@@ -64,7 +64,7 @@ Use only when the task needs atomic controls not covered by vw-cards.
 | Table (real `<table>` — prefer for plain data grids, keeps screen-reader row/column semantics) | `.nst-table` on the `<table>`; plain `<tr>`, `.is-clickable`, `.is-selected` | `components.css`, `preview/table-semantic.html` |
 | Table toolbar search (collapsible) | `.nst-table-search` (+ `.is-open`), `.nst-table-search-icon`, `.nst-table-search-clear` | `components.css`, `preview/table.html` |
 | Icon-only button (filter, actions trigger) | `.nst-icon-btn` (+ `.is-active`) | `components.css`, `preview/table.html` |
-| Table row actions (kebab) | `.nst-table-kebab`, `.nst-table-menu`, `.nst-table-menu-item` | `components.css`, `preview/table.html` |
+| Table row actions (kebab) — **note:** the drop-menu is clipped by the table card's / cell's `overflow: hidden` (used for column truncation), so in a real grid table it must be portalled/rendered outside the row rather than nested in the `.nst-table-td` | `.nst-table-kebab`, `.nst-table-menu`, `.nst-table-menu-item` | `components.css`, `preview/table.html` |
 | Table status badge | `.vw-chip.vw-chip--success\|warning\|...` (reuse Layer 1 chips) | `vw-chips.css` |
 | Tile view for table data | `.vw-grid.vw-grid-cols-2\|3\|4` + `.vw-card-section` tiles | `vw-utilities.css`, `preview/table.html` |
 | Action menu (generic dropdown — also used for the table toolbar's Actions trigger) | `.nst-action-menu`, `.nst-action-menu-item`, `.nst-action-menu-divider` | `components.css`, `preview/action-menu.html` |
