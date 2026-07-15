@@ -123,6 +123,22 @@ function KpiCard({ title, value, delta }) {
 
 ---
 
+## Filling a gap in the utility layer
+
+If a specific need (a bespoke font-size, font-weight, or line-height) has no `vw-*`/`nst-*` class
+to cover it — `vw-utilities.css` has spacing/layout utilities but no typography utility layer yet —
+do **not** invent a new class or a parallel micro-utility system (`.pg-text-10-5`, `.my-fs-13`, a
+whole `.pg-*`-prefixed family defined in a local `<style>` block, etc.). That fragments the class
+system exactly like the things this registry forbids, just via a back door.
+
+Instead:
+
+1. Snap to the nearest existing `var(--vw-font-*)` / `var(--vw-line-*)` / `var(--vw-space-*)` token
+   and apply it via inline style (e.g. `style="font-size: var(--vw-font-label-sm)"`) — even if it's
+   not a pixel-perfect match to whatever you're copying from.
+2. Only if no token is remotely close, use a literal inline value — but say so explicitly and flag
+   it as a registry gap worth closing, rather than silently inventing a class name for it.
+
 ## Forbidden (rejected by default — see Deviation policy below)
 
 - Random hex colors not from `colors.css` or `theme-tokens.css`
@@ -131,6 +147,7 @@ function KpiCard({ title, value, delta }) {
 - `colors_and_type.css` for dashboard cards (wrong layer)
 - Tailwind / Bootstrap / Material UI classes
 - Invented class names (`card`, `kpi-box`, `status-badge`, `btn-primary`, etc.) when vw/nst equivalents exist
+- A locally-defined parallel utility-class system (any non-`vw-`/`nst-` prefixed family of classes in a `<style>` block) used to work around a registry gap — use tokens directly instead (see "Filling a gap in the utility layer" above)
 - Inline `style="color: #..."` except layout constraints (`max-width`, `grid-template-columns`)
 
 ---

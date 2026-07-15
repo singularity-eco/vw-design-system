@@ -52,6 +52,26 @@ if grep -nE "font-family:[[:space:]]*['\"]?Inter" "$file_path" | grep -qE '.'; t
   warnings+=("- Inter font found. Layer 1/dashboard pages should use Poppins, not Inter — see CLAUDE.md.")
 fi
 
+# 5. A locally-defined parallel utility-class system — 5+ distinct classes sharing the
+#    same non-vw/nst/is prefix inside a <style> block (e.g. a whole .pg-* family invented
+#    to work around a missing typography utility). Heuristic, so the threshold is loose
+#    on purpose — a couple of one-off page-scoped classes sharing a prefix is normal and
+#    not what this is trying to catch.
+style_block=$(sed -n '/<style/,/<\/style>/p' "$file_path" 2>/dev/null || true)
+if [ -n "$style_block" ]; then
+  top=$(echo "$style_block" \
+    | grep -oE '^[[:space:]]*\.[a-zA-Z][a-zA-Z0-9_-]*' \
+    | sed -E 's/^[[:space:]]*\.//' \
+    | grep -vE '^(vw|nst|is)-' \
+    | sed -E 's/-.*$//' \
+    | sort | uniq -c | sort -rn | head -1 || true)
+  top_count=$(echo "$top" | awk '{print $1}')
+  top_prefix=$(echo "$top" | awk '{print $2}')
+  if [ -n "$top_count" ] && [ "$top_count" -ge 5 ] 2>/dev/null; then
+    warnings+=("- Found $top_count classes sharing the prefix \"$top_prefix-\" defined locally in a <style> block — looks like an invented parallel utility-class system. Use vw-*/nst-* classes, or fall back to var(--vw-font-*)/var(--vw-space-*) tokens via inline style (see COMPONENTS.md \"Filling a gap in the utility layer\") instead of a new naming convention.")
+  fi
+fi
+
 if [ ${#warnings[@]} -eq 0 ]; then
   exit 0
 fi
