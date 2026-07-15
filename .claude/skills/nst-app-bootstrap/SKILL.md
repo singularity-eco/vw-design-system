@@ -14,7 +14,8 @@ Wires a target app repo up to use the NST / Vision Waves design system, automati
 2. Adds the design system as a submodule at `design-system/`
 3. Writes or extends the app's `CLAUDE.md` with a design-system pointer block
 4. Copies `.claude/skills/nst-design-system/` into the app repo, so `/nst-design-system` works there directly — not only when working inside this repo
-5. Scaffolds a minimal starter `index.html` — one `.vw-card-section` example, nothing more
+5. Installs the enforcement hook (`.claude/hooks/check-design-system.sh` + a `PostToolUse` entry in `.claude/settings.json`) so drift is caught automatically in this app too, not just in the design-system repo itself
+6. Scaffolds a minimal starter `index.html` — one `.vw-card-section` example, nothing more
 
 Every step checks for existing state first and skips or merges instead of overwriting. This makes the skill safe to re-run on a repo that's already partially set up (e.g. it already has a `CLAUDE.md` for other purposes).
 
@@ -58,7 +59,39 @@ cp -r design-system/.claude/skills/nst-design-system .claude/skills/nst-design-s
 
 This is what makes `/nst-design-system` available directly in the app repo, rather than only when someone happens to be working inside the `design-system/` submodule itself.
 
-### 5. Scaffold a starter page
+### 5. Install the enforcement hook
+
+```bash
+mkdir -p .claude/hooks
+cp design-system/.claude/hooks/check-design-system.sh .claude/hooks/check-design-system.sh
+chmod +x .claude/hooks/check-design-system.sh
+```
+
+The hook's own path-exclusion logic (skip `preview/`, `ui_kits/`) matches on `*/preview/*`/`*/ui_kits/*` wildcards, so it works correctly regardless of how deep it's nested — no edits needed to the script itself.
+
+Then wire it into `.claude/settings.json`:
+
+- **No `.claude/settings.json` yet** — create one:
+  ```json
+  {
+    "hooks": {
+      "PostToolUse": [
+        {
+          "matcher": "Write|Edit",
+          "hooks": [
+            { "type": "command", "command": "bash .claude/hooks/check-design-system.sh 2>/dev/null || true" }
+          ]
+        }
+      ]
+    }
+  }
+  ```
+- **`.claude/settings.json` already exists** — merge this hook entry into the existing `hooks.PostToolUse` array (append, don't replace). Preserve every other hook, permission rule, and setting already there.
+- Validate after writing: `jq -e '.hooks.PostToolUse[] | select(.matcher == "Write|Edit")' .claude/settings.json` should print the command back, not error.
+
+This gives the app the same automatic drift-checking this repo has, without the app needing to build it from scratch.
+
+### 6. Scaffold a starter page
 
 Only create `index.html` if the app has no HTML entry point yet — check for `index.html`, `src/index.html`, or a framework-specific entry (e.g. `src/App.tsx`, `pages/index.*`, `public/index.html`). If one already exists, skip this step and tell the user why, rather than clobbering their app's real entry point.
 
