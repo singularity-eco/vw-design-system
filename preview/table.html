@@ -220,9 +220,12 @@
        we render the exact classes on their own so the .nst-table-menu-item
        specimen is visible. Extra bottom space leaves room for the open menu. -->
   <div class="demo-wrap" style="height:180px;">
-    <div style="position:relative; display:inline-block; margin-left:180px;">
+    <div style="position:relative; display:inline-block;">
       <span class="nst-table-kebab">&#8942;</span>
-      <div class="nst-table-menu">
+      <!-- Menu defaults to right:0 (opens leftward, for a trigger at the row's
+           right edge). This specimen's trigger sits at the left, so open it
+           rightward instead: left:0; right:auto. -->
+      <div class="nst-table-menu" style="left:0; right:auto;">
         <div class="nst-table-menu-item">View</div>
         <div class="nst-table-menu-item">Edit</div>
         <div class="nst-table-menu-item nst-table-menu-item--danger">Delete</div>
