@@ -61,6 +61,11 @@ This is what makes `/nst-design-system` available directly in the app repo, rath
 
 ### 5. Install the enforcement hook
 
+Writing to `.claude/settings.json` modifies Claude Code's own hook configuration — a
+properly safety-configured session may correctly pause and ask for explicit confirmation
+before doing this, even mid-bootstrap. That pause is expected, not a failure: confirm with
+the user, then proceed. Don't try to route around it.
+
 ```bash
 mkdir -p .claude/hooks
 cp design-system/.claude/hooks/check-design-system.sh .claude/hooks/check-design-system.sh
