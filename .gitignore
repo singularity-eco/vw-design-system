@@ -1,5 +1,8 @@
 # Local reference material — not part of the published design system
 reference-only/
 
+# Sample applications used for study/mapping only — not part of the design system
+sample-application/
+
 # macOS
 .DS_Store

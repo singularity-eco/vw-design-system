@@ -6,7 +6,7 @@ Code. Two steps: install once, then use everywhere.
 ## 1. One-time setup (per machine, not per project)
 
 ```bash
-git clone https://github.com/singularity-eco/nst-design-system.git /tmp/nst-design-system
+git clone https://github.com/singularity-eco/vw-design-system.git /tmp/nst-design-system
 mkdir -p ~/.claude/skills
 cp -r /tmp/nst-design-system/.claude/skills/nst-app-bootstrap ~/.claude/skills/
 cp -r /tmp/nst-design-system/.claude/skills/nst-design-system ~/.claude/skills/

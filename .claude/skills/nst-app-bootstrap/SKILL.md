@@ -1,6 +1,6 @@
 ---
 name: nst-app-bootstrap
-description: Bootstraps a new or existing app repository to use the NST / Vision Waves design system (singularity-eco/nst-design-system) — adds it as a git submodule, wires up the app's CLAUDE.md, installs the nst-design-system UI-generation skill locally in the app repo, and scaffolds a minimal starter index.html. Use this whenever a user wants to start a new project on this design system, add nst-design-system to an existing repo, "set up the design system here", or asks how to wire this design system into another codebase. This is a one-time setup skill — once bootstrapped, use the nst-design-system skill itself to generate dashboards, cards, forms, and other UI.
+description: Bootstraps a new or existing app repository to use the NST / Vision Waves design system (singularity-eco/vw-design-system) — adds it as a git submodule, wires up the app's CLAUDE.md, installs the nst-design-system UI-generation skill locally in the app repo, and scaffolds a minimal starter index.html. Use this whenever a user wants to start a new project on this design system, add nst-design-system to an existing repo, "set up the design system here", or asks how to wire this design system into another codebase. This is a one-time setup skill — once bootstrapped, use the nst-design-system skill itself to generate dashboards, cards, forms, and other UI.
 user-invocable: true
 ---
 
@@ -27,7 +27,7 @@ The target is the current working directory unless the user names another path. 
 ### 2. Add the submodule
 
 ```bash
-git submodule add https://github.com/singularity-eco/nst-design-system.git design-system
+git submodule add https://github.com/singularity-eco/vw-design-system.git design-system
 ```
 
 - If `design-system/` already exists as a submodule pointing at this same repo, skip this step.
@@ -39,7 +39,7 @@ If the app has no `CLAUDE.md`, create one containing:
 
 ```markdown
 ## Design system
-- Path: `design-system/` (git submodule → singularity-eco/nst-design-system)
+- Path: `design-system/` (git submodule → singularity-eco/vw-design-system)
 - Before any UI work: read `design-system/COMPONENTS.md` — use listed components only
 - Stylesheet: `design-system/nst-design-system.css` + Poppins font
 - Skill: `.claude/skills/nst-design-system/SKILL.md` — invoke `/nst-design-system` when generating UI

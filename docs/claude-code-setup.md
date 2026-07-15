@@ -8,7 +8,7 @@ Everything in Option A below, done for you: submodule add, `CLAUDE.md` wiring, l
 
 ```bash
 # once per machine, so the skill exists before any app does:
-git clone https://github.com/singularity-eco/nst-design-system.git
+git clone https://github.com/singularity-eco/vw-design-system.git
 cp -r nst-design-system/.claude/skills/nst-app-bootstrap ~/.claude/skills/
 
 # then, per app:
@@ -22,7 +22,7 @@ Safe to re-run on a repo that's already partially set up — it skips or merges 
 ## Option A — Submodule (manual)
 
 ```bash
-git submodule add https://github.com/singularity-eco/nst-design-system.git design-system
+git submodule add https://github.com/singularity-eco/vw-design-system.git design-system
 ```
 
 Add to your app’s `CLAUDE.md`:
@@ -38,7 +38,7 @@ Add to your app’s `CLAUDE.md`:
 ## Option B — Copy skill globally (all projects)
 
 ```bash
-git clone https://github.com/singularity-eco/nst-design-system.git
+git clone https://github.com/singularity-eco/vw-design-system.git
 cp -r nst-design-system/.claude/skills/nst-design-system ~/.claude/skills/
 ```
 
@@ -47,7 +47,7 @@ Point Claude at the cloned `COMPONENTS.md` path in your prompts.
 ## Option C — Work inside this repo
 
 ```bash
-git clone https://github.com/singularity-eco/nst-design-system.git
+git clone https://github.com/singularity-eco/vw-design-system.git
 cd nst-design-system
 claude
 ```
