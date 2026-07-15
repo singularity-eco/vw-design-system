@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gallery — vw-utility</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../nst-design-system.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { background: var(--vw-color-gray-50); margin: 0; display: flex; align-items: flex-start; }
+
+  /* ── Left nav sidebar (shared across gallery-*.html) ── */
+  .doc-sidebar { width: 220px; flex-shrink: 0; height: 100vh; position: sticky; top: 0; overflow-y: auto; background: #fff; border-right: 1px solid var(--vw-color-slate-200); padding: 1.5rem 1rem 2rem; }
+  .doc-sidebar-brand { padding: 0 .5rem; margin-bottom: 1.5rem; }
+  .doc-sidebar-brand-title { font-size: .9375rem; font-weight: 500; color: var(--vw-color-gray-800); }
+  .doc-sidebar-brand-sub { font-size: .75rem; color: var(--vw-color-gray-500); margin-top: 2px; }
+  .doc-sidebar-label { font-size: .6875rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--vw-color-gray-400); margin: 0 0 .375rem; padding: 0 .5rem; }
+  .doc-sidebar-link { display: block; padding: .4rem .5rem; border-radius: 6px; font-size: .8125rem; color: var(--vw-color-gray-700); text-decoration: none; margin-bottom: 2px; }
+  .doc-sidebar-link:hover { background: var(--vw-color-gray-100); }
+  .doc-sidebar-link.is-active { background: var(--vw-color-accent-50); color: var(--vw-color-accent-700); font-weight: 500; }
+  .doc-sidebar-link--sub { color: var(--vw-color-accent-600, #1C81EF); margin-top: .75rem; }
+  .doc-main { flex: 1; min-width: 0; padding: 2rem 2.5rem 6rem; }
+
+  .doc-header { max-width: 900px; margin-bottom: 2.5rem; }
+  .gsec { max-width: 1100px; margin-bottom: 3rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--vw-color-slate-200); }
+  .gsec:last-of-type { border-bottom: none; }
+  .gsec-title { font-size: 1.0625rem; font-weight: 500; color: var(--vw-color-gray-800); margin: 0 0 .375rem; }
+  .gsec-desc { color: var(--vw-color-gray-600); font-size: .8125rem; max-width: 680px; margin: 0 0 1rem; line-height: 1.5; }
+  .gsec-sample { border: 1px dashed var(--vw-color-slate-300); border-radius: 12px; padding: 1.75rem; background: #fff; }
+  .gsec-code { background: #1e1e2e; color: #e5e7eb; font-family: 'SFMono-Regular', Consolas, Menlo, monospace; font-size: .75rem; line-height: 1.6; padding: 1rem 1.25rem; border-radius: 8px; overflow-x: auto; margin-top: .75rem; white-space: pre; }
+  table.ref-table { width: 100%; max-width: 1100px; border-collapse: collapse; font-size: .8125rem; margin-top: 1rem; }
+  table.ref-table th, table.ref-table td { text-align: left; padding: .65rem .8rem; border-bottom: 1px solid var(--vw-color-slate-200); vertical-align: top; }
+  table.ref-table th { background: var(--vw-color-gray-50); font-weight: 500; color: var(--vw-color-gray-700); }
+  table.ref-table code { background: var(--vw-color-gray-100); padding: 1px 5px; border-radius: 4px; font-size: .75rem; }
+
+  /* Demo-only chrome for the gap visualizer — not part of the design system */
+  .gap-block { background: var(--vw-color-accent-50, #eff6ff); border: 1px solid var(--vw-color-accent-200, #bfdbfe); border-radius: 8px; padding: .75rem 1rem; font-size: .8125rem; color: var(--vw-color-gray-700); }
+  .gap-demo-row { display: flex; }
+  .gap-demo-col { display: flex; flex-direction: column; }
+  .swatch { display: flex; align-items: center; justify-content: center; height: 40px; border-radius: 6px; background: var(--vw-color-accent-100, #dbeafe); color: var(--vw-color-accent-700, #1d4ed8); font-size: .75rem; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<aside class="doc-sidebar">
+  <div class="doc-sidebar-brand">
+    <div class="doc-sidebar-brand-title">NST Design System</div>
+    <div class="doc-sidebar-brand-sub">Component gallery</div>
+  </div>
+  <nav class="doc-sidebar-nav">
+    <div class="doc-sidebar-label">Galleries</div>
+    <a class="doc-sidebar-link" href="gallery-index.html">Overview</a>
+    <a class="doc-sidebar-link" href="gallery-cards.html">vw-cards</a>
+    <a class="doc-sidebar-link is-active" href="gallery-utility.html">vw-utility</a>
+    <a class="doc-sidebar-link" href="gallery-atomic.html">Layer 2 atomic</a>
+    <a class="doc-sidebar-link doc-sidebar-link--sub" href="gallery-index.html#raw-specimens">All raw specimens →</a>
+  </nav>
+</aside>
+
+<main class="doc-main">
+
+  <div class="doc-header">
+    <h1 class="vw-page-title">Component gallery — vw-utility</h1>
+    <p class="vw-page-description">Every class in <code>vw-utilities.css</code> — display, direction, alignment, gap, and grid helpers from <code>core-mixin.scss</code>. No new classes here, just how to combine the ones that exist.</p>
+  </div>
+
+  <section class="gsec">
+    <h2 class="gsec-title">1. vw-page-gap</h2>
+    <p class="gsec-desc"><code>.vw-page-gap</code> sets <code>gap: var(--vw-page-gap)</code> (0.75rem / 12px) on a flex container — apply it on the container, not the children. Variants: <code>.vw-page-gap-xl</code> (20px), <code>-md</code> (12px), <code>-sm</code> (8px), <code>-xxs</code> (4px).</p>
+    <div class="gsec-sample">
+      <div class="gap-demo-row vw-page-gap">
+        <div class="gap-block">Block 1</div>
+        <div class="gap-block">Block 2</div>
+        <div class="gap-block">Block 3</div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div style="display: flex;" class="vw-page-gap"&gt;
+  &lt;div&gt;Block 1&lt;/div&gt;
+  &lt;div&gt;Block 2&lt;/div&gt;
+  &lt;div&gt;Block 3&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <section class="gsec">
+    <h2 class="gsec-title">2. Cards in a row, spaced with vw-page-gap</h2>
+    <p class="gsec-desc">Flex row + <code>.vw-page-gap</code> is the standard pattern for spacing <code>.vw-card-section</code> siblings.</p>
+    <div class="gsec-sample">
+      <div class="vw-flex vw-page-gap vw-wrap">
+        <div class="vw-card-section" style="width: 140px;"><div class="vw-card-title-sm">Card 1</div></div>
+        <div class="vw-card-section" style="width: 140px;"><div class="vw-card-title-sm">Card 2</div></div>
+        <div class="vw-card-section" style="width: 140px;"><div class="vw-card-title-sm">Card 3</div></div>
+        <div class="vw-card-section" style="width: 140px;"><div class="vw-card-title-sm">Card 4</div></div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-flex vw-page-gap vw-wrap"&gt;
+  &lt;div class="vw-card-section"&gt;...&lt;/div&gt;
+  &lt;!-- repeat --&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <section class="gsec">
+    <h2 class="gsec-title">3. Display</h2>
+    <p class="gsec-desc"><code>.vw-flex</code>, <code>.vw-inline-flex</code>, <code>.vw-grid</code>.</p>
+    <div class="gsec-sample">
+      <div class="vw-flex vw-gap-sm"><span class="swatch" style="width:80px;">vw-flex</span><span class="swatch" style="width:80px;">item 2</span></div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-flex"&gt;...&lt;/div&gt;
+&lt;div class="vw-inline-flex"&gt;...&lt;/div&gt;
+&lt;div class="vw-grid"&gt;...&lt;/div&gt;</code></pre>
+  </section>
+
+  <section class="gsec">
+    <h2 class="gsec-title">4. Direction — vw-flex-row / vw-flex-col</h2>
+    <div class="gsec-sample">
+      <div class="vw-flex vw-flex-row vw-gap-sm" style="margin-bottom: 1rem;">
+        <span class="swatch" style="width:70px;">row 1</span><span class="swatch" style="width:70px;">row 2</span>
+      </div>
+      <div class="vw-flex vw-flex-col vw-gap-sm" style="width: 100px;">
+        <span class="swatch">col 1</span><span class="swatch">col 2</span>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-flex vw-flex-row"&gt;...&lt;/div&gt;
+&lt;div class="vw-flex vw-flex-col"&gt;...&lt;/div&gt;</code></pre>
+  </section>
+
+  <section class="gsec">
+    <h2 class="gsec-title">5. Align — vw-items-*</h2>
+    <p class="gsec-desc"><code>.vw-items-start / -center / -end / -baseline / -stretch</code>.</p>
+    <div class="gsec-sample">
+      <div class="vw-flex vw-items-baseline vw-gap-sm">
+        <div class="vw-card-metric-lg">₹2.5M</div>
+        <div class="vw-card-variance is-positive">+12%</div>
+        <span style="font-size:.75rem; color: var(--vw-color-gray-500);">← vw-items-baseline aligns the metric and delta on their text baseline</span>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-flex vw-items-baseline vw-gap-sm"&gt;
+  &lt;div class="vw-card-metric-lg"&gt;₹2.5M&lt;/div&gt;
+  &lt;div class="vw-card-variance is-positive"&gt;+12%&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <section class="gsec">
+    <h2 class="gsec-title">6. Justify — vw-justify-*</h2>
+    <p class="gsec-desc"><code>.vw-justify-start / -center / -end / -between / -around / -evenly</code>. <code>-between</code> is the standard KPI-card title/icon and metric/variance pattern.</p>
+    <div class="gsec-sample">
+      <div class="vw-card-section vw-flex vw-flex-col vw-justify-between" style="max-width: 260px;">
+        <div class="vw-card-title">Potential revenue</div>
+        <div class="vw-flex vw-justify-between vw-items-baseline vw-gap-sm">
+          <div class="vw-card-metric-lg">₹2.5M</div>
+          <div class="vw-card-variance is-positive">+12%</div>
+        </div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-flex vw-justify-between"&gt;...&lt;/div&gt;</code></pre>
+  </section>
+
+  <section class="gsec">
+    <h2 class="gsec-title">7. Wrap — vw-wrap / vw-nowrap</h2>
+    <div class="gsec-sample">
+      <div class="vw-flex vw-wrap vw-gap-sm" style="max-width: 220px;">
+        <span class="swatch" style="width:80px;">1</span><span class="swatch" style="width:80px;">2</span><span class="swatch" style="width:80px;">3</span>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-flex vw-wrap"&gt;...&lt;/div&gt;</code></pre>
+  </section>
+
+  <section class="gsec">
+    <h2 class="gsec-title">8. Gap scale — vw-gap-*</h2>
+    <p class="gsec-desc"><code>.vw-gap-none / -xxs / -xs / -sm / -md / -lg / -xl</code> — the general-purpose gap scale (distinct from <code>.vw-page-gap-*</code>, which is specifically for page-level flex spacing).</p>
+    <div class="gsec-sample">
+      <div class="vw-flex vw-flex-col" style="gap: 1rem;">
+        <div class="vw-flex vw-gap-xxs"><span class="swatch" style="width:60px;">xxs</span><span class="swatch" style="width:60px;">4px</span></div>
+        <div class="vw-flex vw-gap-sm"><span class="swatch" style="width:60px;">sm</span><span class="swatch" style="width:60px;">8px</span></div>
+        <div class="vw-flex vw-gap-md"><span class="swatch" style="width:60px;">md</span><span class="swatch" style="width:60px;">12px</span></div>
+        <div class="vw-flex vw-gap-lg"><span class="swatch" style="width:60px;">lg</span><span class="swatch" style="width:60px;">16px</span></div>
+        <div class="vw-flex vw-gap-xl"><span class="swatch" style="width:60px;">xl</span><span class="swatch" style="width:60px;">20px</span></div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-flex vw-gap-md"&gt;...&lt;/div&gt;</code></pre>
+  </section>
+
+  <section class="gsec">
+    <h2 class="gsec-title">9. Grid column helpers</h2>
+    <p class="gsec-desc"><code>.vw-grid-cols-2 / -3 / -4</code> for fixed columns; <code>.vw-grid-cols-auto-320</code> for a responsive auto-fill grid (the standard KPI-grid pattern).</p>
+    <div class="gsec-sample">
+      <div class="vw-grid vw-grid-cols-4 vw-gap-sm">
+        <span class="swatch">1</span><span class="swatch">2</span><span class="swatch">3</span><span class="swatch">4</span>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-grid vw-grid-cols-4 vw-gap-sm"&gt;...&lt;/div&gt;
+&lt;div class="vw-grid vw-grid-cols-auto-320 vw-gap-lg"&gt;...&lt;/div&gt;</code></pre>
+  </section>
+
+  <section class="gsec" style="border-bottom: none;">
+    <h2 class="gsec-title">Classes reference</h2>
+    <p class="gsec-desc">Complete list of classes in <code>vw-utilities.css</code>. The last two rows (<code>.field-*-color</code>) are core-mixin field-color helpers, unrelated to layout.</p>
+    <table class="ref-table">
+      <thead><tr><th>Class</th><th>CSS</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td><code>.vw-flex</code></td><td><code>display: flex</code></td><td>Flex container</td></tr>
+        <tr><td><code>.vw-inline-flex</code></td><td><code>display: inline-flex</code></td><td>Inline flex container</td></tr>
+        <tr><td><code>.vw-grid</code></td><td><code>display: grid</code></td><td>Grid container</td></tr>
+        <tr><td><code>.vw-flex-row / .vw-flex-col</code></td><td><code>flex-direction: row/column</code></td><td>Flex direction</td></tr>
+        <tr><td><code>.vw-items-start / -center / -end / -baseline / -stretch</code></td><td><code>align-items</code></td><td>Cross-axis alignment</td></tr>
+        <tr><td><code>.vw-justify-start / -center / -end / -between / -around / -evenly</code></td><td><code>justify-content</code></td><td>Main-axis alignment</td></tr>
+        <tr><td><code>.vw-wrap / .vw-nowrap</code></td><td><code>flex-wrap</code></td><td>Wrapping behavior</td></tr>
+        <tr><td><code>.vw-page-gap</code></td><td><code>gap: var(--vw-page-gap)</code> (12px)</td><td>Default page-section / flex-child spacing</td></tr>
+        <tr><td><code>.vw-page-gap-xl / -md / -sm / -xxs</code></td><td><code>gap: var(--vw-space-xl/md/sm/xxs)</code></td><td>Page-gap size overrides</td></tr>
+        <tr><td><code>.vw-gap-none / -xxs / -xs / -sm / -md / -lg / -xl</code></td><td><code>gap: var(--vw-space-*)</code></td><td>General-purpose gap scale</td></tr>
+        <tr><td><code>.vw-grid-cols-2 / -3 / -4</code></td><td><code>repeat(N, 1fr)</code></td><td>Fixed-column grid</td></tr>
+        <tr><td><code>.vw-grid-cols-auto-320</code></td><td><code>repeat(auto-fill, minmax(320px, 1fr))</code></td><td>Responsive KPI/card grid</td></tr>
+        <tr><td><code>.vw-items-start-grid</code></td><td><code>align-items: start</code></td><td>Grid item alignment (grid-specific alias)</td></tr>
+        <tr><td><code>.vw-w-full</code></td><td><code>width: 100%</code></td><td>Full-width element</td></tr>
+        <tr><td><code>.field-label-color</code></td><td><code>color: var(--fieldLabelColor)</code></td><td>Form field label color (core-mixin)</td></tr>
+        <tr><td><code>.field-text-color</code></td><td><code>color: var(--fieldTextColor)</code></td><td>Form field text color</td></tr>
+        <tr><td><code>.field-disabled-label-color / .field-disabled-text-color</code></td><td>disabled-state colors</td><td>Disabled form field styling</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+</body>
+</html>

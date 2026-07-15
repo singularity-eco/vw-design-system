@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gallery — Layer 2 atomic</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../nst-design-system.css">
+<link rel="stylesheet" href="../components.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { background: var(--vw-color-gray-50); margin: 0; display: flex; align-items: flex-start; }
+
+  /* ── Left nav sidebar (shared across gallery-*.html) ── */
+  .doc-sidebar { width: 220px; flex-shrink: 0; height: 100vh; position: sticky; top: 0; overflow-y: auto; background: #fff; border-right: 1px solid var(--vw-color-slate-200); padding: 1.5rem 1rem 2rem; }
+  .doc-sidebar-brand { padding: 0 .5rem; margin-bottom: 1.5rem; }
+  .doc-sidebar-brand-title { font-size: .9375rem; font-weight: 500; color: var(--vw-color-gray-800); }
+  .doc-sidebar-brand-sub { font-size: .75rem; color: var(--vw-color-gray-500); margin-top: 2px; }
+  .doc-sidebar-label { font-size: .6875rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--vw-color-gray-400); margin: 0 0 .375rem; padding: 0 .5rem; }
+  .doc-sidebar-link { display: block; padding: .4rem .5rem; border-radius: 6px; font-size: .8125rem; color: var(--vw-color-gray-700); text-decoration: none; margin-bottom: 2px; }
+  .doc-sidebar-link:hover { background: var(--vw-color-gray-100); }
+  .doc-sidebar-link.is-active { background: var(--vw-color-accent-50); color: var(--vw-color-accent-700); font-weight: 500; }
+  .doc-sidebar-link--sub { color: var(--vw-color-accent-600, #1C81EF); margin-top: .75rem; }
+  .doc-main { flex: 1; min-width: 0; padding: 2rem 2.5rem 6rem; }
+
+  .doc-header { max-width: 900px; margin-bottom: 2.5rem; }
+  .gsec { max-width: 1100px; margin-bottom: 3rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--vw-color-slate-200); }
+  .gsec:last-of-type { border-bottom: none; }
+  .gsec-title { font-size: 1.0625rem; font-weight: 500; color: var(--vw-color-gray-800); margin: 0 0 .375rem; }
+  .gsec-desc { color: var(--vw-color-gray-600); font-size: .8125rem; max-width: 680px; margin: 0 0 1rem; line-height: 1.5; }
+  .gsec-warn { background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; font-size: .8125rem; padding: .6rem .9rem; border-radius: 8px; margin: 0 0 1rem; max-width: 680px; }
+  .gsec-ok { background: #F0FDF4; border: 1px solid #BBF7D0; color: #166534; font-size: .8125rem; padding: .6rem .9rem; border-radius: 8px; margin: 0 0 1rem; max-width: 680px; }
+  .gsec-sample { border: 1px dashed var(--vw-color-slate-300); border-radius: 12px; padding: 1.75rem; background: #fff; display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
+  .gsec-code { background: #1e1e2e; color: #e5e7eb; font-family: 'SFMono-Regular', Consolas, Menlo, monospace; font-size: .75rem; line-height: 1.6; padding: 1rem 1.25rem; border-radius: 8px; overflow-x: auto; margin-top: .75rem; white-space: pre; }
+  table.ref-table { width: 100%; max-width: 1100px; border-collapse: collapse; font-size: .8125rem; margin-top: 1rem; }
+  table.ref-table th, table.ref-table td { text-align: left; padding: .65rem .8rem; border-bottom: 1px solid var(--vw-color-slate-200); vertical-align: top; }
+  table.ref-table th { background: var(--vw-color-gray-50); font-weight: 500; color: var(--vw-color-gray-700); }
+  table.ref-table code { background: var(--vw-color-gray-100); padding: 1px 5px; border-radius: 4px; font-size: .75rem; }
+  .embed-frame { width: 100%; height: 420px; border: 1px solid var(--vw-color-slate-200); border-radius: 8px; background: #fff; }
+</style>
+</head>
+<body>
+
+<aside class="doc-sidebar">
+  <div class="doc-sidebar-brand">
+    <div class="doc-sidebar-brand-title">NST Design System</div>
+    <div class="doc-sidebar-brand-sub">Component gallery</div>
+  </div>
+  <nav class="doc-sidebar-nav">
+    <div class="doc-sidebar-label">Galleries</div>
+    <a class="doc-sidebar-link" href="gallery-index.html">Overview</a>
+    <a class="doc-sidebar-link" href="gallery-cards.html">vw-cards</a>
+    <a class="doc-sidebar-link" href="gallery-utility.html">vw-utility</a>
+    <a class="doc-sidebar-link is-active" href="gallery-atomic.html">Layer 2 atomic</a>
+    <a class="doc-sidebar-link doc-sidebar-link--sub" href="gallery-index.html#raw-specimens">All raw specimens →</a>
+  </nav>
+</aside>
+
+<main class="doc-main">
+
+  <div class="doc-header">
+    <h1 class="vw-page-title">Component gallery — Layer 2 atomic</h1>
+    <p class="vw-page-description">Form/table/menu primitives from <code>components.css</code> (the <code>.nst-*</code> family), plus embedded specimens for the atomic Figma-derived components that ship as standalone <code>preview/*.html</code> pages without a reusable class.</p>
+  </div>
+
+  <!-- Buttons -->
+  <section class="gsec">
+    <h2 class="gsec-title">1. Buttons — .nst-btn</h2>
+    <p class="gsec-desc">Base class = md size + outline variant. Add one size (<code>--xs/--sm/--lg</code>, default md) and one variant (<code>--filled/--gray/--ghost/--action/--danger/--danger-subtle</code>, default outline).</p>
+    <div class="gsec-sample">
+      <button class="nst-btn nst-btn--filled">Filled</button>
+      <button class="nst-btn">Outline</button>
+      <button class="nst-btn nst-btn--gray">Gray</button>
+      <button class="nst-btn nst-btn--ghost">Ghost</button>
+      <button class="nst-btn nst-btn--action">Action</button>
+      <button class="nst-btn nst-btn--danger">Danger</button>
+      <button class="nst-btn nst-btn--danger-subtle">Danger subtle</button>
+      <button class="nst-btn" disabled>Disabled</button>
+    </div>
+    <div class="gsec-sample" style="margin-top: .75rem; align-items: center;">
+      <button class="nst-btn nst-btn--filled nst-btn--xs">XS</button>
+      <button class="nst-btn nst-btn--filled nst-btn--sm">SM</button>
+      <button class="nst-btn nst-btn--filled nst-btn--md">MD</button>
+      <button class="nst-btn nst-btn--filled nst-btn--lg">LG</button>
+    </div>
+    <pre class="gsec-code"><code>&lt;button class="nst-btn nst-btn--filled"&gt;Filled&lt;/button&gt;
+&lt;button class="nst-btn nst-btn--filled nst-btn--sm"&gt;Small&lt;/button&gt;</code></pre>
+  </section>
+
+  <!-- Inputs -->
+  <section class="gsec">
+    <h2 class="gsec-title">2. Text input — .nst-input</h2>
+    <div class="gsec-ok"><strong>In sync:</strong> <code>preview/inputs-states.html</code> now renders these exact <code>.nst-input</code>/<code>.nst-input-shell</code> classes (fixed — it previously used its own one-off <code>.input</code>/<code>.hint</code> CSS).</div>
+    <div class="gsec-sample" style="flex-direction: column; align-items: flex-start; max-width: 280px;">
+      <div class="nst-input-label">Email address</div>
+      <input class="nst-input" placeholder="you@company.com">
+      <div class="nst-input-hint">We'll never share your email.</div>
+    </div>
+    <div class="gsec-sample" style="flex-direction: column; align-items: flex-start; max-width: 280px;">
+      <div class="nst-input-label">Email address</div>
+      <input class="nst-input nst-input--error" value="not-an-email">
+      <div class="nst-input-hint nst-input-hint--error">Enter a valid email address.</div>
+    </div>
+    <div class="gsec-sample" style="flex-direction: column; align-items: flex-start; max-width: 280px;">
+      <div class="nst-input-label">Email address</div>
+      <input class="nst-input" value="you@company.com" disabled>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="nst-input-label"&gt;Email address&lt;/div&gt;
+&lt;input class="nst-input" placeholder="you@company.com"&gt;
+&lt;div class="nst-input-hint"&gt;We'll never share your email.&lt;/div&gt;</code></pre>
+  </section>
+
+  <section class="gsec">
+    <h2 class="gsec-title">3. Input shell — .nst-input-shell (prefix/suffix icon)</h2>
+    <div class="gsec-sample" style="max-width: 280px;">
+      <div class="nst-input-shell">
+        <i class="ph ph-magnifying-glass nst-input-icon"></i>
+        <input placeholder="Search...">
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="nst-input-shell"&gt;
+  &lt;i class="ph ph-magnifying-glass nst-input-icon"&gt;&lt;/i&gt;
+  &lt;input placeholder="Search..."&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- Textarea -->
+  <section class="gsec">
+    <h2 class="gsec-title">4. Textarea — .nst-textarea-wrap</h2>
+    <div class="gsec-ok"><strong>In sync:</strong> <code>preview/textarea.html</code> now renders <code>.nst-textarea-wrap</code>/<code>.nst-textarea</code> via <code>className</code> (fixed — it previously used its own inline-styled <code>.ta-wrap</code>/<code>.ta</code> implementation).</div>
+    <div class="gsec-sample" style="max-width: 320px;">
+      <div class="nst-textarea-wrap" style="width: 100%;">
+        <textarea class="nst-textarea" placeholder="Add a description..." maxlength="200"></textarea>
+        <div class="nst-textarea-footer">
+          <span class="nst-textarea-counter">0 / 200</span>
+        </div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="nst-textarea-wrap"&gt;
+  &lt;textarea class="nst-textarea" maxlength="200"&gt;&lt;/textarea&gt;
+  &lt;div class="nst-textarea-footer"&gt;
+    &lt;span class="nst-textarea-counter"&gt;0 / 200&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- Surface -->
+  <section class="gsec">
+    <h2 class="gsec-title">5. Surface — .nst-surface</h2>
+    <div class="gsec-sample">
+      <div class="nst-surface" style="padding: 1rem; width: 160px;">Resting</div>
+      <div class="nst-surface--raised" style="padding: 1rem; width: 160px;">Raised</div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="nst-surface"&gt;Resting&lt;/div&gt;
+&lt;div class="nst-surface--raised"&gt;Raised&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- Icon button + search -->
+  <section class="gsec">
+    <h2 class="gsec-title">6. Icon button & collapsible table search</h2>
+    <div class="gsec-sample" style="align-items: center;">
+      <button class="nst-icon-btn"><i class="ph ph-funnel"></i></button>
+      <button class="nst-icon-btn is-active"><i class="ph ph-funnel"></i></button>
+      <div class="nst-table-search is-open">
+        <button class="nst-table-search-icon"><i class="ph ph-magnifying-glass"></i></button>
+        <input placeholder="Search rows...">
+        <button class="nst-table-search-clear"><i class="ph ph-x"></i></button>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;button class="nst-icon-btn"&gt;&lt;i class="ph ph-funnel"&gt;&lt;/i&gt;&lt;/button&gt;
+&lt;div class="nst-table-search"&gt;   &lt;!-- add .is-open via JS on click --&gt;
+  &lt;button class="nst-table-search-icon"&gt;...&lt;/button&gt;
+  &lt;input&gt;
+  &lt;button class="nst-table-search-clear"&gt;...&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- Action menu -->
+  <section class="gsec">
+    <h2 class="gsec-title">7. Action menu — .nst-action-menu</h2>
+    <div class="gsec-ok"><strong>In sync:</strong> <code>preview/action-menu.html</code> now renders these exact <code>.nst-action-menu</code> classes (fixed — it previously used its own one-off <code>.menu</code>/<code>.menu-item</code> CSS).</div>
+    <div class="gsec-sample">
+      <div class="nst-action-menu" style="position: static;">
+        <div class="nst-action-menu-item"><i class="ph ph-pencil-simple nst-action-menu-icon"></i>Edit</div>
+        <div class="nst-action-menu-item"><i class="ph ph-copy nst-action-menu-icon"></i>Duplicate</div>
+        <div class="nst-action-menu-divider"></div>
+        <div class="nst-action-menu-item nst-action-menu-item--danger"><i class="ph ph-trash nst-action-menu-icon"></i>Delete</div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="nst-action-menu"&gt;
+  &lt;div class="nst-action-menu-item"&gt;Edit&lt;/div&gt;
+  &lt;div class="nst-action-menu-divider"&gt;&lt;/div&gt;
+  &lt;div class="nst-action-menu-item nst-action-menu-item--danger"&gt;Delete&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- Table (grid) -->
+  <section class="gsec">
+    <h2 class="gsec-title">8. Table — grid-of-divs (.nst-table-card)</h2>
+    <p class="gsec-desc">Set the same <code>grid-template-columns</code> on <code>.nst-table-head</code> and every <code>.nst-table-row</code>. Use for resizable/virtualisable columns.</p>
+    <div class="gsec-sample" style="display: block;">
+      <div class="nst-table-card">
+        <div class="nst-table-head" style="grid-template-columns: 2fr 1fr 1fr 40px;">
+          <div class="nst-table-th">Name</div><div class="nst-table-th">Status</div><div class="nst-table-th">Owner</div><div class="nst-table-th"></div>
+        </div>
+        <div class="nst-table-row" style="grid-template-columns: 2fr 1fr 1fr 40px;">
+          <div class="nst-table-td nst-table-td--primary">Acme deal</div><div class="nst-table-td"><span class="vw-chip vw-chip--success">Active</span></div><div class="nst-table-td">R. Iyer</div><div class="nst-table-td"><span class="nst-table-kebab">⋮</span></div>
+        </div>
+        <div class="nst-table-row nst-table-row--selected" style="grid-template-columns: 2fr 1fr 1fr 40px;">
+          <div class="nst-table-td nst-table-td--primary">Globex deal</div><div class="nst-table-td"><span class="vw-chip vw-chip--warning">Pending</span></div><div class="nst-table-td">S. Rao</div><div class="nst-table-td"><span class="nst-table-kebab">⋮</span></div>
+        </div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="nst-table-card"&gt;
+  &lt;div class="nst-table-head" style="grid-template-columns: 2fr 1fr 1fr 40px;"&gt;
+    &lt;div class="nst-table-th"&gt;Name&lt;/div&gt;...
+  &lt;/div&gt;
+  &lt;div class="nst-table-row" style="grid-template-columns: 2fr 1fr 1fr 40px;"&gt;
+    &lt;div class="nst-table-td nst-table-td--primary"&gt;Acme deal&lt;/div&gt;...
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- Table (semantic) -->
+  <section class="gsec">
+    <h2 class="gsec-title">9. Table — semantic &lt;table&gt; (.nst-table)</h2>
+    <p class="gsec-desc">Prefer this for plain data grids — keeps screen-reader row/column semantics. Do not reuse <code>.nst-table-row</code> here (that's the grid variant's <code>display:grid</code>).</p>
+    <div class="gsec-sample" style="display: block;">
+      <table class="nst-table">
+        <thead><tr><th>Name</th><th>Status</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr class="is-clickable"><td class="nst-table-td--primary">Acme deal</td><td><span class="vw-chip vw-chip--success">Active</span></td><td>R. Iyer</td></tr>
+          <tr class="is-selected"><td class="nst-table-td--primary">Globex deal</td><td><span class="vw-chip vw-chip--warning">Pending</span></td><td>S. Rao</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <pre class="gsec-code"><code>&lt;table class="nst-table"&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;...&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr class="is-clickable"&gt;&lt;td class="nst-table-td--primary"&gt;Acme deal&lt;/td&gt;...&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+  </section>
+
+  <!-- Embedded no-class specimens -->
+  <section class="gsec">
+    <h2 class="gsec-title">10. Atomic components without a portable class</h2>
+    <p class="gsec-desc">These ship only as standalone <code>preview/*.html</code> pages with scoped, page-local CSS — there is no reusable <code>.nst-*</code> class to reference. Embedded live below (each is the real file, not a copy) so version drift is impossible to introduce here.</p>
+
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size:.875rem; font-weight:500; margin-bottom:.5rem;">Selection controls (checkbox / radio / toggle)</h3>
+      <iframe class="embed-frame" src="selection-controls.html"></iframe>
+    </div>
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size:.875rem; font-weight:500; margin-bottom:.5rem;">Tabs</h3>
+      <iframe class="embed-frame" src="tabs.html"></iframe>
+    </div>
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size:.875rem; font-weight:500; margin-bottom:.5rem;">Tooltip</h3>
+      <iframe class="embed-frame" src="tooltip.html"></iframe>
+    </div>
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size:.875rem; font-weight:500; margin-bottom:.5rem;">Stepper</h3>
+      <iframe class="embed-frame" src="stepper.html"></iframe>
+    </div>
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size:.875rem; font-weight:500; margin-bottom:.5rem;">Chips (Figma pastel — colors_and_type.css palette, distinct from .vw-chip)</h3>
+      <iframe class="embed-frame" src="chips-status.html"></iframe>
+    </div>
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size:.875rem; font-weight:500; margin-bottom:.5rem;">Timeline</h3>
+      <iframe class="embed-frame" src="timeline.html"></iframe>
+    </div>
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size:.875rem; font-weight:500; margin-bottom:.5rem;">Filter popover</h3>
+      <iframe class="embed-frame" src="filter-popover.html"></iframe>
+    </div>
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size:.875rem; font-weight:500; margin-bottom:.5rem;">Charts — bar / line</h3>
+      <iframe class="embed-frame" src="bar-chart.html"></iframe>
+      <iframe class="embed-frame" src="line-chart.html" style="margin-top: .75rem;"></iframe>
+    </div>
+  </section>
+
+  <!-- Classes reference -->
+  <section class="gsec" style="border-bottom: none;">
+    <h2 class="gsec-title">Classes reference</h2>
+    <table class="ref-table">
+      <thead><tr><th>Class</th><th>Token / value</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td><code>.nst-btn</code> + size/variant modifiers</td><td>md/outline default; radius <code>--vw-radius-sm</code></td><td>All buttons</td></tr>
+        <tr><td><code>.nst-input</code> / <code>.nst-input-label</code> / <code>.nst-input-hint</code></td><td>36px min-height, radius 8px, Inter 14px</td><td>Text input + label + helper text</td></tr>
+        <tr><td><code>.nst-input-shell</code> + <code>.nst-input-icon</code></td><td>same as <code>.nst-input</code></td><td>Input with prefix/suffix icon</td></tr>
+        <tr><td><code>.nst-textarea-wrap</code> / <code>.nst-textarea</code></td><td>140px default height, radius 8px</td><td>Resizable description field</td></tr>
+        <tr><td><code>.nst-textarea-footer</code> / <code>.nst-textarea-counter</code></td><td>right-aligned footer row</td><td>Character counter</td></tr>
+        <tr><td><code>.nst-surface</code> / <code>.nst-surface--raised</code></td><td>radius 8px; resting = border only, raised = <code>--shadow-sm</code></td><td>Generic elevated container</td></tr>
+        <tr><td><code>.nst-icon-btn</code> (+ <code>.is-active</code>)</td><td>36×36px, radius <code>--vw-radius-sm</code></td><td>Square icon-only trigger (filter, actions)</td></tr>
+        <tr><td><code>.nst-table-search</code> (+ <code>.is-open</code>)</td><td>collapses to 36px, expands to 240px</td><td>Collapsible toolbar search</td></tr>
+        <tr><td><code>.nst-action-menu</code> / <code>-item</code> / <code>-icon</code> / <code>-divider</code> / <code>-item--danger</code></td><td>radius 12px, floating, <code>z-index: 100</code></td><td>Context/dropdown menu</td></tr>
+        <tr><td><code>.nst-table-card</code> / <code>-toolbar</code> / <code>-head</code> / <code>-th</code> / <code>-row</code> / <code>-td</code> / <code>-td--primary</code></td><td>grid-of-divs, radius 12px</td><td>Resizable/virtualisable table</td></tr>
+        <tr><td><code>.nst-table-kebab</code> / <code>-menu</code> / <code>-menu-item</code> / <code>-menu-item--danger</code></td><td>row action trigger + dropdown</td><td>Per-row actions</td></tr>
+        <tr><td><code>.nst-table</code> (on <code>&lt;table&gt;</code>), plain <code>&lt;tr&gt;</code>, <code>.is-clickable</code>, <code>.is-selected</code></td><td>radius <code>--vw-radius-md</code></td><td>Accessible semantic data grid</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+</body>
+</html>

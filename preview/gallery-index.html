@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NST Design System — Component Gallery</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../nst-design-system.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { background: var(--vw-color-gray-50); margin: 0; display: flex; align-items: flex-start; }
+
+  /* ── Left nav sidebar (shared across gallery-*.html) ── */
+  .doc-sidebar { width: 220px; flex-shrink: 0; height: 100vh; position: sticky; top: 0; overflow-y: auto; background: #fff; border-right: 1px solid var(--vw-color-slate-200); padding: 1.5rem 1rem 2rem; }
+  .doc-sidebar-brand { padding: 0 .5rem; margin-bottom: 1.5rem; }
+  .doc-sidebar-brand-title { font-size: .9375rem; font-weight: 500; color: var(--vw-color-gray-800); }
+  .doc-sidebar-brand-sub { font-size: .75rem; color: var(--vw-color-gray-500); margin-top: 2px; }
+  .doc-sidebar-label { font-size: .6875rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--vw-color-gray-400); margin: 0 0 .375rem; padding: 0 .5rem; }
+  .doc-sidebar-link { display: block; padding: .4rem .5rem; border-radius: 6px; font-size: .8125rem; color: var(--vw-color-gray-700); text-decoration: none; margin-bottom: 2px; }
+  .doc-sidebar-link:hover { background: var(--vw-color-gray-100); }
+  .doc-sidebar-link.is-active { background: var(--vw-color-accent-50); color: var(--vw-color-accent-700); font-weight: 500; }
+  .doc-sidebar-link--sub { color: var(--vw-color-accent-600, #1C81EF); margin-top: .75rem; }
+  .doc-main { flex: 1; min-width: 0; padding: 3rem 2.5rem; }
+
+  .wrap { max-width: 920px; margin: 0 auto; }
+  .lead { color: var(--vw-color-gray-600); font-size: .9375rem; max-width: 640px; margin: .5rem 0 2.5rem; line-height: 1.55; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
+  .gcard { display: block; text-decoration: none; }
+  .gcard-title { display: flex; align-items: center; gap: .5rem; }
+  .gcard-badge { font-size: .6875rem; font-weight: 500; padding: 2px 8px; border-radius: 999px; }
+  .badge-l1 { background: var(--vw-color-blue-50); color: var(--vw-color-blue-700); }
+  .badge-l2 { background: var(--vw-color-purple-50, #faf5ff); color: var(--vw-color-purple-700, #7e22ce); }
+  .raw-list { columns: 3; column-gap: 2rem; font-size: .8125rem; }
+  .raw-list a { display: block; color: var(--vw-color-gray-700); text-decoration: none; padding: .25rem 0; break-inside: avoid; }
+  .raw-list a:hover { color: var(--vw-color-accent-600, #1C81EF); text-decoration: underline; }
+  h2.section-h { font-size: .9375rem; font-weight: 500; color: var(--vw-color-gray-700); margin: 0 0 1rem; padding-top: 1.5rem; border-top: 1px solid var(--vw-color-slate-200); scroll-margin-top: 1.5rem; }
+</style>
+</head>
+<body>
+
+<aside class="doc-sidebar">
+  <div class="doc-sidebar-brand">
+    <div class="doc-sidebar-brand-title">NST Design System</div>
+    <div class="doc-sidebar-brand-sub">Component gallery</div>
+  </div>
+  <nav class="doc-sidebar-nav">
+    <div class="doc-sidebar-label">Galleries</div>
+    <a class="doc-sidebar-link is-active" href="gallery-index.html">Overview</a>
+    <a class="doc-sidebar-link" href="gallery-cards.html">vw-cards</a>
+    <a class="doc-sidebar-link" href="gallery-utility.html">vw-utility</a>
+    <a class="doc-sidebar-link" href="gallery-atomic.html">Layer 2 atomic</a>
+    <a class="doc-sidebar-link doc-sidebar-link--sub" href="gallery-index.html#raw-specimens">All raw specimens →</a>
+  </nav>
+</aside>
+
+<main class="doc-main">
+  <div class="wrap">
+    <h1 class="vw-page-title">NST Design System — Component Gallery</h1>
+    <p class="lead">
+      Verification pages for developers and Claude: every registered class, live-rendered with its HTML
+      snippet and a full reference table, so you can confirm the installed version matches
+      <code>COMPONENTS.md</code> before shipping. Modeled on the upstream guidelines site's
+      <code>vw-cards</code> / <code>vw-utility</code> pages.
+    </p>
+
+    <div class="cards">
+      <a class="gcard" href="gallery-cards.html">
+        <div class="vw-card-section vw-card--clickable vw-flex vw-flex-col vw-gap-sm">
+          <div class="gcard-title"><span class="vw-card-title">vw-cards</span><span class="gcard-badge badge-l1">Layer 1</span></div>
+          <div class="vw-card-description">Card containers, KPI metrics, semantic variants, chips. 14 sections + full classes reference.</div>
+        </div>
+      </a>
+      <a class="gcard" href="gallery-utility.html">
+        <div class="vw-card-section vw-card--clickable vw-flex vw-flex-col vw-gap-sm">
+          <div class="gcard-title"><span class="vw-card-title">vw-utility</span><span class="gcard-badge badge-l1">Layer 1</span></div>
+          <div class="vw-card-description">Flex/grid display, alignment, gap, and grid-column helpers.</div>
+        </div>
+      </a>
+      <a class="gcard" href="gallery-atomic.html">
+        <div class="vw-card-section vw-card--clickable vw-flex vw-flex-col vw-gap-sm">
+          <div class="gcard-title"><span class="vw-card-title">Layer 2 atomic</span><span class="gcard-badge badge-l2">Layer 2</span></div>
+          <div class="vw-card-description">Buttons, inputs, tables, action menu, plus embedded specimens for components without a portable class.</div>
+        </div>
+      </a>
+    </div>
+
+    <h2 class="section-h" id="raw-specimens">All raw preview specimens</h2>
+    <p class="lead" style="margin-bottom: 1rem;">The original copy-paste reference files that COMPONENTS.md and the <code>/nst-design-system</code> skill point to.</p>
+    <div class="raw-list">
+      <a href="vw-cards.html">vw-cards.html</a>
+      <a href="kpi-card.html">kpi-card.html</a>
+      <a href="table.html">table.html</a>
+      <a href="table-semantic.html">table-semantic.html</a>
+      <a href="inputs-states.html">inputs-states.html</a>
+      <a href="textarea.html">textarea.html</a>
+      <a href="action-menu.html">action-menu.html</a>
+      <a href="buttons-styles.html">buttons-styles.html</a>
+      <a href="buttons-sizes.html">buttons-sizes.html</a>
+      <a href="buttons-states.html">buttons-states.html</a>
+      <a href="selection-controls.html">selection-controls.html</a>
+      <a href="chips-status.html">chips-status.html</a>
+      <a href="tabs.html">tabs.html</a>
+      <a href="tooltip.html">tooltip.html</a>
+      <a href="stepper.html">stepper.html</a>
+      <a href="timeline.html">timeline.html</a>
+      <a href="bar-chart.html">bar-chart.html</a>
+      <a href="line-chart.html">line-chart.html</a>
+      <a href="filter-popover.html">filter-popover.html</a>
+      <a href="colors-semantic.html">colors-semantic.html</a>
+      <a href="colors-brand.html">colors-brand.html</a>
+      <a href="colors-neutrals.html">colors-neutrals.html</a>
+      <a href="colors-palette.html">colors-palette.html</a>
+      <a href="colors-primary.html">colors-primary.html</a>
+      <a href="elevation.html">elevation.html</a>
+      <a href="radius.html">radius.html</a>
+      <a href="spacing.html">spacing.html</a>
+      <a href="themes.html">themes.html</a>
+      <a href="type-body.html">type-body.html</a>
+      <a href="type-display.html">type-display.html</a>
+      <a href="type-family.html">type-family.html</a>
+      <a href="type-headings.html">type-headings.html</a>
+      <a href="type-scale-semantic.html">type-scale-semantic.html</a>
+      <a href="type-scale-utility.html">type-scale-utility.html</a>
+      <a href="type-typography.html">type-typography.html</a>
+      <a href="uploader.html">uploader.html</a>
+      <a href="logo.html">logo.html</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

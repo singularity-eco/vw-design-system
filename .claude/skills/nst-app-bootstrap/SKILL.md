@@ -1,0 +1,95 @@
+---
+name: nst-app-bootstrap
+description: Bootstraps a new or existing app repository to use the NST / Vision Waves design system (singularity-eco/nst-design-system) — adds it as a git submodule, wires up the app's CLAUDE.md, installs the nst-design-system UI-generation skill locally in the app repo, and scaffolds a minimal starter index.html. Use this whenever a user wants to start a new project on this design system, add nst-design-system to an existing repo, "set up the design system here", or asks how to wire this design system into another codebase. This is a one-time setup skill — once bootstrapped, use the nst-design-system skill itself to generate dashboards, cards, forms, and other UI.
+user-invocable: true
+---
+
+# NST App Bootstrap
+
+Wires a target app repo up to use the NST / Vision Waves design system, automating the manual submodule setup in `docs/claude-code-setup.md` (Option A). Run this once per app repo. After it's done, switch to `/nst-design-system` for all actual UI generation — this skill's job ends at wiring, not building screens.
+
+## What this does
+
+1. Ensures the target repo is a git repo (`git init` if it isn't one yet)
+2. Adds the design system as a submodule at `design-system/`
+3. Writes or extends the app's `CLAUDE.md` with a design-system pointer block
+4. Copies `.claude/skills/nst-design-system/` into the app repo, so `/nst-design-system` works there directly — not only when working inside this repo
+5. Scaffolds a minimal starter `index.html` — one `.vw-card-section` example, nothing more
+
+Every step checks for existing state first and skips or merges instead of overwriting. This makes the skill safe to re-run on a repo that's already partially set up (e.g. it already has a `CLAUDE.md` for other purposes).
+
+## Steps
+
+### 1. Confirm the target and repo state
+
+The target is the current working directory unless the user names another path. Run `git status`; if that fails because there's no repo yet, run `git init`. If there are uncommitted changes already in the target repo, don't touch them — this skill only adds new files, it never resets or discards.
+
+### 2. Add the submodule
+
+```bash
+git submodule add https://github.com/singularity-eco/nst-design-system.git design-system
+```
+
+- If `design-system/` already exists as a submodule pointing at this same repo, skip this step.
+- If `design-system/` exists but isn't a submodule (a plain directory, a different repo, or a symlink), stop and ask the user how they want to proceed — don't overwrite something you don't recognize.
+
+### 3. Wire up CLAUDE.md
+
+If the app has no `CLAUDE.md`, create one containing:
+
+```markdown
+## Design system
+- Path: `design-system/` (git submodule → singularity-eco/nst-design-system)
+- Before any UI work: read `design-system/COMPONENTS.md` — use listed components only
+- Stylesheet: `design-system/nst-design-system.css` + Poppins font
+- Skill: `.claude/skills/nst-design-system/SKILL.md` — invoke `/nst-design-system` when generating UI
+- Do not invent colors, cards, chips, or class names — use `.vw-*` classes from the registry
+- Updating the design system: `git submodule update --remote design-system`
+```
+
+If `CLAUDE.md` already exists (it usually will, describing the rest of the app), append this same block under its own `## Design system` heading instead of overwriting the file. Preserve everything already there.
+
+### 4. Install the skill locally
+
+```bash
+mkdir -p .claude/skills
+cp -r design-system/.claude/skills/nst-design-system .claude/skills/nst-design-system
+```
+
+This is what makes `/nst-design-system` available directly in the app repo, rather than only when someone happens to be working inside the `design-system/` submodule itself.
+
+### 5. Scaffold a starter page
+
+Only create `index.html` if the app has no HTML entry point yet — check for `index.html`, `src/index.html`, or a framework-specific entry (e.g. `src/App.tsx`, `pages/index.*`, `public/index.html`). If one already exists, skip this step and tell the user why, rather than clobbering their app's real entry point.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="design-system/nst-design-system.css">
+</head>
+<body style="margin:0;background:var(--vw-color-gray-50);padding:24px;">
+  <div class="vw-card-section">
+    <div class="vw-card-title">Design system connected</div>
+    <div class="vw-card-description">Run /nst-design-system to start building UI.</div>
+  </div>
+</body>
+</html>
+```
+
+Keep this page minimal on purpose — real screens are `/nst-design-system`'s job, which reads `COMPONENTS.md` and matches `preview/*.html` specimens before generating anything.
+
+## After bootstrapping
+
+Tell the user setup is complete, name the files you touched, and point them at `/nst-design-system` for the next step. Don't generate any dashboard, form, or card content yourself here — that's out of scope for this skill and belongs to the UI-generation skill, which has its own registry-driven workflow.
+
+## Using this skill on a fresh machine
+
+This skill lives inside the `nst-design-system` repo, which creates a chicken-and-egg problem: a brand-new app doesn't have the design system yet, so it can't have this skill yet either. Two ways around that, matching the patterns in `docs/claude-code-setup.md`:
+
+- **Global install (do this once per machine):** `cp -r nst-design-system/.claude/skills/nst-app-bootstrap ~/.claude/skills/` — after this, `/nst-app-bootstrap` is available in every project.
+- **One-off:** clone `nst-design-system` anywhere, then run Claude Code from inside (or pointed at) the target app directory and reference this skill by its path.

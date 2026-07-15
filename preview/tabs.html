@@ -1,0 +1,47 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>Tabs — NST Design System</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  * { font-family: Inter, system-ui, sans-serif; }
+  .tab { padding: 8px 0; font-size: 14px; background: none; border: none; border-bottom: 2px solid transparent; color: #515151; cursor: pointer; }
+  .tab.is-active { color: #1C81EF; font-weight: 500; border-bottom-color: #1C81EF; }
+  .tab:disabled { color: #A8A8A8; cursor: not-allowed; }
+  .seg { padding: 4px 10px; border-radius: 6px; border: none; background: none; color: #515151; font-size: 12px; font-weight: 500; cursor: pointer; }
+  .seg.is-active { background: #1C81EF; color: #fff; }
+</style>
+</head>
+<body style="background:#fff;padding:20px;margin:0;color:#252525;">
+<div style="display:flex;flex-direction:column;gap:16px;">
+  <div>
+    <div style="font-size:11px;color:#7C7C7C;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Underline tabs (click to switch)</div>
+    <div id="underline-tabs" style="display:flex;gap:24px;">
+      <button class="tab is-active" data-tab="Overview">Overview</button>
+      <button class="tab" data-tab="Activity">Activity</button>
+      <button class="tab" data-tab="Settings">Settings</button>
+      <button class="tab" data-tab="Billing" disabled>Billing</button>
+    </div>
+  </div>
+  <div>
+    <div style="font-size:11px;color:#7C7C7C;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Segmented (switch)</div>
+    <div id="segmented" style="display:inline-flex;gap:4px;padding:3px 4px;border:1px solid #E3E3E3;background:#fff;border-radius:8px;">
+      <button class="seg is-active" data-seg="Day">Day</button>
+      <button class="seg" data-seg="Week">Week</button>
+      <button class="seg" data-seg="Month">Month</button>
+      <button class="seg" data-seg="Year">Year</button>
+    </div>
+  </div>
+</div>
+<script>
+  function wireGroup(containerId, itemClass) {
+    const container = document.getElementById(containerId);
+    container.addEventListener('click', (e) => {
+      const btn = e.target.closest('.' + itemClass);
+      if (!btn || btn.disabled) return;
+      container.querySelectorAll('.' + itemClass).forEach(el => el.classList.remove('is-active'));
+      btn.classList.add('is-active');
+    });
+  }
+  wireGroup('underline-tabs', 'tab');
+  wireGroup('segmented', 'seg');
+</script>
+</body></html>

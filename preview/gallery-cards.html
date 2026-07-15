@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gallery — vw-cards</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../nst-design-system.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { background: var(--vw-color-gray-50); margin: 0; display: flex; align-items: flex-start; }
+
+  /* ── Left nav sidebar (shared across gallery-*.html) ── */
+  .doc-sidebar { width: 220px; flex-shrink: 0; height: 100vh; position: sticky; top: 0; overflow-y: auto; background: #fff; border-right: 1px solid var(--vw-color-slate-200); padding: 1.5rem 1rem 2rem; }
+  .doc-sidebar-brand { padding: 0 .5rem; margin-bottom: 1.5rem; }
+  .doc-sidebar-brand-title { font-size: .9375rem; font-weight: 500; color: var(--vw-color-gray-800); }
+  .doc-sidebar-brand-sub { font-size: .75rem; color: var(--vw-color-gray-500); margin-top: 2px; }
+  .doc-sidebar-label { font-size: .6875rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--vw-color-gray-400); margin: 0 0 .375rem; padding: 0 .5rem; }
+  .doc-sidebar-link { display: block; padding: .4rem .5rem; border-radius: 6px; font-size: .8125rem; color: var(--vw-color-gray-700); text-decoration: none; margin-bottom: 2px; }
+  .doc-sidebar-link:hover { background: var(--vw-color-gray-100); }
+  .doc-sidebar-link.is-active { background: var(--vw-color-accent-50); color: var(--vw-color-accent-700); font-weight: 500; }
+  .doc-sidebar-link--sub { color: var(--vw-color-accent-600, #1C81EF); margin-top: .75rem; }
+  .doc-main { flex: 1; min-width: 0; padding: 2rem 2.5rem 6rem; }
+
+  .doc-header { max-width: 900px; margin-bottom: 2.5rem; }
+  .gsec { max-width: 1100px; margin-bottom: 3rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--vw-color-slate-200); }
+  .gsec:last-of-type { border-bottom: none; }
+  .gsec-title { font-size: 1.0625rem; font-weight: 500; color: var(--vw-color-gray-800); margin: 0 0 .375rem; }
+  .gsec-desc { color: var(--vw-color-gray-600); font-size: .8125rem; max-width: 680px; margin: 0 0 1rem; line-height: 1.5; }
+  .gsec-sample { border: 1px dashed var(--vw-color-slate-300); border-radius: 12px; padding: 1.75rem; background: #fff; display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
+  .gsec-code { background: #1e1e2e; color: #e5e7eb; font-family: 'SFMono-Regular', Consolas, Menlo, monospace; font-size: .75rem; line-height: 1.6; padding: 1rem 1.25rem; border-radius: 8px; overflow-x: auto; margin-top: .75rem; white-space: pre; }
+  table.ref-table { width: 100%; max-width: 1100px; border-collapse: collapse; font-size: .8125rem; margin-top: 1rem; }
+  table.ref-table th, table.ref-table td { text-align: left; padding: .65rem .8rem; border-bottom: 1px solid var(--vw-color-slate-200); vertical-align: top; }
+  table.ref-table th { background: var(--vw-color-gray-50); font-weight: 500; color: var(--vw-color-gray-700); }
+  table.ref-table code { background: var(--vw-color-gray-100); padding: 1px 5px; border-radius: 4px; font-size: .75rem; }
+  .swatch-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .icon-row { display: flex; gap: 1.5rem; align-items: center; }
+</style>
+</head>
+<body>
+
+<aside class="doc-sidebar">
+  <div class="doc-sidebar-brand">
+    <div class="doc-sidebar-brand-title">NST Design System</div>
+    <div class="doc-sidebar-brand-sub">Component gallery</div>
+  </div>
+  <nav class="doc-sidebar-nav">
+    <div class="doc-sidebar-label">Galleries</div>
+    <a class="doc-sidebar-link" href="gallery-index.html">Overview</a>
+    <a class="doc-sidebar-link is-active" href="gallery-cards.html">vw-cards</a>
+    <a class="doc-sidebar-link" href="gallery-utility.html">vw-utility</a>
+    <a class="doc-sidebar-link" href="gallery-atomic.html">Layer 2 atomic</a>
+    <a class="doc-sidebar-link doc-sidebar-link--sub" href="gallery-index.html#raw-specimens">All raw specimens →</a>
+  </nav>
+</aside>
+
+<main class="doc-main">
+
+  <div class="doc-header">
+    <h1 class="vw-page-title">Component gallery — vw-cards</h1>
+    <p class="vw-page-description">Every class in <code>vw-cards.css</code> and <code>vw-chips.css</code>, live-rendered with the exact markup below each sample. Use this to verify the installed version matches expectations before shipping. Source of truth: <code>COMPONENTS.md</code>.</p>
+  </div>
+
+  <!-- 1 -->
+  <section class="gsec">
+    <h2 class="gsec-title">1. Basic card</h2>
+    <p class="gsec-desc">Simple card with title and description using <code>.vw-card-section</code>, <code>.vw-card-title</code>, <code>.vw-card-description</code>.</p>
+    <div class="gsec-sample">
+      <div class="vw-card-section vw-flex vw-flex-col vw-gap-sm" style="max-width: 320px;">
+        <div class="vw-card-title">Report name</div>
+        <div class="vw-card-description">Short summary. Use only vw-card classes.</div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-card-section vw-flex vw-flex-col vw-gap-sm" style="max-width: 320px;"&gt;
+  &lt;div class="vw-card-title"&gt;Report name&lt;/div&gt;
+  &lt;div class="vw-card-description"&gt;Short summary. Use only vw-card classes.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- 2 -->
+  <section class="gsec">
+    <h2 class="gsec-title">2. KPI card</h2>
+    <p class="gsec-desc">Title, large metric, and variance indicator using <code>.vw-card-metric-lg</code> and <code>.vw-card-variance</code>.</p>
+    <div class="gsec-sample">
+      <div class="vw-card-section vw-flex vw-flex-col vw-justify-between" style="max-width: 280px;">
+        <div class="vw-card-title">Potential revenue</div>
+        <div class="vw-flex vw-justify-between vw-items-baseline vw-gap-sm">
+          <div class="vw-card-metric-lg">₹2.5M</div>
+          <div class="vw-card-variance is-positive">+12%</div>
+        </div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-card-section vw-flex vw-flex-col vw-justify-between" style="max-width: 280px;"&gt;
+  &lt;div class="vw-card-title"&gt;Potential revenue&lt;/div&gt;
+  &lt;div class="vw-flex vw-justify-between vw-items-baseline vw-gap-sm"&gt;
+    &lt;div class="vw-card-metric-lg"&gt;₹2.5M&lt;/div&gt;
+    &lt;div class="vw-card-variance is-positive"&gt;+12%&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- 3 -->
+  <section class="gsec">
+    <h2 class="gsec-title">3. Card with icon on right</h2>
+    <p class="gsec-desc">Two variants: icon only using <code>.vw-card-icon-md</code>, or icon with a tinted background using <code>.vw-card-icon-md .vw-chip--neutral</code>.</p>
+    <div class="gsec-sample">
+      <div class="vw-card-section vw-flex vw-flex-col vw-justify-between" style="max-width: 260px;">
+        <div class="vw-flex vw-justify-between vw-items-start vw-gap-sm">
+          <div class="vw-card-title">Potential revenue</div>
+          <i class="ph ph-arrows-clockwise" style="font-size: 20px; color: var(--vw-color-gray-700); flex-shrink: 0;"></i>
+        </div>
+        <div class="vw-flex vw-justify-between vw-items-baseline vw-gap-sm">
+          <div class="vw-card-metric-lg">₹2.5M</div>
+          <div class="vw-card-variance is-positive">+12%</div>
+        </div>
+      </div>
+      <div class="vw-card-section vw-flex vw-flex-col vw-justify-between" style="max-width: 260px;">
+        <div class="vw-flex vw-justify-between vw-items-start vw-gap-sm">
+          <div class="vw-card-title">Potential revenue</div>
+          <span class="vw-card-icon-md vw-chip--neutral"><i class="ph ph-arrows-clockwise"></i></span>
+        </div>
+        <div class="vw-flex vw-justify-between vw-items-baseline vw-gap-sm">
+          <div class="vw-card-metric-lg">₹2.5M</div>
+          <div class="vw-card-variance is-positive">+12%</div>
+        </div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;!-- Variant 1: icon only --&gt;
+&lt;div class="vw-flex vw-justify-between vw-items-start vw-gap-sm"&gt;
+  &lt;div class="vw-card-title"&gt;Potential revenue&lt;/div&gt;
+  &lt;i class="ph ph-arrows-clockwise"&gt;&lt;/i&gt;
+&lt;/div&gt;
+
+&lt;!-- Variant 2: icon with tinted background --&gt;
+&lt;div class="vw-flex vw-justify-between vw-items-start vw-gap-sm"&gt;
+  &lt;div class="vw-card-title"&gt;Potential revenue&lt;/div&gt;
+  &lt;span class="vw-card-icon-md vw-chip--neutral"&gt;&lt;i class="ph ph-arrows-clockwise"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- 4 -->
+  <section class="gsec">
+    <h2 class="gsec-title">4. KPI card with icon and MoM delta</h2>
+    <p class="gsec-desc">Row 1: title (left) and <code>.vw-card-icon-lg</code> with a semantic chip background (right). Row 2: <code>.vw-card-metric-xl</code> value (left) and delta with <code>.vw-card-metric-label-sub</code> (right).</p>
+    <div class="gsec-sample">
+      <div class="vw-card-section vw-flex vw-flex-col vw-justify-between" style="max-width: 320px;">
+        <div class="vw-flex vw-justify-between vw-items-start vw-gap-sm">
+          <div class="vw-card-title">Total purchases</div>
+          <div class="vw-card-icon-lg vw-chip--info"><i class="ph ph-shopping-cart-simple" style="font-size: 24px;"></i></div>
+        </div>
+        <div class="vw-flex vw-justify-between vw-items-end vw-gap-sm">
+          <div class="vw-card-metric-xl">₹19.39M</div>
+          <div class="vw-flex vw-flex-col" style="align-items: flex-end;">
+            <div class="vw-card-variance is-positive">₹2.49M</div>
+            <div class="vw-card-metric-label-sub">MoM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-card-section vw-flex vw-flex-col vw-justify-between" style="max-width: 320px;"&gt;
+  &lt;div class="vw-flex vw-justify-between vw-items-start vw-gap-sm"&gt;
+    &lt;div class="vw-card-title"&gt;Total purchases&lt;/div&gt;
+    &lt;div class="vw-card-icon-lg vw-chip--info"&gt;&lt;i class="ph ph-shopping-cart-simple"&gt;&lt;/i&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="vw-flex vw-justify-between vw-items-end vw-gap-sm"&gt;
+    &lt;div class="vw-card-metric-xl"&gt;₹19.39M&lt;/div&gt;
+    &lt;div class="vw-flex vw-flex-col" style="align-items: flex-end;"&gt;
+      &lt;div class="vw-card-variance is-positive"&gt;₹2.49M&lt;/div&gt;
+      &lt;div class="vw-card-metric-label-sub"&gt;MoM&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- 5 -->
+  <section class="gsec">
+    <h2 class="gsec-title">5. KPI grid</h2>
+    <p class="gsec-desc">Multiple KPI cards in a responsive grid using <code>.vw-grid.vw-grid-cols-auto-320</code>.</p>
+    <div class="gsec-sample" style="display: block;">
+      <div class="vw-grid vw-grid-cols-auto-320 vw-gap-lg">
+        <div class="vw-card-section vw-flex vw-flex-col vw-justify-between">
+          <div class="vw-card-title">Potential revenue</div>
+          <div class="vw-flex vw-justify-between vw-items-baseline vw-gap-sm"><div class="vw-card-metric-lg">₹2.5M</div><div class="vw-card-variance is-positive">+12%</div></div>
+        </div>
+        <div class="vw-card-section vw-flex vw-flex-col vw-justify-between">
+          <div class="vw-card-title">Lead velocity</div>
+          <div class="vw-flex vw-justify-between vw-items-baseline vw-gap-sm"><div class="vw-card-metric-lg">10</div><div class="vw-card-variance is-negative">−8%</div></div>
+        </div>
+        <div class="vw-card-section vw-flex vw-flex-col vw-justify-between">
+          <div class="vw-card-title">Open leads</div>
+          <div class="vw-flex vw-justify-between vw-items-baseline vw-gap-sm"><div class="vw-card-metric-lg">38</div><div class="vw-card-variance is-positive">+18%</div></div>
+        </div>
+        <div class="vw-card-section vw-flex vw-flex-col vw-justify-between">
+          <div class="vw-card-title">Conversion rate</div>
+          <div class="vw-flex vw-justify-between vw-items-baseline vw-gap-sm"><div class="vw-card-metric-lg">23.5%</div><div class="vw-card-variance is-positive">+5.2%</div></div>
+        </div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-grid vw-grid-cols-auto-320 vw-gap-lg"&gt;
+  &lt;div class="vw-card-section vw-flex vw-flex-col vw-justify-between"&gt;...&lt;/div&gt;
+  &lt;!-- repeat per card --&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- 6 -->
+  <section class="gsec">
+    <h2 class="gsec-title">6. Card with chip</h2>
+    <p class="gsec-desc">Title paired with a status chip, plus a labeled secondary metric.</p>
+    <div class="gsec-sample">
+      <div class="vw-card-section vw-flex vw-flex-col vw-justify-between" style="max-width: 320px;">
+        <div class="vw-flex vw-items-center vw-gap-sm">
+          <div class="vw-card-title">Leads</div>
+          <span class="vw-chip vw-chip--success">Active</span>
+        </div>
+        <div>
+          <div class="vw-card-metric-lg">20</div>
+          <div class="vw-card-metric-label" style="margin-top: .5rem;">Created (L30D)</div>
+          <div class="vw-card-metric-md">10</div>
+        </div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-flex vw-items-center vw-gap-sm"&gt;
+  &lt;div class="vw-card-title"&gt;Leads&lt;/div&gt;
+  &lt;span class="vw-chip vw-chip--success"&gt;Active&lt;/span&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;div class="vw-card-metric-lg"&gt;20&lt;/div&gt;
+  &lt;div class="vw-card-metric-label"&gt;Created (L30D)&lt;/div&gt;
+  &lt;div class="vw-card-metric-md"&gt;10&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- 7 -->
+  <section class="gsec">
+    <h2 class="gsec-title">7. Semantic card variants</h2>
+    <p class="gsec-desc">Add a modifier to <code>.vw-card-section</code> for a tinted status surface: <code>--success</code>, <code>--error</code>, <code>--warning</code>, <code>--info</code>, plus the extended set <code>--fuchsia</code>, <code>--purple</code>, <code>--cyan</code>, <code>--yellow</code>, <code>--orange</code>.</p>
+    <div class="gsec-sample" style="display: block;">
+      <div class="vw-grid vw-grid-cols-auto-320 vw-gap-md">
+        <div class="vw-card-section vw-card--success"><div class="vw-card-title">Success</div><div class="vw-card-metric-lg">100</div></div>
+        <div class="vw-card-section vw-card--error"><div class="vw-card-title">Error</div><div class="vw-card-metric-lg">5</div></div>
+        <div class="vw-card-section vw-card--warning"><div class="vw-card-title">Warning</div><div class="vw-card-metric-lg">15</div></div>
+        <div class="vw-card-section vw-card--info"><div class="vw-card-title">Info</div><div class="vw-card-metric-lg">42</div></div>
+        <div class="vw-card-section vw-card--fuchsia"><div class="vw-card-title">Fuchsia</div><div class="vw-card-metric-lg">7</div></div>
+        <div class="vw-card-section vw-card--purple"><div class="vw-card-title">Purple</div><div class="vw-card-metric-lg">18</div></div>
+        <div class="vw-card-section vw-card--cyan"><div class="vw-card-title">Cyan</div><div class="vw-card-metric-lg">9</div></div>
+        <div class="vw-card-section vw-card--yellow"><div class="vw-card-title">Yellow</div><div class="vw-card-metric-lg">3</div></div>
+        <div class="vw-card-section vw-card--orange"><div class="vw-card-title">Orange</div><div class="vw-card-metric-lg">11</div></div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-card-section vw-card--success"&gt;
+  &lt;div class="vw-card-title"&gt;Success&lt;/div&gt;
+  &lt;div class="vw-card-metric-lg"&gt;100&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- 8 -->
+  <section class="gsec">
+    <h2 class="gsec-title">8. Card with variance and footer metric</h2>
+    <p class="gsec-desc">Large metric + variance, then a footer section separated with <code>.vw-card-footer-divider</code>.</p>
+    <div class="gsec-sample">
+      <div class="vw-card-section vw-flex vw-flex-col vw-justify-between" style="max-width: 340px;">
+        <div class="vw-card-title">Total revenue</div>
+        <div>
+          <div class="vw-flex vw-justify-between vw-items-baseline vw-gap-sm">
+            <div class="vw-card-metric-lg">90.6M</div>
+            <div class="vw-card-variance is-positive">+15.2% (MoM)</div>
+          </div>
+          <div class="vw-card-footer-divider vw-flex vw-justify-between vw-items-center">
+            <div class="vw-card-metric-label">Total invoice</div>
+            <div class="vw-card-metric-md">2028</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-card-footer-divider vw-flex vw-justify-between vw-items-center"&gt;
+  &lt;div class="vw-card-metric-label"&gt;Total invoice&lt;/div&gt;
+  &lt;div class="vw-card-metric-md"&gt;2028&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- 9 -->
+  <section class="gsec">
+    <h2 class="gsec-title">9. Parent-child cards</h2>
+    <p class="gsec-desc">Nested structure using <code>.vw-card-parent</code>, <code>.vw-card-child</code>, and <code>.vw-card-child-shaded</code> for alternating/highlighted sub-items.</p>
+    <div class="gsec-sample">
+      <div class="vw-card-parent" style="max-width: 360px;">
+        <div class="vw-card-title">Parent card</div>
+        <div class="vw-card-description" style="margin: .25rem 0 .75rem;">This is a parent card with child cards inside.</div>
+        <div class="vw-flex vw-flex-col vw-gap-sm">
+          <div class="vw-card-child"><div class="vw-card-title-sm">Child card 1</div><div class="vw-card-metric-md">Value 1</div></div>
+          <div class="vw-card-child"><div class="vw-card-title-sm">Child card 2</div><div class="vw-card-metric-md">Value 2</div></div>
+          <div class="vw-card-child-shaded"><div class="vw-card-title-sm">Child card 3 (shaded)</div><div class="vw-card-metric-md">Value 3</div></div>
+        </div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-card-parent"&gt;
+  &lt;div class="vw-card-title"&gt;Parent card&lt;/div&gt;
+  &lt;div class="vw-card-description"&gt;...&lt;/div&gt;
+  &lt;div class="vw-card-child"&gt;...&lt;/div&gt;
+  &lt;div class="vw-card-child-shaded"&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- 10 -->
+  <section class="gsec">
+    <h2 class="gsec-title">10. Recent documents list card</h2>
+    <p class="gsec-desc"><code>.vw-card-activity-label</code> for item names, <code>.vw-card-activity-value</code> for dates/metadata.</p>
+    <div class="gsec-sample">
+      <div class="vw-card-section vw-flex vw-flex-col vw-gap-sm" style="max-width: 340px;">
+        <div class="vw-card-title">Recent documents</div>
+        <div class="vw-flex vw-items-start vw-gap-sm">
+          <span class="vw-card-icon-md vw-chip--neutral"><i class="ph ph-file"></i></span>
+          <div>
+            <div class="vw-card-activity-label">Knowledge Hub</div>
+            <div class="vw-card-activity-value">December 26, 2024</div>
+          </div>
+        </div>
+        <div class="vw-flex vw-items-start vw-gap-sm">
+          <span class="vw-card-icon-md vw-chip--neutral"><i class="ph ph-folder"></i></span>
+          <div>
+            <div class="vw-card-activity-label">Legal Compliance.pdf</div>
+            <div class="vw-card-activity-value">1.99 KB · January 21, 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-card-activity-label"&gt;Knowledge Hub&lt;/div&gt;
+&lt;div class="vw-card-activity-value"&gt;December 26, 2024&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- 11 -->
+  <section class="gsec">
+    <h2 class="gsec-title">11. Quick action card</h2>
+    <p class="gsec-desc">Centered icon, title, description — icon container uses <code>.vw-card-icon-lg</code> + a chip color.</p>
+    <div class="gsec-sample">
+      <div class="vw-card-section vw-flex vw-flex-col" style="max-width: 260px; align-items: center; text-align: center;">
+        <div class="vw-card-icon-lg vw-chip--neutral"><i class="ph ph-plus" style="font-size: 24px;"></i></div>
+        <div class="vw-card-title" style="margin-top: .75rem;">Create new flow</div>
+        <div class="vw-card-description" style="margin-top: .5rem;">Build flows to orchestrate automated workflows.</div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-card-icon-lg vw-chip--neutral"&gt;&lt;i class="ph ph-plus"&gt;&lt;/i&gt;&lt;/div&gt;
+&lt;div class="vw-card-title"&gt;Create new flow&lt;/div&gt;
+&lt;div class="vw-card-description"&gt;Build flows to orchestrate automated workflows.&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- 12 -->
+  <section class="gsec">
+    <h2 class="gsec-title">12. Card icon sizes and colors</h2>
+    <p class="gsec-desc"><code>.vw-card-icon-sm</code> (32px) / <code>.vw-card-icon-md</code> (40px) / <code>.vw-card-icon-lg</code> (48px). Combine with any <code>.vw-chip--*</code> for the background tint.</p>
+    <div class="gsec-sample">
+      <div class="icon-row">
+        <span class="vw-card-icon-sm vw-chip--neutral"><i class="ph ph-plus"></i></span>
+        <span class="vw-card-icon-md vw-chip--neutral"><i class="ph ph-plus"></i></span>
+        <span class="vw-card-icon-lg vw-chip--neutral"><i class="ph ph-plus" style="font-size:20px;"></i></span>
+        <span class="vw-card-icon-lg vw-chip--success"><i class="ph ph-check" style="font-size:20px;"></i></span>
+        <span class="vw-card-icon-lg vw-chip--info"><i class="ph ph-info" style="font-size:20px;"></i></span>
+        <span class="vw-card-icon-lg vw-chip--error"><i class="ph ph-x" style="font-size:20px;"></i></span>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;span class="vw-card-icon-sm vw-chip--neutral"&gt;&lt;i class="ph ph-plus"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;span class="vw-card-icon-md vw-chip--neutral"&gt;&lt;i class="ph ph-plus"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;span class="vw-card-icon-lg vw-chip--success"&gt;&lt;i class="ph ph-check"&gt;&lt;/i&gt;&lt;/span&gt;</code></pre>
+  </section>
+
+  <!-- 13 -->
+  <section class="gsec">
+    <h2 class="gsec-title">13. Clickable card</h2>
+    <p class="gsec-desc">Add <code>.vw-card--clickable</code> to <code>.vw-card-section</code>, <code>.vw-card-parent</code>, or <code>.vw-card-child</code> for a hover/focus-visible shadow + border highlight. Hover the card below.</p>
+    <div class="gsec-sample">
+      <div class="vw-card-section vw-card--clickable vw-flex vw-flex-col vw-gap-sm" style="max-width: 280px;" tabindex="0">
+        <div class="vw-card-title">Clickable section</div>
+        <div class="vw-card-description">Hover or focus to see shadow and border.</div>
+      </div>
+    </div>
+    <pre class="gsec-code"><code>&lt;div class="vw-card-section vw-card--clickable"&gt;...&lt;/div&gt;</code></pre>
+  </section>
+
+  <!-- Chips -->
+  <section class="gsec">
+    <h2 class="gsec-title">14. Status chips — .vw-chip</h2>
+    <p class="gsec-desc">Base chip is a pill (<code>--vw-radius-full</code>). Every semantic color ships a default (pastel bg) and a <code>-solid</code> variant.</p>
+    <div class="gsec-sample">
+      <div class="swatch-row">
+        <span class="vw-chip vw-chip--neutral">Default</span>
+        <span class="vw-chip vw-chip--success">Active</span>
+        <span class="vw-chip vw-chip--error">Failed</span>
+        <span class="vw-chip vw-chip--warning">Pending</span>
+        <span class="vw-chip vw-chip--info">New</span>
+        <span class="vw-chip vw-chip--purple">Custom</span>
+        <span class="vw-chip vw-chip--cyan">Cyan</span>
+        <span class="vw-chip vw-chip--orange">Orange</span>
+        <span class="vw-chip vw-chip--pink">Pink</span>
+      </div>
+      <div class="swatch-row" style="width:100%; margin-top: .75rem;">
+        <span class="vw-chip vw-chip--neutral-solid">Default</span>
+        <span class="vw-chip vw-chip--success-solid">Active</span>
+        <span class="vw-chip vw-chip--error-solid">Failed</span>
+        <span class="vw-chip vw-chip--warning-solid">Pending</span>
+        <span class="vw-chip vw-chip--info-solid">New</span>
+        <span class="vw-chip vw-chip--purple-solid">Custom</span>
+        <span class="vw-chip vw-chip--cyan-solid">Cyan</span>
+        <span class="vw-chip vw-chip--orange-solid">Orange</span>
+        <span class="vw-chip vw-chip--pink-solid">Pink</span>
+      </div>
+      <div class="swatch-row" style="width:100%; margin-top: .75rem;">
+        <span class="common-red-chip vw-chip">Red</span>
+        <span class="common-orange-chip vw-chip">Orange</span>
+        <span class="common-yellow-chip vw-chip">Yellow</span>
+        <span class="common-green-chip vw-chip">Green</span>
+        <span class="common-blue-chip vw-chip">Blue</span>
+        <span class="common-gray-chip vw-chip">Gray</span>
+      </div>
+    </div>
+    <p class="gsec-desc" style="margin-top: .75rem;">The bottom row is the legacy <code>.common-*-chip</code> family (6 of the ~15 upstream guideline variants are ported locally — see the note in the reference table below).</p>
+    <pre class="gsec-code"><code>&lt;span class="vw-chip vw-chip--success"&gt;Active&lt;/span&gt;
+&lt;span class="vw-chip vw-chip--success-solid"&gt;Active&lt;/span&gt;
+&lt;span class="common-red-chip vw-chip"&gt;Red&lt;/span&gt;</code></pre>
+  </section>
+
+  <!-- Classes reference -->
+  <section class="gsec" style="border-bottom: none;">
+    <h2 class="gsec-title">Classes reference</h2>
+    <p class="gsec-desc">Complete list of classes in <code>vw-cards.css</code> and <code>vw-chips.css</code>. Compare against <code>preview/vw-cards.html</code> and the upstream guidelines page (<code>/guidelines/vw-cards</code>) to verify parity.</p>
+    <table class="ref-table">
+      <thead><tr><th>Class</th><th>Token / value</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td><code>.vw-card-section</code></td><td>bg white · border <code>slate-200</code> · radius <code>--vw-radius-lg</code> (16px) · padding <code>--vw-space-lg</code> (16px)</td><td>Primary standalone card container</td></tr>
+        <tr><td><code>.vw-card-parent</code></td><td>border <code>slate-300</code> · radius 16px · padding 16px · gap <code>--vw-space-sm</code></td><td>Wraps nested child cards</td></tr>
+        <tr><td><code>.vw-card-child</code></td><td>border <code>slate-200</code> · radius <code>--vw-radius-sm</code> (8px) · padding <code>--vw-space-sm</code></td><td>Sub-item inside a parent card</td></tr>
+        <tr><td><code>.vw-card-child-shaded</code></td><td>same as child + bg <code>slate-50</code></td><td>Alternating/highlighted sub-item</td></tr>
+        <tr><td><code>.vw-card-footer-divider</code></td><td>border-top <code>slate-200</code> · margin/padding-top 1rem</td><td>Separates footer content from main card body</td></tr>
+        <tr><td><code>.vw-card--clickable</code></td><td>hover: shadow + border <code>slate-400</code>; focus-visible: outline</td><td>Interactive card or child</td></tr>
+        <tr><td><code>.vw-card--accent</code> + <code>.vw-card-accent</code></td><td>3px top strip, absolutely positioned</td><td>Color-code a card without tinting the whole surface</td></tr>
+        <tr><td><code>.vw-card--success / --error / --warning / --info</code></td><td>emerald/red/amber/sky at 25/200 shades</td><td>Semantic tinted card surface</td></tr>
+        <tr><td><code>.vw-card--fuchsia / --purple / --cyan / --yellow / --orange</code></td><td>matching 25/200–300 shades</td><td>Extended semantic palette</td></tr>
+        <tr><td><code>.vw-card-title / -lg / -sm</code></td><td><code>--vw-font-heading-md/lg/sm</code>, weight 500, <code>gray-800</code></td><td>Card heading text</td></tr>
+        <tr><td><code>.vw-card-description</code></td><td><code>--vw-font-description</code> (14px), weight 400, <code>gray-500</code></td><td>Secondary/explanatory text</td></tr>
+        <tr><td><code>.vw-card-activity-label</code></td><td>14px, weight 500, <code>gray-800</code></td><td>List item title (document/folder name)</td></tr>
+        <tr><td><code>.vw-card-activity-value</code></td><td>12px, weight 400, <code>gray-500</code></td><td>List item metadata (date, size)</td></tr>
+        <tr><td><code>.vw-card-metric-xxxl … -xxxs</code></td><td><code>--vw-font-value-*</code>, weight 300, line-height 1</td><td>Numeric metric value, by prominence</td></tr>
+        <tr><td><code>.vw-card-metric-label</code></td><td><code>--vw-font-label-md</code> (14px), weight 400, <code>gray-500</code></td><td>Label above/beside a metric</td></tr>
+        <tr><td><code>.vw-card-metric-label-sub / -sm</code></td><td><code>--vw-font-label-sm</code> (12px), weight 400, <code>gray-500</code></td><td>MoM / sub-label under a metric</td></tr>
+        <tr><td><code>.vw-card-variance</code></td><td><code>--vw-font-legend</code> (12px), weight 500</td><td>Base class for a trend/delta value</td></tr>
+        <tr><td><code>.vw-card-variance.is-positive</code></td><td><code>#1a7f10</code> (guideline spec: <code>green-700</code> <code>#15803d</code>)</td><td>Upward/favorable trend — <strong>hardcoded, not token-linked</strong>, see note below</td></tr>
+        <tr><td><code>.vw-card-variance.is-negative</code></td><td><code>#d91818</code> (guideline spec: <code>red-600</code> <code>#dc2626</code>)</td><td>Downward/unfavorable trend — hardcoded</td></tr>
+        <tr><td><code>.vw-card-variance.is-neutral</code></td><td><code>#7c7c7c</code> (guideline spec: <code>gray-500</code> <code>#6b7280</code>)</td><td>No-change trend — hardcoded</td></tr>
+        <tr><td><code>.vw-card-icon-sm / -md / -lg</code></td><td>32px / 40px / 48px, radius <code>--vw-radius-sm</code></td><td>Icon slot; pair with a <code>.vw-chip--*</code> for color</td></tr>
+        <tr><td><code>.vw-page-title</code></td><td>1.25rem, weight 500, <code>slate-800</code></td><td>Page-level heading</td></tr>
+        <tr><td><code>.vw-page-description</code></td><td>0.875rem, weight 400, <code>slate-700</code></td><td>Page-level subtitle</td></tr>
+        <tr><td><code>.vw-page-container</code></td><td>padding/gap <code>--vw-page-gap</code>, transparent bg</td><td>Root wrapper for page content</td></tr>
+        <tr><td><code>.vw-chip</code></td><td>padding 6px/12px, radius <code>--vw-radius-full</code></td><td>Base pill chip</td></tr>
+        <tr><td><code>.vw-chip--success / -error / -warning / -info / -neutral / -purple / -cyan / -orange / -pink</code></td><td>pastel bg + dark text</td><td>Status badges (default weight)</td></tr>
+        <tr><td><code>.vw-chip--*-solid</code></td><td>dark bg (700) + white text</td><td>High-emphasis status badge</td></tr>
+        <tr><td><code>.vw-chip.is-strong / .is-clickable</code></td><td>weight 500 / cursor pointer</td><td>Modifiers, combine with any variant</td></tr>
+        <tr><td><code>.common-red / -orange / -yellow / -green / -blue / -gray-chip</code></td><td>50/100 bg + 700 text</td><td>Legacy chip family — <strong>only 6 of the upstream guideline's ~15 colors are ported</strong> (missing: brown, coffee, magenta, lavender, lightBlue, teal, indigo, disable, violet, cyan)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+</body>
+</html>

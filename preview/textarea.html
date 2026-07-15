@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TextArea — NST Design System</title>
+<link rel="stylesheet" href="../colors.css">
+<link rel="stylesheet" href="../spacing.css">
+<link rel="stylesheet" href="../typography-tokens.css">
+<link rel="stylesheet" href="../theme-tokens.css">
+<link rel="stylesheet" href="../components.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  @font-face { font-family: 'Inter'; src: url('../fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype-variations'); font-weight: 100 900; font-style: normal; font-display: swap; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #fff;
+    font-family: Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 20px;
+    color: #252525;
+  }
+  button, input, textarea { font-family: inherit; }
+  .label { font-size: 11px; color: #7C7C7C; font-family: ui-monospace, monospace; margin-bottom: 8px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+/* ── TextArea — renders the real .nst-textarea-wrap / .nst-textarea classes
+   from components.css. Real DOM + real :hover/:focus-within, so no static
+   state simulation is needed here (unlike the plain-HTML specimens). ── */
+const TextArea = ({ label, value = '', onChange, placeholder, hint, error, disabled, maxLength = 200, style }) => {
+  const [height, setHeight] = React.useState(140);
+
+  const over = value.length >= maxLength;
+
+  function startResize(e) {
+    e.preventDefault();
+    const startY = e.clientY, startH = height;
+    const onMove = ev => setHeight(Math.max(80, startH + ev.clientY - startY));
+    const onUp   = ()  => { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }
+
+  const wrapClass = [
+    'nst-textarea-wrap',
+    error && 'nst-textarea--error',
+    disabled && 'nst-textarea--disabled',
+  ].filter(Boolean).join(' ');
+
+  const counterClass = [
+    'nst-textarea-counter',
+    over && 'nst-textarea-counter--over',
+  ].filter(Boolean).join(' ');
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, ...style }}>
+      {label && <span className="nst-input-label">{label}</span>}
+      <div className={wrapClass} style={{ height }}>
+        <textarea
+          className="nst-textarea"
+          value={value} onChange={onChange} placeholder={placeholder}
+          disabled={disabled} maxLength={maxLength}
+        />
+        <div className="nst-textarea-footer">
+          <span className={counterClass}>{value.length}/{maxLength}</span>
+          {!disabled && (
+            <span className="nst-textarea-resize" onMouseDown={startResize}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                <path d="M5 13L13 5M9.5 13L13 9.5"/>
+              </svg>
+            </span>
+          )}
+        </div>
+      </div>
+      {(hint || error) && (
+        <span className={error ? 'nst-input-hint nst-input-hint--error' : 'nst-input-hint'}>{error || hint}</span>
+      )}
+    </div>
+  );
+};
+
+/* ── Live demo states ── */
+const Demo = () => {
+  const [v1, setV1] = React.useState('');
+  const [v2, setV2] = React.useState('We use this field to capture detailed context about the issue before routing to the right team.');
+  const [v3, setV3] = React.useState('Invalid entry');
+
+  return (
+    <div className="grid">
+      <div>
+        <div className="label">Default</div>
+        <TextArea
+          label="Description"
+          placeholder="Add a description…"
+          hint="Provide a short summary."
+          value={v1}
+          onChange={e => setV1(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <div className="label">With content</div>
+        <TextArea
+          label="Notes"
+          placeholder="Add notes…"
+          value={v2}
+          onChange={e => setV2(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <div className="label">Error</div>
+        <TextArea
+          label="Comment"
+          placeholder="Add a comment…"
+          error="This field is required."
+          value={v3}
+          onChange={e => setV3(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <div className="label">Disabled</div>
+        <TextArea
+          label="Reason"
+          placeholder="Not editable"
+          value="Read-only content cannot be modified here."
+          disabled
+        />
+      </div>
+
+      <div>
+        <div className="label">Near limit (190 / 200)</div>
+        <TextArea
+          label="Bio"
+          placeholder="Write something…"
+          maxLength={200}
+          value={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercit"}
+          onChange={() => {}}
+        />
+      </div>
+
+      <div>
+        <div className="label">Over limit</div>
+        <TextArea
+          label="Bio"
+          placeholder="Write something…"
+          maxLength={50}
+          value={"This text has exceeded the maximum character limit for this field."}
+          onChange={() => {}}
+        />
+      </div>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>
