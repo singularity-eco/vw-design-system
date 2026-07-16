@@ -139,6 +139,38 @@ Instead:
 2. Only if no token is remotely close, use a literal inline value — but say so explicitly and flag
    it as a registry gap worth closing, rather than silently inventing a class name for it.
 
+---
+
+## Promoting a page-local pattern into the registry
+
+Sometimes a page genuinely needs a composite pattern this registry doesn't have yet — a KPI card
+with an icon badge and a sparkline, a labeled progress bar, an activity-feed row. Building one
+correctly (using existing `var(--vw-color-*)`/`var(--vw-space-*)`/`var(--vw-radius-*)` tokens
+throughout, no arbitrary values) is fine and expected — that's not the same failure mode as
+inventing a utility layer. But a well-behaved page-local pattern still isn't a registry component,
+and the two get confused easily because both look "clean."
+
+**The bar for promoting one is cross-page recurrence, not within-page repetition.** A KPI card
+repeating four times on one dashboard is evidence that page needed four KPI cards — it is not
+evidence the pattern will generalize. Wait until the same pattern shows up on a *second*,
+independently-built page before treating it as a real candidate. Until then, leave it as page-local
+CSS and say so explicitly (e.g. "this stepper isn't a registered component yet — built as
+page-local CSS, extending `preview/stepper.html`'s sketch; if it recurs, that's the signal to
+promote it").
+
+**When it does recur, validate before promoting:**
+
+1. If an independent reference for the same design language exists (an older copy of this design
+   system elsewhere, a source-of-truth Figma file, a reference implementation), cross-check the
+   pattern against it. Confirming the same shape already exists there is much stronger evidence
+   than "I've now typed similar CSS twice."
+2. Confirm the recurrence is real and independent — the same pattern appearing across pages that
+   were built/reviewed separately (not copy-pasted from one another in the same sitting).
+3. **Never promote unilaterally.** Adding to this registry changes what every project consuming it
+   is told to use — treat it exactly like the Deviation policy below: name the pattern, name where
+   it recurred, propose the class name and token usage, and get explicit sign-off before it lands
+   in `vw-cards.css`/`vw-utilities.css`/`components.css` and this file.
+
 ## Forbidden (rejected by default — see Deviation policy below)
 
 - Random hex colors not from `colors.css` or `theme-tokens.css`
