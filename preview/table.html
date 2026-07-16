@@ -213,6 +213,26 @@
     </div>
   </div>
 
+  <div class="block-label">Row action menu (.nst-table-kebab + .nst-table-menu)</div>
+  <!-- Shown standalone (not inside a .nst-table-card): the card and .nst-table-td
+       both set overflow:hidden for column truncation, which clips an in-cell
+       drop-menu. In a real grid table the menu is portalled out of the row; here
+       we render the exact classes on their own so the .nst-table-menu-item
+       specimen is visible. Extra bottom space leaves room for the open menu. -->
+  <div class="demo-wrap" style="height:180px;">
+    <div style="position:relative; display:inline-block;">
+      <span class="nst-table-kebab">&#8942;</span>
+      <!-- Menu defaults to right:0 (opens leftward, for a trigger at the row's
+           right edge). This specimen's trigger sits at the left, so open it
+           rightward instead: left:0; right:auto. -->
+      <div class="nst-table-menu" style="left:0; right:auto;">
+        <div class="nst-table-menu-item">View</div>
+        <div class="nst-table-menu-item">Edit</div>
+        <div class="nst-table-menu-item nst-table-menu-item--danger">Delete</div>
+      </div>
+    </div>
+  </div>
+
   <script>
     var currentView = 'table';
 

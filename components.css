@@ -51,7 +51,7 @@
   justify-content: center;
   gap: 8px;
   border-radius: var(--vw-radius-sm);
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family: var(--fontFamily);
   font-weight: 500;
   white-space: nowrap;
   cursor: pointer;
@@ -183,7 +183,7 @@
   border: 1px solid var(--vw-color-gray-200);
   background: var(--vw-color-white);
 
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family: var(--fontFamily);
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
@@ -202,7 +202,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family: var(--fontFamily);
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
@@ -244,7 +244,7 @@
 
 /* Hint / error message below input */
 .nst-input-hint {
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family: var(--fontFamily);
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;
@@ -283,7 +283,7 @@
   border: none;
   outline: none;
   background: transparent;
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family: var(--fontFamily);
   font-size: 14px;
   line-height: 20px;
   color: var(--vw-color-gray-700);
@@ -337,7 +337,7 @@
 
 .nst-table-th {
   padding: 10px 8px;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--fontFamily);
   font-size: 12px;
   font-weight: 500;
   line-height: 20px;
@@ -373,7 +373,7 @@
 /* Cell */
 .nst-table-td {
   padding: 10px 8px;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--fontFamily);
   font-size: 13px;
   font-weight: 400;
   line-height: 20px;
@@ -430,7 +430,7 @@
   gap: 8px;
   padding: 8px 10px;
   border-radius: 6px;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--fontFamily);
   font-size: 13px;
   line-height: 20px;
   color: #252525;
@@ -467,7 +467,7 @@
   border: 1px solid var(--vw-color-slate-200);
   border-radius: var(--vw-radius-md);
   overflow: hidden;
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family: var(--fontFamily);
 }
 
 .nst-table th {
@@ -575,7 +575,7 @@
   outline: none;
   background: transparent;
   padding: 0;
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family: var(--fontFamily);
   font-size: 14px;
   color: var(--vw-color-gray-700);
   display: none;
@@ -636,7 +636,7 @@
   cursor: pointer;
   transition: background 100ms;
   color: #1F2937;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--fontFamily);
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
@@ -699,7 +699,7 @@
   outline: none;
   resize: none;
   padding: 8px 8px 0;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--fontFamily);
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
@@ -723,7 +723,7 @@
 
 /* Character counter */
 .nst-textarea-counter {
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--fontFamily);
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;
