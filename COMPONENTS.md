@@ -38,7 +38,7 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 | Semantic card bg | `.vw-card--success\|error\|warning\|info` (+ fuchsia, purple, etc.) | `vw-cards.css` |
 | Status chip | `.vw-chip.vw-chip--success\|error\|warning\|info\|neutral` (+ `-solid`) | `vw-chips.css` |
 | Page title | `.vw-page-title`, `.vw-page-description` | `vw-cards.css` |
-| Layout | `.vw-flex`, `.vw-flex-col`, `.vw-justify-between`, `.vw-page-gap`, `.vw-gap-sm` | `vw-utilities.css` |
+| Layout | `.vw-flex`, `.vw-flex-col`, `.vw-justify-between`, `.vw-page-gap`, `.vw-gap-sm` (gap classes need a flex/grid parent on the same element — see "Common gotcha" below) | `vw-utilities.css` |
 | Grid of cards | `.vw-grid.vw-grid-cols-auto-320.vw-gap-xl` | `vw-utilities.css` |
 | Clickable card | `.vw-card--clickable` | `vw-cards.css` |
 | Status accent strip (color-code a card without tinting the whole surface) | `.vw-card--accent` on host + `.vw-card-accent` first-child div | `vw-cards.css` |
@@ -138,6 +138,35 @@ Instead:
    not a pixel-perfect match to whatever you're copying from.
 2. Only if no token is remotely close, use a literal inline value — but say so explicitly and flag
    it as a registry gap worth closing, rather than silently inventing a class name for it.
+
+---
+
+## Common gotcha — `.vw-page-gap`/`.vw-gap-*` need a flex or grid parent
+
+`.vw-page-gap` and every `.vw-gap-*` variant compile to nothing but `gap: var(--vw-space-*)`. The
+`gap` property only does anything on an element that's *also* `display: flex` or `display: grid` —
+on a plain block element it's silently accepted and does **nothing**: no console error, no visual
+difference from omitting the class entirely, and the enforcement hook sees a correctly-spelled
+registry class and stays quiet. This has actually shipped: a fresh-transform run applied
+`.vw-page-gap` straight to a `.content` wrapper, and the intended section spacing simply never
+appeared until the element also got `.vw-flex .vw-flex-col`.
+
+**Always pair a `.vw-page-gap`/`.vw-gap-*` class with a display class on the same element** —
+`.vw-flex` (+ `.vw-flex-col` for vertical stacks), `.vw-inline-flex`, or `.vw-grid` — never apply it
+to a bare block element and assume the class name alone is doing the layout work:
+
+```html
+<!-- correct: gap has a flex container to act on -->
+<div class="vw-flex vw-flex-col vw-page-gap">...</div>
+
+<!-- silent no-op: gap is set, but this div is still display:block -->
+<div class="vw-page-gap">...</div>
+```
+
+The enforcement hook has a heuristic check for this (a `vw-gap`-family token with no `vw-flex`/
+`vw-inline-flex`/`vw-grid` token on the same element) — but it can only see class attributes, not an
+equivalent `style="display:flex"`, so treat it as a backstop, not a substitute for checking this
+yourself when using the gap utilities.
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: nst-app-bootstrap
-description: Bootstraps a new or existing app repository to use the NST / Vision Waves design system (singularity-eco/vw-design-system) — adds it as a git submodule, wires up the app's CLAUDE.md, installs the nst-design-system UI-generation skill locally in the app repo, and scaffolds a minimal starter index.html. Use this whenever a user wants to start a new project on this design system, add nst-design-system to an existing repo, "set up the design system here", or asks how to wire this design system into another codebase. This is a one-time setup skill — once bootstrapped, use the nst-design-system skill itself to generate dashboards, cards, forms, and other UI.
+description: Bootstraps a new or existing app repository to use the NST / Vision Waves design system (singularity-eco/vw-design-system) — adds it as a git submodule, wires up the app's CLAUDE.md, installs the nst-design-system UI-generation skill locally for both Claude Code and Cursor, installs the Claude Code enforcement hook and a GitHub Actions CI check, and scaffolds a minimal starter index.html. Use this whenever a user wants to start a new project on this design system, add nst-design-system to an existing repo, "set up the design system here", or asks how to wire this design system into another codebase. This is a one-time setup skill — once bootstrapped, use the nst-design-system skill itself to generate dashboards, cards, forms, and other UI.
 user-invocable: true
 ---
 
@@ -14,8 +14,10 @@ Wires a target app repo up to use the NST / Vision Waves design system, automati
 2. Adds the design system as a submodule at `design-system/`
 3. Writes or extends the app's `CLAUDE.md` with a design-system pointer block
 4. Copies `.claude/skills/nst-design-system/` into the app repo, so `/nst-design-system` works there directly — not only when working inside this repo
-5. Installs the enforcement hook (`.claude/hooks/check-design-system.sh` + a `PostToolUse` entry in `.claude/settings.json`) so drift is caught automatically in this app too, not just in the design-system repo itself
-6. Scaffolds a minimal starter `index.html` — one `.vw-card-section` example, nothing more
+5. Copies `.cursor/rules/nst-design-system.mdc` + `.cursor/skills/nst-design-system/` into the app repo too, so Cursor gets the same auto-loaded rules Claude Code gets — not just Claude Code users
+6. Installs the enforcement hook (`.claude/hooks/check-design-system.sh` + a `PostToolUse` entry in `.claude/settings.json`) so drift is caught automatically in this app too, not just in the design-system repo itself
+7. Installs a CI check (`.github/workflows/design-system-check.yml`) that runs the same rules as a real gate on every PR — catches drift the hook can't, since the hook only fires inside a Claude Code session
+8. Scaffolds a minimal starter `index.html` — one `.vw-card-section` example, nothing more
 
 Every step checks for existing state first and skips or merges instead of overwriting. This makes the skill safe to re-run on a repo that's already partially set up (e.g. it already has a `CLAUDE.md` for other purposes).
 
@@ -59,7 +61,21 @@ cp -r design-system/.claude/skills/nst-design-system .claude/skills/nst-design-s
 
 This is what makes `/nst-design-system` available directly in the app repo, rather than only when someone happens to be working inside the `design-system/` submodule itself.
 
-### 5. Install the enforcement hook
+### 5. Install the Cursor rule + skill
+
+```bash
+mkdir -p .cursor/rules .cursor/skills
+cp design-system/.cursor/rules/nst-design-system.mdc .cursor/rules/nst-design-system.mdc
+cp -r design-system/.cursor/skills/nst-design-system .cursor/skills/nst-design-system
+```
+
+Skip a file that already exists rather than overwriting it — same rule as step 4. Without this
+step, a dev opening the bootstrapped app in Cursor gets nothing auto-loaded at all (Cursor doesn't
+read `CLAUDE.md` or `.claude/skills/`), even though the submodule and the registry are right there.
+This is what makes the design system usable regardless of which tool a given developer on the team
+prefers, not just Claude Code.
+
+### 6. Install the enforcement hook
 
 Writing to `.claude/settings.json` modifies Claude Code's own hook configuration — a
 properly safety-configured session may correctly pause and ask for explicit confirmation
@@ -96,7 +112,44 @@ Then wire it into `.claude/settings.json`:
 
 This gives the app the same automatic drift-checking this repo has, without the app needing to build it from scratch.
 
-### 6. Scaffold a starter page
+### 7. Install the CI check
+
+The hook from step 6 only fires inside a Claude Code session — it can't catch a human edit, a
+different tool, or a merge that bypassed the assistant entirely. This step wires up a repo-level
+gate that runs regardless of what wrote the code.
+
+Only if the app has a GitHub remote (this is a GitHub Actions workflow — skip silently, no need to
+ask, if there's no `.git/config` remote pointing at github.com):
+
+```bash
+mkdir -p .github/workflows
+```
+
+Write `.github/workflows/design-system-check.yml`:
+
+```yaml
+name: Design System Check
+
+on:
+  pull_request:
+
+jobs:
+  design-system-check:
+    uses: singularity-eco/vw-design-system/.github/workflows/design-system-check.yml@main
+    with:
+      base-sha: ${{ github.event.pull_request.base.sha }}
+      head-sha: ${{ github.event.pull_request.head.sha }}
+```
+
+If the file already exists, don't overwrite it — a repo that already has its own PR-check workflow
+shouldn't have that clobbered; tell the user to add the `design-system-check` job to it by hand
+instead. This calls the reusable workflow living in the design-system repo itself
+(`.github/workflows/design-system-check.yml`, which shares its actual rules with the Claude Code
+hook via `.claude/hooks/design-system-rules.sh` — one source of truth, two enforcement points). It
+runs as a real failing check, not a warning, since there's no assistant session to just leave a
+note for.
+
+### 8. Scaffold a starter page
 
 Only create `index.html` if the app has no HTML entry point yet — check for `index.html`, `src/index.html`, or a framework-specific entry (e.g. `src/App.tsx`, `pages/index.*`, `public/index.html`). If one already exists, skip this step and tell the user why, rather than clobbering their app's real entry point.
 

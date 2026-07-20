@@ -4,7 +4,7 @@ Clone or submodule this repo into your app, then choose one setup:
 
 ## Option A (automated) — `/nst-app-bootstrap` skill
 
-Everything in Option A below, done for you: submodule add, `CLAUDE.md` wiring, local skill install, and a minimal starter page.
+Everything in Option A below, done for you: submodule add, `CLAUDE.md` wiring, local skill install for both Claude Code and Cursor, the enforcement hook, the CI check, and a minimal starter page.
 
 ```bash
 # once per machine, so the skill exists before any app does:
@@ -53,6 +53,39 @@ claude
 ```
 
 `CLAUDE.md` and `/nst-design-system` load automatically. No manual skill install.
+
+## CI enforcement (GitHub Actions)
+
+The `.claude/hooks/check-design-system.sh` hook only fires *inside* a Claude Code session — it
+can't catch drift from a human edit, a different tool, or a merge that bypassed the assistant
+entirely. A repo-level CI check closes that gap by running the **same rules** (shared via
+`.claude/hooks/design-system-rules.sh`) as a real gate on every PR, regardless of what wrote the
+code.
+
+If you followed Option A (submodule at `design-system/`), add this file to your app:
+
+```yaml
+# .github/workflows/design-system-check.yml
+name: Design System Check
+
+on:
+  pull_request:
+
+jobs:
+  design-system-check:
+    uses: singularity-eco/vw-design-system/.github/workflows/design-system-check.yml@main
+    with:
+      base-sha: ${{ github.event.pull_request.base.sha }}
+      head-sha: ${{ github.event.pull_request.head.sha }}
+```
+
+`design-system-path` defaults to `design-system`, matching the standard submodule layout — no need
+to set it unless your submodule lives somewhere else. `/nst-app-bootstrap` installs this file for
+you automatically (see its own step 7); add it manually only if you're wiring things up by hand.
+
+This runs as a real failing check (not a warning) — a violation blocks the PR from showing green,
+though a reviewer can still merge past it if a finding turns out to be a genuine false positive
+(adjudicate against `COMPONENTS.md`, same as the in-session hook).
 
 ## Verify in Claude Code
 

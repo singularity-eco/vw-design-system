@@ -1,0 +1,12 @@
+name: PR Check
+
+on:
+  pull_request:
+
+jobs:
+  design-system-check:
+    uses: ./.github/workflows/design-system-check.yml
+    with:
+      base-sha: ${{ github.event.pull_request.base.sha }}
+      head-sha: ${{ github.event.pull_request.head.sha }}
+      design-system-path: "."

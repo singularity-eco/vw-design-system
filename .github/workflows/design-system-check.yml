@@ -1,0 +1,39 @@
+name: Design System Check (reusable)
+
+# Reusable workflow — this is the one source of truth for the drift check.
+# - Called from THIS repo's own PRs via .github/workflows/pr-check.yml (design-system-path: '.').
+# - Called from consuming apps via:
+#     uses: singularity-eco/vw-design-system/.github/workflows/design-system-check.yml@main
+#   with base-sha/head-sha from their own pull_request event. Their checkout must include
+#   the `design-system` submodule (submodules: true, done below) since that's where this
+#   workflow's steps find the shared script and rules lib.
+
+on:
+  workflow_call:
+    inputs:
+      base-sha:
+        description: "Base commit SHA to diff from (e.g. github.event.pull_request.base.sha)"
+        required: true
+        type: string
+      head-sha:
+        description: "Head commit SHA to diff to (e.g. github.event.pull_request.head.sha)"
+        required: true
+        type: string
+      design-system-path:
+        description: "Path to the design-system checkout relative to the calling repo's root. Default matches the standard `git submodule add ... design-system` layout from /nst-app-bootstrap."
+        required: false
+        type: string
+        default: design-system
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (with submodules, full history for diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Run design-system check
+        run: bash "${{ inputs.design-system-path }}/.github/scripts/ci-design-check.sh" "${{ inputs.base-sha }}" "${{ inputs.head-sha }}"
