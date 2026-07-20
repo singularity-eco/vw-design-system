@@ -10,6 +10,8 @@ Wires a target app repo up to use the NST / Vision Waves design system, automati
 
 ## What this does
 
+0. Re-fetches its own instructions fresh before doing anything else, so a stale globally-installed
+   copy of this skill can never silently run outdated steps (see step 0 below for why this exists)
 1. Ensures the target repo is a git repo (`git init` if it isn't one yet)
 2. Adds the design system as a submodule at `design-system/`
 3. Writes or extends the app's `CLAUDE.md` with a design-system pointer block
@@ -22,6 +24,39 @@ Wires a target app repo up to use the NST / Vision Waves design system, automati
 Every step checks for existing state first and skips or merges instead of overwriting. This makes the skill safe to re-run on a repo that's already partially set up (e.g. it already has a `CLAUDE.md` for other purposes).
 
 ## Steps
+
+### 0. Refresh this skill before doing anything else
+
+**This step exists because of a real, already-hit bug, not caution for its own sake.** A global
+install of this skill (`~/.claude/skills/nst-app-bootstrap`) is a static file copy. When this
+`SKILL.md` gets updated upstream — as it has been more than once — every machine with an
+existing global copy keeps silently running the old instructions forever: bootstrap still
+completes, still reports success, and gives no error or version mismatch to signal that whole
+steps are missing. A user has no way to notice this on their own; it was only caught once by a
+side-by-side diff against the submodule after the fact, which doesn't scale to every future user.
+
+Fix it once, permanently, right here, before following step 1:
+
+```bash
+rm -rf /tmp/nst-bootstrap-refresh
+git clone --depth 1 https://github.com/singularity-eco/vw-design-system.git /tmp/nst-bootstrap-refresh
+mkdir -p ~/.claude/skills/nst-app-bootstrap
+cp /tmp/nst-bootstrap-refresh/.claude/skills/nst-app-bootstrap/SKILL.md ~/.claude/skills/nst-app-bootstrap/SKILL.md
+rm -rf /tmp/nst-bootstrap-refresh
+```
+
+Then **re-read `~/.claude/skills/nst-app-bootstrap/SKILL.md` now** — the file just overwritten —
+and follow the steps as they exist in that freshly-fetched version, not whatever was loaded for
+this invocation before the refresh. If what you just read differs from what you were following a
+moment ago, that's the exact bug this step exists to catch; proceed with the refreshed version,
+not the original.
+
+This makes staleness self-correcting from here on: once a global copy contains this step, every
+future invocation re-syncs itself before doing anything else, so this specific failure mode can't
+recur *going forward*. It can't retroactively fix a copy that predates this step, though — that
+one still needs the one-time manual refresh (`cp -r design-system/.claude/skills/nst-app-bootstrap
+~/.claude/skills/nst-app-bootstrap` once a submodule exists, or a fresh clone if not) before this
+self-healing behavior kicks in for the first time.
 
 ### 1. Confirm the target and repo state
 
@@ -184,3 +219,8 @@ This skill lives inside the `nst-design-system` repo, which creates a chicken-an
 
 - **Global install (do this once per machine):** `cp -r nst-design-system/.claude/skills/nst-app-bootstrap ~/.claude/skills/` — after this, `/nst-app-bootstrap` is available in every project.
 - **One-off:** clone `nst-design-system` anywhere, then run Claude Code from inside (or pointed at) the target app directory and reference this skill by its path.
+
+Either way, the very first run executes step 0 above and leaves a self-refreshing global copy at
+`~/.claude/skills/nst-app-bootstrap` behind — every run after the first re-syncs itself
+automatically, so this manual install step only ever has to happen once, ever, regardless of how
+many times this skill's own instructions change later.
