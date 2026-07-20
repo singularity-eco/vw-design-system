@@ -70,18 +70,18 @@ Use only when the task needs atomic controls not covered by vw-cards.
 | Action menu (generic dropdown — also used for the table toolbar's Actions trigger) | `.nst-action-menu`, `.nst-action-menu-item`, `.nst-action-menu-divider` | `components.css`, `preview/action-menu.html` |
 | Surface | `.nst-surface`, `.nst-surface--raised` | `components.css` |
 | Buttons | `.nst-btn` + variant (`--filled\|--gray\|--ghost\|--action\|--danger\|--danger-subtle`, default = outline) + size (`--xs\|--sm\|--md\|--lg`, default = md) | `components.css`, `preview/buttons-styles.html`, `buttons-sizes.html` |
-| Buttons (React) | `Button`, `Field`, `Chip` from `components.jsx` | `ui_kits/admin-console/` |
-| Checkbox / radio / toggle | preview specimens | `preview/selection-controls.html` |
+| Checkbox / radio / toggle | preview specimens **(no shipped class — see "Known registry gaps" below)** | `preview/selection-controls.html` |
 | Chips (Figma pastel) | preview specimens | `preview/chips-status.html` |
-| Tabs | preview specimens | `preview/tabs.html` |
+| Tabs | preview specimens **(no shipped class — see "Known registry gaps" below)** | `preview/tabs.html` |
 | Tooltip | preview specimens | `preview/tooltip.html` |
 | Stepper | preview specimens | `preview/stepper.html` |
-| Timeline | `Timeline` in `components.jsx` | `preview/timeline.html` |
 | Charts | preview specimens | `preview/bar-chart.html`, `preview/line-chart.html` |
 | Filter popover | preview specimens | `preview/filter-popover.html` |
 | Colors (Figma semantic) | `colors_and_type.css` tokens | `preview/colors-semantic.html` |
 
 **React prototype:** `ui_kits/admin-console/index.html` (atomic Figma components; Inter font — use only for atomic demos, not dashboard cards)
+
+**`components.jsx`'s `Button`/`Field`/`Chip`/`Timeline` are NOT registered components** — confirmed by reading the source: hardcoded Inter font and raw hex (`#1C81EF`, `#E9E9E9`, `#FF2020`, etc.) throughout, exactly what the Forbidden list below bans. An earlier version of this table listed them as if they were usable, directly contradicting the Framework-usage section's own instruction three headings down not to treat `components.jsx` as the design-system React layer. If you need a button/input/chip in React: bind the real `.nst-btn`/`.nst-input`/`.vw-chip` classes via `className` (see "Framework usage" below) — there is no separate React component set to reach for instead. Timeline has no registered equivalent at all yet — see "Known registry gaps."
 
 ---
 
@@ -167,6 +167,42 @@ The enforcement hook has a heuristic check for this (a `vw-gap`-family token wit
 `vw-inline-flex`/`vw-grid` token on the same element) — but it can only see class attributes, not an
 equivalent `style="display:flex"`, so treat it as a backstop, not a substitute for checking this
 yourself when using the gap utilities.
+
+---
+
+## Known registry gaps
+
+Consolidated from independent audits of two separately-built consuming apps (Sample-thread's
+`Dev-Sec-Ops-V4` transform, and an `admin-dashboard` fresh build) — no shipped `.vw-*`/`.nst-*`
+class exists for any of these; where a `preview/*.html` file exists for one, it's an inline-style
+demo, not a real component. Build these page-local, token-only, per "Filling a gap in the utility
+layer" above — do not invent a parallel class system for them.
+
+**Recurred on 2+ independently-built apps — the "Promoting a page-local pattern" bar below is
+already met for these three.** Don't promote unilaterally even so; this just means they're real
+candidates the next time this file gets a sign-off review:
+- **App shell** (sidebar nav + topbar)
+- **Modal / Drawer**
+- **Toast**
+
+**Seen on one app so far** (not yet at the cross-page-recurrence bar):
+- Avatar (single + stacked group with overflow)
+- Checkbox / radio / toggle switch (styled, not just the inline demo)
+- Tabs (styled, not just the inline demo)
+- Timeline / comment thread
+- `<select>` dropdown
+- Date picker
+- Pagination
+- Skeleton loading rows
+- Confirm dialog
+- Empty state pattern
+- Loading spinner (submit-button state)
+- Progress meter, heatmap, activity feed, sparkline/chart primitives, segmented control, filter
+  chip, sub-12px type scale (from the `Dev-Sec-Ops-V4` transform specifically)
+
+If you hit a gap not listed here, add it under the appropriate bucket rather than silently
+building around it unlogged — that's how the first three above became visible as real candidates
+instead of staying siloed in one app's private notes.
 
 ---
 
