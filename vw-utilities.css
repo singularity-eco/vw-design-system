@@ -64,6 +64,25 @@
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
 
+/* Responsive reflow for the fixed-column-count grids above — found missing via
+   a real consuming app (a 4-up KPI row overflowed/cramped on narrower screens,
+   since repeat(4, 1fr) alone has no reflow behavior). .vw-grid-cols-auto-320
+   doesn't need this: auto-fill/minmax already reflows on its own.
+   768px / 480px are this design system's first responsive breakpoints —
+   match them if more fixed-column grid utilities are added later. */
+@media (max-width: 768px) {
+  .vw-grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+  .vw-grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .vw-grid-cols-2,
+  .vw-grid-cols-3,
+  .vw-grid-cols-4 {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
 .vw-items-start-grid {
   align-items: start;
 }

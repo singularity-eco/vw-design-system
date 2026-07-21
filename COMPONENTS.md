@@ -197,6 +197,11 @@ candidates the next time this file gets a sign-off review:
 - Confirm dialog
 - Empty state pattern
 - Loading spinner (submit-button state)
+- Sortable column header affordance (icon + click target for a `<th>`)
+- "Danger"/urgency text treatment outside of a chip (e.g. an overdue date) — only semantic option
+  today is wrapping it in a `.vw-chip--error`, which isn't always the right shape
+- Multi-select / combobox (distinct from the plain `<select>` gap above — no multi-value selection
+  pattern of any kind exists yet)
 - Progress meter, heatmap, activity feed, sparkline/chart primitives, segmented control, filter
   chip, sub-12px type scale (from the `Dev-Sec-Ops-V4` transform specifically)
 
