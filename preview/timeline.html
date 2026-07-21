@@ -61,12 +61,16 @@ const TimelineItem = ({ title, subtext, isLast }) => {
           marginTop: 1, /* (18px line-height / 2) - (16px dot / 2) = 1px — aligns dot center with title */
         }}></div>
 
-        {/* Connecting line — starts immediately below the dot, no gap */}
+        {/* Connecting line — starts immediately below the dot, no gap.
+            Geometry here is correct by default flex stretch (rail matches
+            content height, confirmed via computed layout); the real failure
+            mode is contrast, not layout — a thin line in a near-white color
+            reads as "disconnected" even when it geometrically isn't. */}
         {!isLast && (
           <div style={{
-            width: 1.5,
+            width: 2,
             flex: 1,
-            background: '#EFF6FF',
+            background: '#D1D5DB',
             minHeight: 16,
           }}></div>
         )}
