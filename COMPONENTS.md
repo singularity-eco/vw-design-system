@@ -6,6 +6,8 @@
 
 **Retrofitting an existing app (not building fresh)?** See `SKILL.md` → "Retrofitting an existing app" — read the code first, screenshot the running app, restyle only (never touch data-wiring), then re-verify. Don't rebuild from scratch.
 
+**Composing a card from real production precedent, not guessing at arrangement?** See `docs/card-reference.md` — a modular catalog of header/body/footer pieces and composed archetypes (KPI, entity+status, alert, comparison, profile, etc.), sourced from real production Figma reference. Every piece maps to classes already in this registry — it's a composition guide, not a new component layer.
+
 ## Mandatory setup (every HTML page)
 
 ```html
@@ -202,6 +204,10 @@ candidates the next time this file gets a sign-off review:
   today is wrapping it in a `.vw-chip--error`, which isn't always the right shape
 - Multi-select / combobox (distinct from the plain `<select>` gap above — no multi-value selection
   pattern of any kind exists yet)
+- Rating (star) — confirmed real in the legacy `core-ui` component library (`rating-star`), not just
+  something a consuming app happened to invent: a row of star icons, empty state in a neutral gray,
+  filled/hover in gold. Until built, fall back to existing tokens rather than a hardcoded gold hex —
+  `--vw-color-amber-400` already covers the same intent, `--vw-color-gray-300` for the empty state
 - Progress meter, heatmap, activity feed, sparkline/chart primitives, segmented control, filter
   chip, sub-12px type scale (from the `Dev-Sec-Ops-V4` transform specifically)
 
