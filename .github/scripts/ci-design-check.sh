@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # CI entry point for design-system drift detection. Unlike the Claude Code
 # PostToolUse hook (warn-only, fires per-edit inside a session), this runs once
-# per PR and is a real gate: it fails the check if any changed HTML/JSX/TSX file
-# trips a rule. Catches drift regardless of what wrote the code — a human, a
-# different AI tool, anything — since it doesn't depend on the hook having been
-# active during authoring.
+# per PR and is a real gate: it fails the check if any changed HTML/JSX/TSX/CSS
+# file trips a rule. Catches drift regardless of what wrote the code — a human,
+# a different AI tool, anything — since it doesn't depend on the hook having
+# been active during authoring.
 #
 # Shares its actual detection logic with the Claude Code hook via
 # .claude/hooks/design-system-rules.sh — one source of truth for the checks.
@@ -24,10 +24,10 @@ rules_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 # shellcheck source=../../.claude/hooks/design-system-rules.sh
 source "$rules_root/.claude/hooks/design-system-rules.sh"
 
-changed_files=$(git diff --name-only --diff-filter=ACMR "$base_sha" "$head_sha" -- '*.html' '*.jsx' '*.tsx' || true)
+changed_files=$(git diff --name-only --diff-filter=ACMR "$base_sha" "$head_sha" -- '*.html' '*.jsx' '*.tsx' '*.css' || true)
 
 if [ -z "$changed_files" ]; then
-  echo "No changed HTML/JSX/TSX files in this diff — nothing to check."
+  echo "No changed HTML/JSX/TSX/CSS files in this diff — nothing to check."
   exit 0
 fi
 
