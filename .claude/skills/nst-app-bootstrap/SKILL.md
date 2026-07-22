@@ -19,7 +19,8 @@ Wires a target app repo up to use the NST / Vision Waves design system, automati
 5. Copies `.cursor/rules/nst-design-system.mdc` + `.cursor/skills/nst-design-system/` into the app repo too, so Cursor gets the same auto-loaded rules Claude Code gets — not just Claude Code users
 6. Installs the enforcement hook (`.claude/hooks/check-design-system.sh` + a `PostToolUse` entry in `.claude/settings.json`) so drift is caught automatically in this app too, not just in the design-system repo itself
 7. Installs a CI check (`.github/workflows/design-system-check.yml`) that runs the same rules as a real gate on every PR — catches drift the hook can't, since the hook only fires inside a Claude Code session
-8. Scaffolds a minimal starter `index.html` — one `.vw-card-section` example, nothing more
+8. Installs a session-start staleness check (`.claude/hooks/check-design-system-staleness.sh` + a `SessionStart` entry in `.claude/settings.json`) so the agent proactively flags — once per session, not per task — when this app's pinned `design-system/` submodule has fallen behind `origin/main`, instead of the app silently drifting further behind with no signal
+9. Scaffolds a minimal starter `index.html` — one `.vw-card-section` example, nothing more
 
 Every step checks for existing state first and skips or merges instead of overwriting. This makes the skill safe to re-run on a repo that's already partially set up (e.g. it already has a `CLAUDE.md` for other purposes).
 
@@ -184,7 +185,47 @@ hook via `.claude/hooks/design-system-rules.sh` — one source of truth, two enf
 runs as a real failing check, not a warning, since there's no assistant session to just leave a
 note for.
 
-### 8. Scaffold a starter page
+### 8. Install the session-start staleness check
+
+Git submodules don't auto-sync — pushing a commit to `vw-design-system` gives every app that
+already pinned an older commit no signal at all that an update exists, until someone happens to
+check by hand. This step closes that gap with a `SessionStart` hook: once per session start or
+resume (never per-prompt, so it stays cheap), it does a quick `git fetch` on the `design-system/`
+submodule and, if the app's pinned commit is behind `origin/main`, injects that fact into context
+so the agent can ask the user whether to update now or later — never updates silently either way.
+
+Same settings.json caveat as step 6 — a properly safety-configured session may pause for
+confirmation before writing to `.claude/settings.json`; that's expected, confirm and proceed.
+
+```bash
+mkdir -p .claude/hooks
+cp design-system/.claude/hooks/check-design-system-staleness.sh .claude/hooks/check-design-system-staleness.sh
+chmod +x .claude/hooks/check-design-system-staleness.sh
+```
+
+Then wire it into `.claude/settings.json` under `hooks.SessionStart` (merge — don't replace
+`hooks.PostToolUse` from step 6):
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bash .claude/hooks/check-design-system-staleness.sh 2>/dev/null || true" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Validate after writing: `jq -e '.hooks.SessionStart[0].hooks[0].command' .claude/settings.json` should print the command back, not error.
+
+This hook is silent by design whenever there's nothing to report — no submodule, offline, or
+already current — so a quiet session start means it ran and found nothing, not that it didn't run.
+
+### 9. Scaffold a starter page
 
 Only create `index.html` if the app has no HTML entry point yet — check for `index.html`, `src/index.html`, or a framework-specific entry (e.g. `src/App.tsx`, `pages/index.*`, `public/index.html`). If one already exists, skip this step and tell the user why, rather than clobbering their app's real entry point.
 

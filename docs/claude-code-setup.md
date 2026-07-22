@@ -87,6 +87,37 @@ This runs as a real failing check (not a warning) — a violation blocks the PR 
 though a reviewer can still merge past it if a finding turns out to be a genuine false positive
 (adjudicate against `COMPONENTS.md`, same as the in-session hook).
 
+## Staying in sync (submodule staleness check)
+
+Git submodules don't auto-sync — pushing a commit here gives an app that already pinned an
+older `design-system/` commit no signal at all until someone checks by hand. `/nst-app-bootstrap`
+installs a `SessionStart` hook (`.claude/hooks/check-design-system-staleness.sh`) that closes this
+gap: once per session start/resume (never per-prompt), it fetches the submodule's remote and, if
+the app is behind `origin/main`, tells the agent to ask you whether to update now or later. Silent
+whenever there's nothing to report.
+
+If you followed Option A/B/C manually instead of `/nst-app-bootstrap`, add it yourself:
+
+```bash
+mkdir -p .claude/hooks
+cp design-system/.claude/hooks/check-design-system-staleness.sh .claude/hooks/check-design-system-staleness.sh
+chmod +x .claude/hooks/check-design-system-staleness.sh
+```
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bash .claude/hooks/check-design-system-staleness.sh 2>/dev/null || true" }
+        ]
+      }
+    ]
+  }
+}
+```
+
 ## Verify in Claude Code
 
 ```
