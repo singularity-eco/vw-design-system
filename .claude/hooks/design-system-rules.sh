@@ -25,8 +25,17 @@ ds_check_file() {
   # files exist specifically to show raw tokens/hex/Inter for teaching purposes,
   # not to consume the registry. The Forbidden-list rules are about *application*
   # UI that should be using the registry, not the registry's own docs.
+  #
+  # Both `*/preview/*` (path has a directory component before "preview") AND the
+  # bare `preview/*` (path starts with "preview/", no leading component at all)
+  # are needed: `*/preview/*` requires the literal substring "/preview/" to
+  # appear, which a bare repo-root-relative path like "preview/x.html" does NOT
+  # contain (no leading "/"). This is exactly the path shape `git diff
+  # --name-only` produces in the CI check - without the bare-prefix case, the CI
+  # gate would have incorrectly flagged every top-level preview/ui_kits file it
+  # touched as a violation instead of exempting it.
   case "$file_path" in
-    */preview/*|*/ui_kits/*) return 0 ;;
+    */preview/*|*/ui_kits/*|preview/*|ui_kits/*) return 0 ;;
   esac
 
   local warnings=()

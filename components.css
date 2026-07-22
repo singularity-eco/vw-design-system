@@ -745,3 +745,238 @@
 }
 .nst-textarea-resize:hover                         { color: #6B7280; }
 .nst-textarea-wrap.nst-textarea--disabled .nst-textarea-resize { cursor: not-allowed; pointer-events: none; }
+
+/* ============================================================
+   Date picker — .nst-datepicker
+   Ported from a real production spec (see docs/card-reference.md's
+   provenance note) — single date, single date+time, date range, and
+   date range+time, each with a collapsed/input state and an expanded
+   grid state. Was a "Known registry gaps" entry; promoted here once a
+   precise spec existed to build from, not guessed.
+
+   Structure: header (date text + edit icon) -> nav (prev/next + a
+   clickable month/year label that swaps the grid for a year grid) ->
+   day grid OR year grid -> optional "Set Time" stepper row -> footer
+   (Cancel/Set, reuse .nst-btn).
+   ============================================================ */
+
+.nst-datepicker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 320px;
+  padding: 16px;
+  box-sizing: border-box;
+
+  background: var(--vw-color-white);
+  border: 1px solid var(--vw-color-gray-200);
+  border-radius: var(--vw-radius-md);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(16, 24, 40, 0.1));
+  font-family: var(--fontFamily);
+}
+
+.nst-datepicker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vw-color-gray-900);
+}
+
+.nst-datepicker-header-edit {
+  display: inline-flex;
+  color: var(--vw-color-gray-400);
+  cursor: pointer;
+}
+.nst-datepicker-header-edit:hover { color: var(--vw-color-gray-600); }
+
+/* Month navigator */
+.nst-datepicker-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nst-datepicker-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: none;
+  border-radius: var(--vw-radius-sm);
+  color: var(--vw-color-gray-500);
+  cursor: pointer;
+}
+.nst-datepicker-nav-btn:hover { background: var(--vw-color-gray-50); color: var(--vw-color-gray-700); }
+
+.nst-datepicker-nav-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vw-color-gray-900);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--vw-radius-sm);
+}
+.nst-datepicker-nav-label:hover { background: var(--vw-color-gray-50); }
+
+/* Day grid */
+.nst-datepicker-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 2px;
+}
+
+.nst-datepicker-weekday {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--vw-color-gray-400);
+  padding: 4px 0 8px;
+}
+
+.nst-datepicker-day {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  font-size: 13px;
+  color: var(--vw-color-gray-700);
+  cursor: pointer;
+  border-radius: var(--vw-radius-full);
+  background: none;
+  border: none;
+}
+.nst-datepicker-day:hover { background: var(--vw-color-gray-50); }
+
+.nst-datepicker-day.is-muted { color: var(--vw-color-gray-300); cursor: default; }
+.nst-datepicker-day.is-muted:hover { background: none; }
+
+/* Single selection / "today" marker: solid filled circle */
+.nst-datepicker-day.is-selected {
+  background: var(--vw-color-accent-500);
+  color: var(--vw-color-white);
+  font-weight: 600;
+}
+.nst-datepicker-day.is-selected:hover { background: var(--vw-color-accent-600); }
+
+/* Range endpoints: lighter filled circle */
+.nst-datepicker-day.is-range-start,
+.nst-datepicker-day.is-range-end {
+  background: var(--vw-color-accent-200);
+  color: var(--vw-color-accent-800);
+  font-weight: 600;
+}
+
+/* Days between range endpoints: connected band, not a circle */
+.nst-datepicker-day.is-in-range {
+  border-radius: 0;
+  background: var(--vw-color-accent-50);
+}
+.nst-datepicker-day.is-range-start { border-radius: var(--vw-radius-full) 0 0 var(--vw-radius-full); }
+.nst-datepicker-day.is-range-end   { border-radius: 0 var(--vw-radius-full) var(--vw-radius-full) 0; }
+
+/* Year grid — alternate view when the nav label is clicked */
+.nst-datepicker-year-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.nst-datepicker-year {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  font-size: 13px;
+  color: var(--vw-color-gray-700);
+  cursor: pointer;
+  border-radius: var(--vw-radius-sm);
+  background: none;
+  border: none;
+}
+.nst-datepicker-year:hover { background: var(--vw-color-gray-50); }
+.nst-datepicker-year.is-muted { color: var(--vw-color-gray-300); }
+.nst-datepicker-year.is-selected { background: var(--vw-color-accent-100); color: var(--vw-color-accent-700); font-weight: 600; }
+
+/* Collapsed input state — single date: one field, built on .nst-input-shell */
+.nst-datepicker-field-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--vw-color-gray-500);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.nst-datepicker-range-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* "Set Time" section */
+.nst-datepicker-time {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--vw-color-gray-100);
+}
+
+.nst-datepicker-time-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vw-color-gray-900);
+}
+
+.nst-datepicker-steppers {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nst-datepicker-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 72px;
+  padding: 6px 8px;
+  border: 1px solid var(--vw-color-gray-200);
+  border-radius: var(--vw-radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vw-color-gray-900);
+}
+
+.nst-datepicker-stepper-arrows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nst-datepicker-stepper-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 10px;
+  color: var(--vw-color-gray-400);
+  cursor: pointer;
+}
+.nst-datepicker-stepper-btn:hover { color: var(--vw-color-gray-700); }
+
+/* Footer */
+.nst-datepicker-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 4px;
+}

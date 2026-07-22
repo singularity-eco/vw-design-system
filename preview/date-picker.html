@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Date picker — NST Design System</title>
+<link rel="stylesheet" href="../colors.css">
+<link rel="stylesheet" href="../spacing.css">
+<link rel="stylesheet" href="../typography-tokens.css">
+<link rel="stylesheet" href="../theme-tokens.css">
+<link rel="stylesheet" href="../vw-chips.css">
+<link rel="stylesheet" href="../components.css">
+<style>
+  @font-face { font-family: 'Inter'; src: url('../fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype-variations'); font-weight: 100 900; font-style: normal; font-display: swap; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 28px; background: #F4F4F4; font-family: 'Inter', system-ui, sans-serif; color: #252525; }
+  .block-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #A8A8A8; margin-bottom: 12px; }
+  .row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; margin-bottom: 40px; }
+  .col-label { font-size: 12px; font-weight: 500; color: #6B7280; margin-bottom: 8px; }
+  .icon { display: inline-flex; }
+</style>
+</head>
+<body>
+
+  <div class="block-label">Date picker — .nst-datepicker (single date, click a day to select; click the month/year to open the year grid)</div>
+  <div class="row">
+    <div>
+      <div class="col-label">Expanded — day grid</div>
+      <div class="nst-datepicker" id="single-day-view">
+        <div class="nst-datepicker-header">
+          <span id="single-header-text">10 May 2025</span>
+          <span class="icon nst-datepicker-header-edit" title="Edit">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2l3 3-8 8H3v-3l8-8z"/></svg>
+          </span>
+        </div>
+        <div class="nst-datepicker-nav">
+          <button type="button" class="nst-datepicker-nav-btn" aria-label="Previous month">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+          </button>
+          <button type="button" class="nst-datepicker-nav-label" id="single-nav-label">
+            May 2025
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+          </button>
+          <button type="button" class="nst-datepicker-nav-btn" aria-label="Next month">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg>
+          </button>
+        </div>
+
+        <div class="nst-datepicker-grid" id="single-grid">
+          <div class="nst-datepicker-weekday">Mo</div><div class="nst-datepicker-weekday">Tu</div><div class="nst-datepicker-weekday">We</div><div class="nst-datepicker-weekday">Th</div><div class="nst-datepicker-weekday">Fr</div><div class="nst-datepicker-weekday">Sa</div><div class="nst-datepicker-weekday">Su</div>
+          <div class="nst-datepicker-day is-muted">30</div><div class="nst-datepicker-day is-muted">31</div>
+          <div class="nst-datepicker-day">1</div><div class="nst-datepicker-day">2</div><div class="nst-datepicker-day">3</div><div class="nst-datepicker-day">4</div><div class="nst-datepicker-day">5</div>
+          <div class="nst-datepicker-day">6</div><div class="nst-datepicker-day">7</div><div class="nst-datepicker-day">8</div><div class="nst-datepicker-day">9</div>
+          <div class="nst-datepicker-day is-selected">10</div>
+          <div class="nst-datepicker-day">11</div><div class="nst-datepicker-day">12</div>
+          <div class="nst-datepicker-day">13</div><div class="nst-datepicker-day">14</div><div class="nst-datepicker-day">15</div><div class="nst-datepicker-day">16</div><div class="nst-datepicker-day">17</div><div class="nst-datepicker-day">18</div><div class="nst-datepicker-day">19</div>
+          <div class="nst-datepicker-day">20</div><div class="nst-datepicker-day">21</div><div class="nst-datepicker-day">22</div><div class="nst-datepicker-day">23</div><div class="nst-datepicker-day">24</div><div class="nst-datepicker-day">25</div><div class="nst-datepicker-day">26</div>
+          <div class="nst-datepicker-day">27</div><div class="nst-datepicker-day">28</div><div class="nst-datepicker-day">29</div><div class="nst-datepicker-day">30</div><div class="nst-datepicker-day">31</div>
+          <div class="nst-datepicker-day is-muted">1</div><div class="nst-datepicker-day is-muted">2</div>
+        </div>
+
+        <div class="nst-datepicker-year-grid" id="single-year-grid" style="display:none;">
+          <div class="nst-datepicker-year is-muted">2011</div><div class="nst-datepicker-year is-muted">2012</div><div class="nst-datepicker-year is-muted">2013</div><div class="nst-datepicker-year is-muted">2014</div><div class="nst-datepicker-year is-muted">2015</div>
+          <div class="nst-datepicker-year is-muted">2016</div><div class="nst-datepicker-year is-muted">2017</div><div class="nst-datepicker-year is-muted">2018</div><div class="nst-datepicker-year is-muted">2019</div><div class="nst-datepicker-year is-muted">2020</div>
+          <div class="nst-datepicker-year is-muted">2021</div><div class="nst-datepicker-year is-muted">2022</div><div class="nst-datepicker-year is-muted">2023</div><div class="nst-datepicker-year is-muted">2024</div><div class="nst-datepicker-year is-selected">2025</div>
+          <div class="nst-datepicker-year is-muted">2026</div><div class="nst-datepicker-year is-muted">2027</div><div class="nst-datepicker-year is-muted">2028</div><div class="nst-datepicker-year is-muted">2029</div><div class="nst-datepicker-year is-muted">2030</div>
+        </div>
+
+        <div class="nst-datepicker-footer">
+          <button type="button" class="nst-btn nst-btn--sm">Cancel</button>
+          <button type="button" class="nst-btn nst-btn--sm nst-btn--filled">Set</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="col-label">Collapsed / input state</div>
+      <div class="nst-datepicker" style="width:280px;">
+        <div class="nst-datepicker-header">10 May 2025</div>
+        <div class="nst-input-shell">
+          <span class="nst-input-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6h12M5 2v2M11 2v2"/></svg>
+          </span>
+          <input type="text" value="10 May 2025" readonly>
+        </div>
+        <div class="nst-datepicker-footer">
+          <button type="button" class="nst-btn nst-btn--sm">Cancel</button>
+          <button type="button" class="nst-btn nst-btn--sm nst-btn--filled">Set</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="col-label">Date + time</div>
+      <div class="nst-datepicker" style="width:280px;">
+        <div class="nst-datepicker-header">
+          10 May 2025
+          <span class="icon nst-datepicker-header-edit" title="Edit">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2l3 3-8 8H3v-3l8-8z"/></svg>
+          </span>
+        </div>
+        <div class="nst-datepicker-nav">
+          <button type="button" class="nst-datepicker-nav-btn" aria-label="Previous month"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg></button>
+          <button type="button" class="nst-datepicker-nav-label">May 2025 <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></button>
+          <button type="button" class="nst-datepicker-nav-btn" aria-label="Next month"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></button>
+        </div>
+        <div class="nst-datepicker-grid">
+          <div class="nst-datepicker-weekday">Mo</div><div class="nst-datepicker-weekday">Tu</div><div class="nst-datepicker-weekday">We</div><div class="nst-datepicker-weekday">Th</div><div class="nst-datepicker-weekday">Fr</div><div class="nst-datepicker-weekday">Sa</div><div class="nst-datepicker-weekday">Su</div>
+          <div class="nst-datepicker-day is-muted">30</div><div class="nst-datepicker-day is-muted">31</div>
+          <div class="nst-datepicker-day">1</div><div class="nst-datepicker-day">2</div><div class="nst-datepicker-day">3</div><div class="nst-datepicker-day">4</div><div class="nst-datepicker-day">5</div>
+          <div class="nst-datepicker-day">6</div><div class="nst-datepicker-day">7</div><div class="nst-datepicker-day">8</div><div class="nst-datepicker-day">9</div>
+          <div class="nst-datepicker-day is-selected">10</div>
+          <div class="nst-datepicker-day">11</div><div class="nst-datepicker-day">12</div>
+        </div>
+        <div class="nst-datepicker-time">
+          <div class="nst-datepicker-time-label">Set Time</div>
+          <div class="nst-datepicker-steppers">
+            <div class="nst-datepicker-stepper">08 <span class="nst-datepicker-stepper-arrows"><span class="nst-datepicker-stepper-btn">▲</span><span class="nst-datepicker-stepper-btn">▼</span></span></div>
+            <div class="nst-datepicker-stepper">09 <span class="nst-datepicker-stepper-arrows"><span class="nst-datepicker-stepper-btn">▲</span><span class="nst-datepicker-stepper-btn">▼</span></span></div>
+            <div class="nst-datepicker-stepper">AM <span class="nst-datepicker-stepper-arrows"><span class="nst-datepicker-stepper-btn">▲</span><span class="nst-datepicker-stepper-btn">▼</span></span></div>
+          </div>
+        </div>
+        <div class="nst-datepicker-footer">
+          <button type="button" class="nst-btn nst-btn--sm">Cancel</button>
+          <button type="button" class="nst-btn nst-btn--sm nst-btn--filled">Set</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block-label">Date range — same classes, range-highlight states (.is-range-start / .is-in-range / .is-range-end)</div>
+  <div class="row">
+    <div>
+      <div class="col-label">Expanded — day grid</div>
+      <div class="nst-datepicker">
+        <div class="nst-datepicker-header">
+          12 May 2025 – 25 May 2025
+          <span class="icon nst-datepicker-header-edit" title="Edit"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2l3 3-8 8H3v-3l8-8z"/></svg></span>
+        </div>
+        <div class="nst-datepicker-nav">
+          <button type="button" class="nst-datepicker-nav-btn" aria-label="Previous month"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg></button>
+          <button type="button" class="nst-datepicker-nav-label">May 2025 <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></button>
+          <button type="button" class="nst-datepicker-nav-btn" aria-label="Next month"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></button>
+        </div>
+        <div class="nst-datepicker-grid">
+          <div class="nst-datepicker-weekday">Mo</div><div class="nst-datepicker-weekday">Tu</div><div class="nst-datepicker-weekday">We</div><div class="nst-datepicker-weekday">Th</div><div class="nst-datepicker-weekday">Fr</div><div class="nst-datepicker-weekday">Sa</div><div class="nst-datepicker-weekday">Su</div>
+          <div class="nst-datepicker-day is-muted">30</div><div class="nst-datepicker-day is-muted">31</div>
+          <div class="nst-datepicker-day">1</div><div class="nst-datepicker-day">2</div><div class="nst-datepicker-day">3</div><div class="nst-datepicker-day">4</div><div class="nst-datepicker-day">5</div>
+          <div class="nst-datepicker-day">6</div><div class="nst-datepicker-day">7</div><div class="nst-datepicker-day">8</div><div class="nst-datepicker-day">9</div><div class="nst-datepicker-day">10</div>
+          <div class="nst-datepicker-day">11</div>
+          <div class="nst-datepicker-day is-range-start">12</div><div class="nst-datepicker-day is-in-range">13</div><div class="nst-datepicker-day is-in-range">14</div><div class="nst-datepicker-day is-in-range">15</div><div class="nst-datepicker-day is-in-range">16</div><div class="nst-datepicker-day is-in-range">17</div><div class="nst-datepicker-day is-in-range">18</div>
+          <div class="nst-datepicker-day is-in-range">19</div><div class="nst-datepicker-day is-in-range">20</div><div class="nst-datepicker-day is-in-range">21</div><div class="nst-datepicker-day is-in-range">22</div><div class="nst-datepicker-day is-in-range">23</div><div class="nst-datepicker-day is-in-range">24</div><div class="nst-datepicker-day is-range-end">25</div>
+          <div class="nst-datepicker-day">26</div><div class="nst-datepicker-day">27</div><div class="nst-datepicker-day">28</div><div class="nst-datepicker-day">29</div><div class="nst-datepicker-day">30</div><div class="nst-datepicker-day">31</div><div class="nst-datepicker-day is-muted">1</div>
+          <div class="nst-datepicker-day is-muted">2</div>
+        </div>
+        <div class="nst-datepicker-footer">
+          <button type="button" class="nst-btn nst-btn--sm">Cancel</button>
+          <button type="button" class="nst-btn nst-btn--sm nst-btn--filled">Set</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="col-label">Collapsed — two stacked fields</div>
+      <div class="nst-datepicker" style="width:280px;">
+        <div class="nst-datepicker-header">12 May 2025 – 25 May 2025</div>
+        <div>
+          <label class="nst-datepicker-field-label">Start date</label>
+          <div class="nst-input-shell">
+            <span class="nst-input-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6h12M5 2v2M11 2v2"/></svg></span>
+            <input type="text" value="12 May 2025" readonly>
+          </div>
+        </div>
+        <div>
+          <label class="nst-datepicker-field-label">End date</label>
+          <div class="nst-input-shell">
+            <span class="nst-input-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6h12M5 2v2M11 2v2"/></svg></span>
+            <input type="text" value="25 May 2025" readonly>
+          </div>
+        </div>
+        <div class="nst-datepicker-footer">
+          <button type="button" class="nst-btn nst-btn--sm">Cancel</button>
+          <button type="button" class="nst-btn nst-btn--sm nst-btn--filled">Set</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Single-date demo: click a (non-muted) day to select it; click the
+  // month/year label to open the year grid; click a year to return.
+  const dayGrid = document.getElementById('single-grid');
+  const yearGrid = document.getElementById('single-year-grid');
+  const navLabel = document.getElementById('single-nav-label');
+  const headerText = document.getElementById('single-header-text');
+
+  dayGrid.querySelectorAll('.nst-datepicker-day:not(.is-muted)').forEach(day => {
+    day.addEventListener('click', () => {
+      dayGrid.querySelectorAll('.nst-datepicker-day').forEach(d => d.classList.remove('is-selected'));
+      day.classList.add('is-selected');
+      headerText.textContent = `${day.textContent} May 2025`;
+    });
+  });
+
+  navLabel.addEventListener('click', () => {
+    dayGrid.style.display = dayGrid.style.display === 'none' ? 'grid' : 'none';
+    yearGrid.style.display = yearGrid.style.display === 'none' ? 'grid' : 'none';
+  });
+
+  yearGrid.querySelectorAll('.nst-datepicker-year').forEach(year => {
+    year.addEventListener('click', () => {
+      yearGrid.querySelectorAll('.nst-datepicker-year').forEach(y => y.classList.remove('is-selected'));
+      year.classList.add('is-selected');
+      yearGrid.style.display = 'none';
+      dayGrid.style.display = 'grid';
+    });
+  });
+</script>
+</body>
+</html>

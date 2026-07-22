@@ -79,6 +79,7 @@ Use only when the task needs atomic controls not covered by vw-cards.
 | Stepper | preview specimens | `preview/stepper.html` |
 | Charts | preview specimens | `preview/bar-chart.html`, `preview/line-chart.html` |
 | Filter popover | preview specimens | `preview/filter-popover.html` |
+| Date picker | `.nst-datepicker` + `.nst-datepicker-{header,nav,grid,day,year-grid,year,time,steppers,footer}` — single date, single date+time, date range, date range+time, each with a collapsed/input state (`.nst-input-shell`) and expanded grid state | `components.css`, `preview/date-picker.html` |
 | Colors (Figma semantic) | `colors_and_type.css` tokens | `preview/colors-semantic.html` |
 
 **React prototype:** `ui_kits/admin-console/index.html` (atomic Figma components; Inter font — use only for atomic demos, not dashboard cards)
@@ -193,7 +194,6 @@ candidates the next time this file gets a sign-off review:
 - Tabs (styled, not just the inline demo)
 - Timeline / comment thread
 - `<select>` dropdown
-- Date picker
 - Pagination
 - Skeleton loading rows
 - Confirm dialog
