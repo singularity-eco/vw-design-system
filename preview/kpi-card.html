@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>KPI Cards — NST Design System</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
   <link rel="stylesheet" href="../nst-design-system.css">
   <style>
     body {
@@ -102,6 +103,22 @@
           <div class="vw-card-variance is-positive">+12% from last week</div>
         </div>
       </div>
+
+      <div class="vw-card-section kpi-card" style="width: 280px;">
+        <div class="vw-card-title">On-Hold / Blocked</div>
+        <div class="vw-flex vw-justify-between vw-items-baseline vw-gap-sm vw-wrap">
+          <div class="vw-card-metric-lg">9</div>
+          <div class="vw-card-variance is-negative">
+            <i class="ph ph-caret-up vw-card-variance-icon"></i>
+            +2 this period
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="block-label" style="margin-top: var(--vw-space-md); text-transform: none; letter-spacing: normal; font-weight: 400;">
+      Tone (is-positive/is-negative/is-neutral) is always the caller's business-meaning call —
+      here the count went <em>up</em> (icon: ph-caret-up) but that's bad, so tone is is-negative.
+      Icon direction and color tone are independent; never infer one from the other.
     </div>
   </div>
 

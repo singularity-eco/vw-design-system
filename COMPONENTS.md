@@ -21,6 +21,19 @@ Optional form/table layer:
 <link rel="stylesheet" href="components.css">
 ```
 
+Optional icon layer (any `<i class="ph ph-*">` usage — table row actions, input prefix icons,
+filter triggers, `.vw-card-variance`'s direction icon, etc.):
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+```
+
+[Phosphor Icons](https://phosphoricons.com/) is this design system's icon set — already used
+throughout real specimens (`preview/gallery-atomic.html`, `preview/filter-popover.html`,
+`assets/icons.md`) via the CDN webfont, but never documented here until now. Default weight:
+`regular`; `duotone` for promo/marketing only (see `assets/icons.md`). Don't reach for a different
+icon library, an inline-SVG-from-scratch icon, or an emoji — use `<i class="ph ph-{name}">`.
+
 ---
 
 ## Layer 1 — Legacy / dashboard (default for enterprise apps)
@@ -36,7 +49,7 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 | Card body text | `.vw-card-description` | `vw-cards.css` |
 | KPI / metric value | `.vw-card-metric-lg` … `.vw-card-metric-xxxl` | `vw-cards.css`, `preview/kpi-card.html` |
 | Metric label | `.vw-card-metric-label`, `.vw-card-metric-label-sub` | `vw-cards.css` |
-| Trend / delta | `.vw-card-variance.is-positive\|is-negative\|is-neutral` | `vw-cards.css` |
+| Trend / delta | `.vw-card-variance.is-positive\|is-negative\|is-neutral` — tone (color) only, plainly optional `.vw-card-variance-icon` (Phosphor `ph-caret-up`/`ph-caret-down`) for direction; the two are independent — tone is always the caller's business-meaning call, never inferred from which way the icon points (a rising count can still be `is-negative`) | `vw-cards.css`, `preview/kpi-card.html` |
 | Semantic card bg | `.vw-card--success\|error\|warning\|info` (+ fuchsia, purple, etc.) | `vw-cards.css` |
 | Status chip | `.vw-chip.vw-chip--success\|error\|warning\|info\|neutral` (+ `-solid`) | `vw-chips.css` |
 | Page title | `.vw-page-title`, `.vw-page-description` | `vw-cards.css` |

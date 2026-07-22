@@ -265,11 +265,33 @@
 .vw-card-metric-label-sm { font-size: var(--vw-font-label-sm); }
 
 /* ── Variance / trend ────────────────────────────────────── */
+/* is-positive/is-negative/is-neutral is TONE (does this mean something good,
+   bad, or neither) — deliberately independent from the optional
+   .vw-card-variance-icon's direction (did the number go up or down). A
+   rising count can still be bad (more On-Hold vendors), so tone is always
+   the caller's call, never inferred from the icon:
+
+     <div class="vw-card-variance is-negative">
+       <i class="ph ph-caret-up vw-card-variance-icon"></i>
+       +2 On-Hold vendors
+     </div>
+
+   Icon is optional — omit it for a plain colored value, as in the original
+   spec. Uses Phosphor Icons (see "Icons" in COMPONENTS.md) — ph-caret-up/
+   ph-caret-down are two distinct glyphs, not one rotated via CSS. */
 
 .vw-card-variance {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   font-size: var(--vw-font-legend);
   font-weight: 500;
   line-height: var(--vw-line-legend);
+}
+
+.vw-card-variance-icon {
+  flex-shrink: 0;
+  font-size: 12px;
 }
 
 .vw-card-variance.is-positive { color: var(--vw-color-green-600); }
