@@ -272,9 +272,9 @@
   line-height: var(--vw-line-legend);
 }
 
-.vw-card-variance.is-positive { color: #1a7f10; }
-.vw-card-variance.is-negative { color: #d91818; }
-.vw-card-variance.is-neutral  { color: #7c7c7c; }
+.vw-card-variance.is-positive { color: var(--vw-color-green-600); }
+.vw-card-variance.is-negative { color: var(--vw-color-red-600); }
+.vw-card-variance.is-neutral  { color: var(--vw-color-gray-500); }
 
 /* ── Card icons ──────────────────────────────────────────── */
 
