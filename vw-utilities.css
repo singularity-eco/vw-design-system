@@ -47,17 +47,26 @@
 .vw-gap-lg   { gap: var(--vw-space-lg); }
 .vw-gap-xl   { gap: var(--vw-space-xl); }
 
-/* Grid helpers */
+/* Grid helpers. Tracks use minmax(0, 1fr), not bare 1fr — bare 1fr computes as
+   minmax(auto, 1fr), and "auto" enforces a floor equal to the cell's
+   min-content width. A grid cell holding a nowrap-heavy child (a data table,
+   a long unbreakable string) then forces the whole track — and the page —
+   wider than the viewport instead of staying inside its container. Found via
+   a real consuming app: a 2-up row holding `.nst-table` (whose th/td are
+   white-space: nowrap) overflowed the entire page at ordinary laptop widths
+   (measured body.scrollWidth > document width). minmax(0, 1fr) removes that
+   floor so the track — and any overflow-x handling inside it, e.g.
+   .nst-table-wrap — can actually take effect instead of being overridden. */
 .vw-grid-cols-2 {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .vw-grid-cols-3 {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .vw-grid-cols-4 {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .vw-grid-cols-auto-320 {
@@ -71,15 +80,15 @@
    768px / 480px are this design system's first responsive breakpoints —
    match them if more fixed-column grid utilities are added later. */
 @media (max-width: 768px) {
-  .vw-grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
-  .vw-grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
+  .vw-grid-cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vw-grid-cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 480px) {
   .vw-grid-cols-2,
   .vw-grid-cols-3,
   .vw-grid-cols-4 {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 }
 

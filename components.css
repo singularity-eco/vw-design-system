@@ -453,11 +453,26 @@
    readers, which the grid-of-divs variant above does not provide.
    Same visual language; no grid-template-columns bookkeeping.
 
-     <table class="nst-table"> <thead><tr><th>…  <tbody><tr class="nst-table-row">…
+     <div class="nst-table-wrap"><table class="nst-table"> <thead><tr><th>…  <tbody><tr class="nst-table-row">…</table></div>
 
    Prefer this for data grids. Use .nst-table-card/-head/-row (grid)
    only when columns must be resized or virtualised.
+
+   Always wrap in .nst-table-wrap. th/td use white-space: nowrap, so a table
+   with enough columns (or content) can exceed its container's width — the
+   wrapper is what lets it scroll horizontally in place instead of pushing
+   the whole page wider. Deliberately NOT solved by giving .nst-table itself
+   overflow-x/display:block: that would touch the box type of the <table>
+   element itself, which is exactly what this variant exists to keep intact
+   for screen readers (see the note above) — the wrapper keeps the table's
+   own display: table untouched and puts the scroll behavior one level up
+   instead. Found via a real consuming app: a vendor scorecard table
+   overflowed the whole page at ordinary laptop widths.
    ============================================================ */
+
+.nst-table-wrap {
+  overflow-x: auto;
+}
 
 .nst-table {
   width: 100%;
