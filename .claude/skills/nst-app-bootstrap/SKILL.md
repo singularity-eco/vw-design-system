@@ -256,10 +256,10 @@ Tell the user setup is complete, name the files you touched, and point them at `
 
 ## Using this skill on a fresh machine
 
-This skill lives inside the `nst-design-system` repo, which creates a chicken-and-egg problem: a brand-new app doesn't have the design system yet, so it can't have this skill yet either. Two ways around that, matching the patterns in `docs/claude-code-setup.md`:
+This skill lives inside the `vw-design-system` repo, which creates a chicken-and-egg problem: a brand-new app doesn't have the design system yet, so it can't have this skill yet either. Two ways around that, matching the patterns in `docs/claude-code-setup.md`:
 
-- **Global install (do this once per machine):** `cp -r nst-design-system/.claude/skills/nst-app-bootstrap ~/.claude/skills/` — after this, `/nst-app-bootstrap` is available in every project.
-- **One-off:** clone `nst-design-system` anywhere, then run Claude Code from inside (or pointed at) the target app directory and reference this skill by its path.
+- **Global install (do this once per machine):** `git clone https://github.com/singularity-eco/vw-design-system.git /tmp/vw-design-system && cp -r /tmp/vw-design-system/.claude/skills/nst-app-bootstrap ~/.claude/skills/ && rm -rf /tmp/vw-design-system` — after this, `/nst-app-bootstrap` is available in every project.
+- **One-off:** clone `vw-design-system` anywhere, then run Claude Code from inside (or pointed at) the target app directory and reference this skill by its path.
 
 Either way, the very first run executes step 0 above and leaves a self-refreshing global copy at
 `~/.claude/skills/nst-app-bootstrap` behind — every run after the first re-syncs itself
