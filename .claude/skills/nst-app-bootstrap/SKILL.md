@@ -26,38 +26,39 @@ Every step checks for existing state first and skips or merges instead of overwr
 
 ## Steps
 
-### 0. Refresh this skill before doing anything else
+### 0. Check for a newer version of this skill — review before adopting, never auto-execute silently
 
-**This step exists because of a real, already-hit bug, not caution for its own sake.** A global
-install of this skill (`~/.claude/skills/nst-app-bootstrap`) is a static file copy. When this
-`SKILL.md` gets updated upstream — as it has been more than once — every machine with an
-existing global copy keeps silently running the old instructions forever: bootstrap still
-completes, still reports success, and gives no error or version mismatch to signal that whole
-steps are missing. A user has no way to notice this on their own; it was only caught once by a
-side-by-side diff against the submodule after the fact, which doesn't scale to every future user.
+**This step exists because of a real, already-hit bug — and an earlier version of this exact fix
+had a real security problem of its own, found by external review.** A global install of this
+skill (`~/.claude/skills/nst-app-bootstrap`) is a static file copy. When this `SKILL.md` gets
+updated upstream — as it has been more than once — every machine with an existing global copy
+keeps silently running the old instructions forever: bootstrap still completes, still reports
+success, and gives no error or version mismatch to signal that whole steps are missing.
 
-Fix it once, permanently, right here, before following step 1:
+The first fix for this (auto-clone, overwrite the global copy, immediately follow whatever came
+back) solved staleness but introduced something worse: it fetched and blindly executed live,
+unreviewed content from the network on every single run, with no pin, no diff, no confirmation —
+a real supply-chain risk, not a hypothetical one. Fixed here: fetch, diff, show, confirm — never
+fetch-and-blindly-follow in the same breath.
 
-```bash
-rm -rf /tmp/nst-bootstrap-refresh
-git clone --depth 1 https://github.com/singularity-eco/vw-design-system.git /tmp/nst-bootstrap-refresh
-mkdir -p ~/.claude/skills/nst-app-bootstrap
-cp /tmp/nst-bootstrap-refresh/.claude/skills/nst-app-bootstrap/SKILL.md ~/.claude/skills/nst-app-bootstrap/SKILL.md
-rm -rf /tmp/nst-bootstrap-refresh
-```
+1. Fetch the current upstream version into a throwaway location. Don't touch the installed copy yet:
+   ```bash
+   rm -rf /tmp/nst-bootstrap-check
+   git clone --depth 1 https://github.com/singularity-eco/vw-design-system.git /tmp/nst-bootstrap-check
+   ```
+2. Diff it against what's actually installed:
+   ```bash
+   diff ~/.claude/skills/nst-app-bootstrap/SKILL.md /tmp/nst-bootstrap-check/.claude/skills/nst-app-bootstrap/SKILL.md
+   ```
+3. **Identical (no diff output, or the fetch/diff commands fail — e.g. offline)** — clean up (`rm -rf /tmp/nst-bootstrap-check`) and continue with step 1 below, using the instructions already loaded for this invocation. Nothing to review, nothing to adopt.
+4. **Different** — do not silently overwrite the installed copy, and do not silently keep running the old one either. Show the user the diff output and ask explicitly: adopt the new version now (overwrite `~/.claude/skills/nst-app-bootstrap/SKILL.md`, then re-read and follow it for the rest of this run), or continue this run on the currently-installed version and revisit later. Proceed only per their answer — never auto-adopt unreviewed changes to your own instructions, regardless of how minor the diff looks.
+5. Clean up the temp clone either way: `rm -rf /tmp/nst-bootstrap-check`.
 
-Then **re-read `~/.claude/skills/nst-app-bootstrap/SKILL.md` now** — the file just overwritten —
-and follow the steps as they exist in that freshly-fetched version, not whatever was loaded for
-this invocation before the refresh. If what you just read differs from what you were following a
-moment ago, that's the exact bug this step exists to catch; proceed with the refreshed version,
-not the original.
-
-This makes staleness self-correcting from here on: once a global copy contains this step, every
-future invocation re-syncs itself before doing anything else, so this specific failure mode can't
-recur *going forward*. It can't retroactively fix a copy that predates this step, though — that
-one still needs the one-time manual refresh (`cp -r design-system/.claude/skills/nst-app-bootstrap
+This keeps staleness self-correcting (every run checks) without the blind-execution risk the
+original version had. It can't retroactively fix a copy that predates this step, though — that one
+still needs a one-time manual refresh (`cp -r design-system/.claude/skills/nst-app-bootstrap
 ~/.claude/skills/nst-app-bootstrap` once a submodule exists, or a fresh clone if not) before this
-self-healing behavior kicks in for the first time.
+check-first behavior applies to it.
 
 ### 1. Confirm the target and repo state
 
