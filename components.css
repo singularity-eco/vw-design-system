@@ -519,19 +519,35 @@
    Kanban board — .nst-kanban (third table view, alongside the
    real <table> above and the tile grid in vw-utilities.css)
 
-   Structural pattern only — cards are built from existing Layer 1/2
-   primitives (.vw-card-section, .vw-card-title, .vw-chip--*,
-   .nst-action-menu), not a new component family. Promoted from real
-   cross-source precedent: an independently-built consuming app's
-   working implementation, cross-checked against this design
-   language's own legacy ticket-board UI — same shape (status
+   Only 4 classes here — .nst-kanban, .nst-kanban-column,
+   .nst-kanban-column-header, .nst-kanban-column-body — because a
+   horizontally-scrolling board of sticky-header columns is a
+   genuinely new layout shape with no existing equivalent. Everything
+   inside a column is NOT new: cards and their contents are built
+   entirely from existing Layer 1/2 classes — .vw-card-section +
+   .vw-card--clickable (card + its own hover/focus state, already
+   registered, not reinvented), .vw-card-title-sm (column title AND
+   card title — same class, not a parallel one), .vw-card-metric-label-sm
+   (field labels), .vw-card-description (field values), .vw-chip--*
+   (priority/severity), .nst-action-menu (card kebab), .vw-flex/
+   .vw-grid/.vw-grid-cols-2/.vw-gap-* (every layout row inside a card).
+   An earlier draft of this component invented card-specific classes
+   for all of that (.nst-kanban-card-field-label etc.) — removed on
+   review: this repo's own "Filling a gap in the utility layer" rule
+   forbids a parallel class family for something existing classes
+   already cover, and none of that card-internal styling was actually
+   new. See preview/table.html for the full real markup.
+
+   Promoted from real cross-source precedent: an independently-built
+   consuming app's working implementation, cross-checked against this
+   design language's own legacy ticket-board UI — same shape (status
    columns with a count, cards with a title/kebab row, a label-value
    field grid, small semantic chips for priority/severity) confirmed
    in both. The legacy reference used a heavy box-shadow and a bold
    title; neither carried over — flat cards with a hairline border
-   and .vw-card-title's normal weight already match this system's
-   own documented visual language, so the pattern was rebuilt in
-   that language rather than copied as-is.
+   and .vw-card-title-sm's normal weight already match this system's
+   own documented visual language, so the pattern was rebuilt in that
+   language rather than copied as-is.
 
    Deliberately no color-coded column accent — an earlier draft tried a
    colored top border per status, dropped as too loud for this system's
@@ -542,11 +558,11 @@
      <div class="nst-kanban">
        <div class="nst-kanban-column">
          <div class="nst-kanban-column-header">
-           <span class="nst-kanban-column-title">New</span>
+           <span class="vw-card-title-sm">New</span>
            <span class="vw-chip vw-chip--neutral-solid">106</span>
          </div>
          <div class="nst-kanban-column-body">
-           <div class="vw-card-section nst-kanban-card">...</div>
+           <div class="vw-card-section vw-card--clickable">...</div>
          </div>
        </div>
      </div>
@@ -583,13 +599,6 @@
   background: var(--vw-color-gray-50);
 }
 
-.nst-kanban-column-title {
-  font-family: var(--fontFamily);
-  font-size: var(--vw-font-label-md);
-  font-weight: 500;
-  color: var(--vw-color-gray-700);
-}
-
 .nst-kanban-column-body {
   flex: 1;
   overflow-y: auto;
@@ -597,52 +606,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--vw-space-sm);
-}
-
-.nst-kanban-card {
-  cursor: pointer;
-  transition: border-color 120ms ease-out, box-shadow 120ms ease-out;
-}
-
-.nst-kanban-card:hover,
-.nst-kanban-card:focus-visible {
-  border-color: var(--vw-color-gray-300);
-}
-
-.nst-kanban-card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--vw-space-sm);
-}
-
-.nst-kanban-card-fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--vw-space-sm) var(--vw-space-md);
-  margin-top: var(--vw-space-md);
-}
-
-.nst-kanban-card-field-label {
-  font-family: var(--fontFamily);
-  font-size: var(--vw-font-label-sm);
-  color: var(--vw-color-gray-500);
-  margin-bottom: 2px;
-}
-
-.nst-kanban-card-field-value {
-  font-family: var(--fontFamily);
-  font-size: var(--vw-font-description);
-  color: var(--vw-color-gray-900);
-}
-
-.nst-kanban-card-footer {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--vw-space-sm) var(--vw-space-md);
-  margin-top: var(--vw-space-md);
-  padding-top: var(--vw-space-md);
-  border-top: 1px solid var(--vw-color-gray-100);
 }
 
 /* ============================================================
