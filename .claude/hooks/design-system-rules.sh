@@ -149,6 +149,29 @@ ds_check_file() {
     warnings+=("Found $fs_count raw px font-size value(s) ($fs_sizes_sorted) matching an existing var(--vw-font-*) token size — use the token instead of a literal value (e.g. 12px -> var(--vw-font-label-sm) or var(--vw-font-legend), 14px -> var(--vw-font-description) or var(--vw-font-label-md)). See COMPONENTS.md \"Filling a gap in the utility layer.\"")
   fi
 
+  # 8. Premature CSS comment close via a class-family glob. Writing "vw-*/nst-*" inside a
+  #    comment (shorthand for "vw-* or nst-*") ends the comment early at that "*/" — every
+  #    character after it is then parsed as CSS, so the browser silently DROPS the next rule
+  #    and a whole component renders unstyled with NO console error (this cost a full
+  #    debugging session on a real app: .app-shell{display:flex} was dropped, the shell fell
+  #    back to display:block, and every page's content was pushed off-screen).
+  #    Matches specifically "-*/[letter]" — a hyphenated token ending "-*" immediately
+  #    followed by "/" and another identifier — the actual glob-shorthand shape, NOT every
+  #    "*/" that happens to be followed by a letter. A plain comment closing right before the
+  #    next selector with no space (e.g. "} /* done */.bar {") is completely valid CSS and
+  #    must not fire here; an earlier, broader version of this check («\*/[A-Za-z.]») flagged
+  #    exactly that as a false positive. Scanned whole on .css files, and only inside <style>
+  #    blocks on .tsx/.jsx/.html (so an ordinary JS block comment ending right before code
+  #    never false-positives).
+  local comment_scan
+  case "$file_path" in
+    *.css) comment_scan=$(cat "$file_path" 2>/dev/null || true) ;;
+    *)     comment_scan="$style_block" ;;
+  esac
+  if [ -n "$comment_scan" ] && printf '%s\n' "$comment_scan" | grep -qE -- '-\*/[A-Za-z.]'; then
+    warnings+=("A '*/' inside a CSS comment closes it early (e.g. the glob in \"vw-*/nst-*\") and silently drops the very next CSS rule — the component renders unstyled with no console error. In comments, write class families WITHOUT the trailing asterisk: \"vw- or nst-\". See uiux-dev.md rule 3.")
+  fi
+
   if [ ${#warnings[@]} -eq 0 ]; then
     return 0
   fi
