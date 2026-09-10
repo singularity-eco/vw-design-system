@@ -11,7 +11,7 @@
 
     body {
       font-family: Inter, system-ui, -apple-system, sans-serif;
-      background: #fff;
+      background: var(--vw-color-white);
       padding: 32px 24px;
       -webkit-font-smoothing: antialiased;
       color: var(--vw-color-gray-900);
@@ -42,7 +42,7 @@
 
       padding: 20px 32px;
       background: var(--vw-color-white);
-      border: 1px solid #E2E8F0;
+      border: 1px solid var(--vw-color-slate-200);
       border-radius: 8px;
 
       cursor: pointer;
@@ -62,7 +62,7 @@
 
     /* Drag-over state */
     .nst-uploader.drag-over {
-      border-color: #1C81EF;
+      border-color: var(--vw-color-accent-500);
       background: var(--vw-color-blue-50);
       box-shadow: 0 0 0 3px var(--vw-color-blue-100);
     }
@@ -79,7 +79,7 @@
     .nst-uploader__icon {
       width: 40px;
       height: 40px;
-      border: 1px solid #E2E8F0;
+      border: 1px solid var(--vw-color-slate-200);
       border-radius: 10px;
       background: var(--vw-color-white);
       display: flex;
@@ -96,7 +96,7 @@
     }
 
     .nst-uploader.drag-over .nst-uploader__icon {
-      border-color: #1C81EF;
+      border-color: var(--vw-color-accent-500);
       background: var(--vw-color-blue-100);
     }
 
@@ -111,10 +111,10 @@
     }
     .nst-uploader:hover .nst-uploader__icon svg,
     .nst-uploader.hover .nst-uploader__icon svg {
-      color: #1C81EF;
+      color: var(--vw-color-accent-500);
     }
     .nst-uploader.drag-over .nst-uploader__icon svg {
-      color: #1C81EF;
+      color: var(--vw-color-accent-500);
     }
     .nst-uploader.disabled .nst-uploader__icon svg {
       color: var(--vw-color-gray-300);
@@ -140,11 +140,11 @@
     }
 
     .nst-uploader__heading .highlight {
-      color: #1C81EF;
+      color: var(--vw-color-accent-500);
     }
 
     .nst-uploader__heading .rest {
-      color: #1F2937;
+      color: var(--vw-color-gray-800);
     }
 
     .nst-uploader.disabled .nst-uploader__heading .highlight,
@@ -155,7 +155,7 @@
     .nst-uploader__subtext {
       font-size: 12px;
       line-height: 20px;
-      color: #6B7280;
+      color: var(--vw-color-gray-500);
     }
 
     .nst-uploader.disabled .nst-uploader__subtext {
@@ -185,7 +185,7 @@
       align-items: center;
       gap: 10px;
       padding: 10px 12px;
-      border: 1px solid #E2E8F0;
+      border: 1px solid var(--vw-color-slate-200);
       border-radius: 8px;
       background: var(--vw-color-white);
     }
@@ -200,7 +200,7 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      color: #1C81EF;
+      color: var(--vw-color-accent-500);
     }
 
     .nst-file-item__info {
@@ -261,7 +261,7 @@
     .nst-file-item__progress-bar {
       height: 100%;
       border-radius: 2px;
-      background: #1C81EF;
+      background: var(--vw-color-accent-500);
       transition: width 600ms ease;
     }
   </style>

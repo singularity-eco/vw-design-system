@@ -11,13 +11,13 @@
   <style>
     @font-face { font-family: 'Inter'; src: url('../fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype-variations'); font-weight: 100 900; font-style: normal; font-display: swap; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #F9FAFB; padding: 28px; font-family: 'Inter', system-ui, sans-serif; color: #1F2937; }
+    body { background: var(--vw-color-gray-50); padding: 28px; font-family: 'Inter', system-ui, sans-serif; color: var(--vw-color-gray-800); }
 
     .row { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; margin-bottom: 32px; }
     .block { display: flex; flex-direction: column; gap: 8px; }
     .section-label {
       font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
-      text-transform: uppercase; color: #9CA3AF;
+      text-transform: uppercase; color: var(--vw-color-gray-400);
     }
 
     /* Demo-only: statically pins the hover background for the "Hover state"
@@ -154,8 +154,8 @@
   </div>
 
   <!-- Anatomy -->
-  <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9CA3AF;margin-bottom:10px;">Classes</div>
-  <div style="font-size:12px;color:#6B7280;font-family:ui-monospace,monospace;line-height:22px;">
+  <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--vw-color-gray-400);margin-bottom:10px;">Classes</div>
+  <div style="font-size:12px;color:var(--vw-color-gray-500);font-family:ui-monospace,monospace;line-height:22px;">
     .nst-action-menu &nbsp;·&nbsp; radius: 12px &nbsp;·&nbsp; border: 1px solid #E9E9E9 &nbsp;·&nbsp; shadow: 0 2px 9px rgba(0,0,0,.10)<br>
     .nst-action-menu-item &nbsp;·&nbsp; padding: 8px &nbsp;·&nbsp; radius: 8px &nbsp;·&nbsp; idle: #FFF &nbsp;·&nbsp; hover: #F4F4F4<br>
     .nst-action-menu-icon &nbsp;·&nbsp; 20×20px &nbsp;·&nbsp; currentColor<br>

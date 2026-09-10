@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Timeline — NST Design System</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../colors.css">
+<link rel="stylesheet" href="../colors_and_type.css">
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    background: #F4F4F4;
+    background: var(--color-surface-muted);
     font-family: Inter, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     padding: 40px;
@@ -54,8 +56,8 @@ const TimelineItem = ({ title, subtext, isLast }) => {
           width: 16,
           height: 16,
           borderRadius: '50%',
-          background: '#1C81EF',
-          border: '3px solid #EFF6FF',
+          background: 'var(--vw-color-accent-500)',
+          border: '3px solid var(--vw-color-accent-50)',
           boxSizing: 'border-box',
           flexShrink: 0,
           marginTop: 1, /* (18px line-height / 2) - (16px dot / 2) = 1px — aligns dot center with title */
@@ -70,7 +72,7 @@ const TimelineItem = ({ title, subtext, isLast }) => {
           <div style={{
             width: 2,
             flex: 1,
-            background: '#D1D5DB',
+            background: 'var(--vw-color-gray-300)',
             minHeight: 16,
           }}></div>
         )}
@@ -80,14 +82,14 @@ const TimelineItem = ({ title, subtext, isLast }) => {
       <div style={{ flex: 1, paddingBottom: isLast ? 0 : 20 }}>
         <div style={{
           font: '400 12px/18px Inter',
-          color: '#111827',
+          color: 'var(--vw-color-gray-900)',
           whiteSpace: 'normal',
         }}>
           {renderTitle(title)}
         </div>
         <div style={{
           font: '400 12px/18px Inter',
-          color: '#6B7280',
+          color: 'var(--vw-color-gray-500)',
           marginTop: 2,
         }}>
           {subtext}
@@ -106,16 +108,16 @@ const TimelineItem = ({ title, subtext, isLast }) => {
 ───────────────────────────────────────────── */
 const Timeline = ({ heading, subtext, items = [] }) => (
   <div style={{
-    background: '#FFFFFF',
+    background: 'var(--color-surface)',
     borderRadius: 16,
-    border: '1px solid #E9E9E9',
+    border: '1px solid var(--color-border)',
     padding: '16px',
   }}>
     {/* Header */}
     <div style={{ marginBottom: 20 }}>
-      <div style={{ font: '500 16px/24px Inter', color: '#111827' }}>{heading}</div>
+      <div style={{ font: '500 16px/24px Inter', color: 'var(--vw-color-gray-900)' }}>{heading}</div>
       {subtext && (
-        <div style={{ font: '400 12px/18px Inter', color: '#6B7280', marginTop: 2 }}>{subtext}</div>
+        <div style={{ font: '400 12px/18px Inter', color: 'var(--vw-color-gray-500)', marginTop: 2 }}>{subtext}</div>
       )}
     </div>
 

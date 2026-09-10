@@ -8,22 +8,24 @@
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../colors.css">
+  <link rel="stylesheet" href="../colors_and_type.css">
   <style>@font-face { font-family: 'Inter'; src: url('../fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype-variations'); font-weight: 100 900; font-style: normal; font-display: swap; }</style>
 
   <style>
     :root {
       --font: 'Inter', ui-sans-serif, system-ui, sans-serif;
-      --blue:  #1C81EF;
-      --blue-h:#1767BE;
-      --ink1:  #252525;
-      --ink2:  #515151;
-      --ink3:  #7C7C7C;
-      --ink4:  #A8A8A8;
-      --border:#E9E9E9;
-      --row-border: #F1F1F1;
-      --bg:    #F4F4F4;
-      --red:   #DC2626;
-      --red-bg:#FEE2E2;
+      --blue:  var(--color-primary);
+      --blue-h:var(--color-primary-press);
+      --ink1:  var(--color-ink-1);
+      --ink2:  var(--color-ink-2);
+      --ink3:  var(--color-ink-3);
+      --ink4:  var(--color-ink-4);
+      --border:var(--color-border);
+      --row-border: var(--vw-color-gray-100);
+      --bg:    var(--color-surface-muted);
+      --red:   var(--vw-color-red-600);
+      --red-bg:var(--vw-color-red-100);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -38,7 +40,7 @@
       position: fixed;
       inset: 0;
       display: flex;
-      background: #fff;
+      background: var(--color-surface);
     }
 
     /* ── Panel ── */
@@ -57,7 +59,7 @@
       overflow-x: hidden;
     }
     .scroll::-webkit-scrollbar { width: 4px; }
-    .scroll::-webkit-scrollbar-thumb { background: #E0E0E0; border-radius: 2px; }
+    .scroll::-webkit-scrollbar-thumb { background: var(--color-border-strong); border-radius: 2px; }
 
     /* ── Comment row ── */
     .comment {
@@ -78,7 +80,7 @@
     .avatar {
       width: 36px; height: 36px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 600; color: #fff;
+      font-size: 13px; font-weight: 600; color: var(--color-surface);
       flex-shrink: 0; user-select: none; letter-spacing: 0.02em;
     }
 
@@ -93,7 +95,7 @@
     }
 
     .edited-badge {
-      font-size: 11px; color: #C0C0C0; font-style: italic;
+      font-size: 11px; color: var(--color-ink-4); font-style: italic;
     }
 
     /* Action buttons — right side, controlled via React hover state */
@@ -114,8 +116,8 @@
       transition: background 120ms, color 120ms;
       padding: 0;
     }
-    .action-btn:hover { background: #F2F2F2; color: var(--ink2); }
-    .action-btn.active { background: #EFF6FF; color: var(--blue); }
+    .action-btn:hover { background: var(--color-surface-muted); color: var(--ink2); }
+    .action-btn.active { background: var(--vw-color-accent-50); color: var(--blue); }
     .action-btn.danger { background: var(--red-bg); color: var(--red); }
 
     /* ── Body text (full-width, NOT under avatar) ── */
@@ -141,7 +143,7 @@
       min-height: 72px;
       transition: border-color 120ms, box-shadow 120ms;
     }
-    .edit-area:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #DBEAFE; }
+    .edit-area:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--vw-color-accent-100); }
 
     /* ── Replies toggle ── */
     .replies-toggle {
@@ -189,7 +191,7 @@
       min-height: 88px;
       transition: border-color 120ms, box-shadow 120ms;
     }
-    .reply-textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #DBEAFE; }
+    .reply-textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--vw-color-accent-100); }
     .reply-textarea::placeholder { color: var(--ink4); }
 
     .composer-actions {
@@ -207,18 +209,18 @@
       font-size: 13px; font-weight: 500; color: var(--ink2);
       transition: background 120ms;
     }
-    .btn-ghost:hover { background: #F2F2F2; }
+    .btn-ghost:hover { background: var(--color-surface-muted); }
 
     .btn-primary {
       padding: 0 18px; height: 32px;
       border-radius: 8px; border: none;
       background: var(--blue); cursor: pointer;
       font-family: var(--font);
-      font-size: 13px; font-weight: 500; color: #fff;
+      font-size: 13px; font-weight: 500; color: var(--color-surface);
       transition: background 120ms;
     }
     .btn-primary:hover    { background: var(--blue-h); }
-    .btn-primary:disabled { background: #BFDBFE; cursor: not-allowed; }
+    .btn-primary:disabled { background: var(--vw-color-accent-200); cursor: not-allowed; }
 
     /* ── Bottom input bar ── */
     .input-bar {
@@ -228,7 +230,7 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      background: #fff;
+      background: var(--color-surface);
     }
 
     .input-field {
@@ -248,18 +250,18 @@
       width: 44px; height: 44px; border-radius: 12px;
       background: var(--blue); border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      color: #fff; flex-shrink: 0;
+      color: var(--color-surface); flex-shrink: 0;
       transition: background 120ms, transform 80ms;
     }
     .send-btn:hover   { background: var(--blue-h); }
     .send-btn:active  { transform: scale(0.92); }
-    .send-btn:disabled { background: #BFDBFE; cursor: not-allowed; transform: none; }
+    .send-btn:disabled { background: var(--vw-color-accent-200); cursor: not-allowed; transform: none; }
 
     /* ── Animations ── */
     @keyframes fade-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
     .fade-in { animation: fade-in 160ms ease forwards; }
 
-    @keyframes flash { 0% { background: #EFF6FF; } 100% { background: transparent; } }
+    @keyframes flash { 0% { background: var(--vw-color-accent-50); } 100% { background: transparent; } }
     .flash { animation: flash 1.8s ease forwards; border-radius: 4px; }
 
     /* ── Empty state ── */
@@ -278,7 +280,8 @@
   const { useState, useRef, useEffect, useCallback } = React;
 
   /* ── Helpers ── */
-  const PALETTES = ['#7C3AED','#1C81EF','#059669','#D97706','#DC2626','#0891B2','#BE185D','#EA580C'];
+  const cssVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const PALETTES = ['--vw-color-violet-600','--vw-color-accent-500','--vw-color-emerald-600','--vw-color-amber-600','--vw-color-red-600','--vw-color-cyan-600','--vw-color-pink-700','--vw-color-orange-600'].map(cssVar);
   function avatarBg(s) {
     let h = 0;
     for (const c of s) h = (h * 31 + c.charCodeAt(0)) & 0xffff;
@@ -607,7 +610,7 @@
         <div className="scroll" ref={scrollRef}>
           {comments.length === 0 ? (
             <div className="empty">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C8C8C8" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--vw-color-gray-300)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
               <span>No comments yet — be the first.</span>
