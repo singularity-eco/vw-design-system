@@ -14,8 +14,8 @@ Setup in other projects: `docs/claude-code-setup.md`
 
 ## Canonical output (legacy enterprise apps)
 
-- Stylesheet: `nst-design-system.css`
-- Font: Poppins (Google Fonts)
+- Stylesheet + font link: see `COMPONENTS.md` → "Mandatory setup" (Poppins — defined there once,
+  not restated here, so the two can't drift)
 - Classes: `.vw-card-*`, `.vw-chip-*`, `.vw-flex`, `.vw-page-gap`
 - Tokens: `--vw-color-*`, `--vw-space-*`, `--grayColor*`, `--primaryColor*`
 

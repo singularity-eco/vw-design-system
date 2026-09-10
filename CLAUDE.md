@@ -14,10 +14,8 @@ instead: read the code first, screenshot the running app, restyle only, re-verif
 
 ## Default stack (enterprise / legacy apps)
 
-```html
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="nst-design-system.css">
-```
+Font + stylesheet link: see @COMPONENTS.md → "Mandatory setup" (Poppins — the one place that
+snippet is defined; don't re-paste or restate it elsewhere, that's how it drifts).
 
 - **Cards/KPIs:** `.vw-card-section`, `.vw-card-title`, `.vw-card-metric-lg`, `.vw-chip--*`
 - **Layout:** `.vw-flex`, `.vw-page-gap`, `.vw-grid-cols-auto-320`
@@ -28,7 +26,7 @@ Add `components.css` only for `.nst-input` / `.nst-table-*` forms.
 ## Do not
 
 - Freestyle cards, chips, or color palettes
-- Use Inter on dashboard pages (Poppins only)
+- A font other than Poppins on dashboard pages — Inter is reserved for the separate atomic/Figma layer only
 - Use `colors_and_type.css` or `ui_kits/admin-console/` for KPI/dashboard cards
 - Tailwind, Bootstrap, Material, or invented `.card` / `.badge` classes
 
