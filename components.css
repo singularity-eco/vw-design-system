@@ -533,14 +533,15 @@
    own documented visual language, so the pattern was rebuilt in
    that language rather than copied as-is.
 
-   Column accent color is intentionally NOT baked into this class —
-   status-to-color mapping is the consuming app's own business logic
-   (its statuses, its semantics). Set it per column via inline style:
-   style="border-top-color: var(--vw-color-blue-500)".
+   Deliberately no color-coded column accent — an earlier draft tried a
+   colored top border per status, dropped as too loud for this system's
+   flat, low-chroma visual language (see DESIGN.md). Column identity
+   comes from the title + count alone; if a status genuinely needs a
+   color cue, use a `.vw-chip--*` on the title instead of a strip.
 
      <div class="nst-kanban">
        <div class="nst-kanban-column">
-         <div class="nst-kanban-column-header" style="border-top-color: var(--vw-color-blue-500);">
+         <div class="nst-kanban-column-header">
            <span class="nst-kanban-column-title">New</span>
            <span class="vw-chip vw-chip--neutral-solid">106</span>
          </div>
@@ -578,8 +579,7 @@
   justify-content: space-between;
   gap: var(--vw-space-sm);
   padding: var(--vw-space-md) var(--vw-space-lg);
-  border-top: 3px solid var(--vw-color-gray-300);
-  border-radius: var(--vw-radius-lg) var(--vw-radius-lg) 0 0;
+  border-bottom: 1px solid var(--vw-color-gray-200);
   background: var(--vw-color-gray-50);
 }
 
