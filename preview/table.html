@@ -213,6 +213,153 @@
     </div>
   </div>
 
+  <div class="block-label">Kanban board (.nst-kanban) — third table view, alongside table and tile</div>
+  <div class="demo-wrap">
+    <div class="nst-kanban">
+
+      <div class="nst-kanban-column">
+        <div class="nst-kanban-column-header" style="border-top-color: var(--vw-color-blue-500);">
+          <span class="nst-kanban-column-title">New</span>
+          <span class="vw-chip vw-chip--neutral-solid">106</span>
+        </div>
+        <div class="nst-kanban-column-body">
+
+          <div class="vw-card-section nst-kanban-card">
+            <div class="nst-kanban-card-header">
+              <div class="vw-card-title" style="font-size: var(--vw-font-description);">Internet connectivity down at corporate office</div>
+              <div style="position: relative;">
+                <button type="button" class="nst-icon-btn" onclick="event.stopPropagation(); toggleKanbanMenu(this)">
+                  <i>&#8942;</i>
+                </button>
+                <div class="nst-action-menu" style="display:none; right:0;">
+                  <div class="nst-action-menu-item">View</div>
+                  <div class="nst-action-menu-item">Edit</div>
+                  <div class="nst-action-menu-item nst-action-menu-item--danger">Delete</div>
+                </div>
+              </div>
+            </div>
+            <div class="nst-kanban-card-fields">
+              <div>
+                <div class="nst-kanban-card-field-label">Category</div>
+                <div class="nst-kanban-card-field-value">Network</div>
+              </div>
+              <div>
+                <div class="nst-kanban-card-field-label">Priority</div>
+                <span class="vw-chip vw-chip--error">High</span>
+              </div>
+            </div>
+            <div class="nst-kanban-card-footer">
+              <div>
+                <div class="nst-kanban-card-field-label">Creator</div>
+                <div class="nst-kanban-card-field-value">Praveen Yadav</div>
+              </div>
+              <div>
+                <div class="nst-kanban-card-field-label">Ticket ID</div>
+                <div class="nst-kanban-card-field-value">TCK-2026-000118</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="vw-card-section nst-kanban-card">
+            <div class="nst-kanban-card-header">
+              <div class="vw-card-title" style="font-size: var(--vw-font-description);">Update agent configuration</div>
+              <div style="position: relative;">
+                <button type="button" class="nst-icon-btn" onclick="event.stopPropagation(); toggleKanbanMenu(this)">
+                  <i>&#8942;</i>
+                </button>
+                <div class="nst-action-menu" style="display:none; right:0;">
+                  <div class="nst-action-menu-item">View</div>
+                  <div class="nst-action-menu-item">Edit</div>
+                  <div class="nst-action-menu-item nst-action-menu-item--danger">Delete</div>
+                </div>
+              </div>
+            </div>
+            <div class="nst-kanban-card-fields">
+              <div>
+                <div class="nst-kanban-card-field-label">Category</div>
+                <div class="nst-kanban-card-field-value">Support</div>
+              </div>
+              <div>
+                <div class="nst-kanban-card-field-label">Priority</div>
+                <span class="vw-chip vw-chip--warning">Medium</span>
+              </div>
+            </div>
+            <div class="nst-kanban-card-footer">
+              <div>
+                <div class="nst-kanban-card-field-label">Creator</div>
+                <div class="nst-kanban-card-field-value">Praveen Yadav</div>
+              </div>
+              <div>
+                <div class="nst-kanban-card-field-label">Ticket ID</div>
+                <div class="nst-kanban-card-field-value">TCK-2026-000119</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="nst-kanban-column">
+        <div class="nst-kanban-column-header" style="border-top-color: var(--vw-color-amber-500);">
+          <span class="nst-kanban-column-title">In progress</span>
+          <span class="vw-chip vw-chip--neutral-solid">44</span>
+        </div>
+        <div class="nst-kanban-column-body">
+
+          <div class="vw-card-section nst-kanban-card">
+            <div class="nst-kanban-card-header">
+              <div class="vw-card-title" style="font-size: var(--vw-font-description);">Change request for bandwidth upgrade</div>
+              <div style="position: relative;">
+                <button type="button" class="nst-icon-btn" onclick="event.stopPropagation(); toggleKanbanMenu(this)">
+                  <i>&#8942;</i>
+                </button>
+                <div class="nst-action-menu" style="display:none; right:0;">
+                  <div class="nst-action-menu-item">View</div>
+                  <div class="nst-action-menu-item">Edit</div>
+                  <div class="nst-action-menu-item nst-action-menu-item--danger">Delete</div>
+                </div>
+              </div>
+            </div>
+            <div class="nst-kanban-card-fields">
+              <div>
+                <div class="nst-kanban-card-field-label">Category</div>
+                <div class="nst-kanban-card-field-value">Network</div>
+              </div>
+              <div>
+                <div class="nst-kanban-card-field-label">Priority</div>
+                <span class="vw-chip vw-chip--error">Critical</span>
+              </div>
+            </div>
+            <div class="nst-kanban-card-footer">
+              <div>
+                <div class="nst-kanban-card-field-label">Creator</div>
+                <div class="nst-kanban-card-field-value">Praveen Yadav</div>
+              </div>
+              <div>
+                <div class="nst-kanban-card-field-label">Ticket ID</div>
+                <div class="nst-kanban-card-field-value">TCK-2026-000217</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="nst-kanban-column">
+        <div class="nst-kanban-column-header" style="border-top-color: var(--vw-color-green-500);">
+          <span class="nst-kanban-column-title">Resolved</span>
+          <span class="vw-chip vw-chip--neutral-solid">23</span>
+        </div>
+        <div class="nst-kanban-column-body">
+          <div style="padding: 24px; text-align: center; color: var(--vw-color-gray-400); font-family: var(--fontFamily); font-size: var(--vw-font-label-sm);">
+            No tickets to show
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <div class="block-label">Row action menu (.nst-table-kebab + .nst-table-menu)</div>
   <!-- Shown standalone (not inside a .nst-table-card): the card and .nst-table-td
        both set overflow:hidden for column truncation, which clips an in-cell
@@ -259,6 +406,18 @@
       var trigger = document.getElementById('actionsTrigger');
       if (menu.style.display === 'block' && !menu.contains(e.target) && !trigger.contains(e.target)) {
         menu.style.display = 'none';
+      }
+    });
+
+    function toggleKanbanMenu(btn) {
+      var menu = btn.nextElementSibling;
+      var isOpen = menu.style.display === 'block';
+      document.querySelectorAll('.nst-kanban .nst-action-menu').forEach(function (m) { m.style.display = 'none'; });
+      menu.style.display = isOpen ? 'none' : 'block';
+    }
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.nst-kanban-card')) {
+        document.querySelectorAll('.nst-kanban .nst-action-menu').forEach(function (m) { m.style.display = 'none'; });
       }
     });
 
