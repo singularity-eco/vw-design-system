@@ -6,13 +6,15 @@
 <title>Filter Popover — NST Design System</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="../colors.css">
+<link rel="stylesheet" href="../colors_and_type.css">
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    background: #F4F4F4;
+    background: var(--color-surface-muted);
     font-family: Inter, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     display: flex;
@@ -46,11 +48,11 @@ const CloseButton = ({ onClick }) => {
       style={{
         width: 32, height: 32, flexShrink: 0,
         borderRadius: 8,
-        border: '1px solid #E9E9E9',
-        background: hover ? '#F4F4F4' : '#FFFFFF',
+        border: '1px solid var(--color-border)',
+        background: hover ? 'var(--color-surface-muted)' : 'var(--color-surface)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         cursor: 'pointer',
-        color: '#515151',
+        color: 'var(--color-ink-2)',
         transition: 'background 150ms ease-out',
       }}
     >
@@ -68,10 +70,10 @@ const GhostButton = ({ children, onClick }) => {
       onMouseLeave={() => setHover(false)}
       style={{
         height: 36, borderRadius: 8, padding: '0 14px',
-        background: hover ? '#F4F4F4' : '#FFFFFF',
-        border: '1px solid #E9E9E9',
+        background: hover ? 'var(--color-surface-muted)' : 'var(--color-surface)',
+        border: '1px solid var(--color-border)',
         font: '500 14px/20px Inter',
-        color: '#252525',
+        color: 'var(--color-ink-1)',
         cursor: 'pointer',
         transition: 'background 150ms ease-out',
         whiteSpace: 'nowrap',
@@ -91,10 +93,10 @@ const PrimaryButton = ({ children, onClick }) => {
       onMouseLeave={() => setHover(false)}
       style={{
         height: 36, borderRadius: 8, padding: '0 16px',
-        background: hover ? '#4290ED' : '#1C81EF',
+        background: hover ? 'var(--color-primary-hover)' : 'var(--color-primary)',
         border: 'none',
         font: '500 14px/20px Inter',
-        color: '#FFFFFF',
+        color: 'var(--color-surface)',
         cursor: 'pointer',
         transition: 'background 150ms ease-out',
         whiteSpace: 'nowrap',
@@ -115,10 +117,10 @@ const FilterChip = ({ label, onRemove }) => {
       display: 'inline-flex', alignItems: 'center', gap: 4,
       height: 26, borderRadius: 999,
       padding: '0 6px 0 10px',
-      background: '#F4F4F4',
-      border: '1px solid #E9E9E9',
+      background: 'var(--color-surface-muted)',
+      border: '1px solid var(--color-border)',
       font: '400 13px/18px Inter',
-      color: '#515151',
+      color: 'var(--color-ink-2)',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       maxWidth: '100%',
@@ -133,7 +135,7 @@ const FilterChip = ({ label, onRemove }) => {
           width: 16, height: 16,
           border: 'none', background: 'none',
           cursor: 'pointer', padding: 0,
-          color: hoverX ? '#252525' : '#A8A8A8',
+          color: hoverX ? 'var(--color-ink-1)' : 'var(--color-ink-4)',
           transition: 'color 100ms',
         }}
       >
@@ -149,8 +151,8 @@ const FilterChip = ({ label, onRemove }) => {
 const SearchField = ({ value, onChange, placeholder }) => {
   const [focus, setFocus] = React.useState(false);
   const [hover, setHover] = React.useState(false);
-  const borderColor = focus ? '#1C81EF' : hover ? '#A8A8A8' : '#E9E9E9';
-  const shadow = focus ? '0 0 0 3px #DBEAFE' : 'none';
+  const borderColor = focus ? 'var(--color-primary)' : hover ? 'var(--color-ink-4)' : 'var(--color-border)';
+  const shadow = focus ? '0 0 0 3px var(--vw-color-accent-100)' : 'none';
   return (
     <div
       onMouseEnter={() => setHover(true)}
@@ -161,7 +163,7 @@ const SearchField = ({ value, onChange, placeholder }) => {
         border: `1px solid ${borderColor}`,
         boxShadow: shadow,
         padding: '0 10px',
-        background: '#FFFFFF',
+        background: 'var(--color-surface)',
         transition: 'border-color 150ms ease-out, box-shadow 150ms ease-out',
       }}
     >
@@ -174,11 +176,11 @@ const SearchField = ({ value, onChange, placeholder }) => {
         style={{
           flex: 1, border: 'none', outline: 'none', background: 'transparent',
           font: '400 14px/20px Inter',
-          color: '#252525',
+          color: 'var(--color-ink-1)',
           minWidth: 0,
         }}
       />
-      <i className="ph ph-magnifying-glass" style={{ fontSize: 16, color: '#A8A8A8', flexShrink: 0, lineHeight: 1 }}></i>
+      <i className="ph ph-magnifying-glass" style={{ fontSize: 16, color: 'var(--color-ink-4)', flexShrink: 0, lineHeight: 1 }}></i>
     </div>
   );
 };
@@ -217,9 +219,9 @@ const FilterPopover = ({ onClose }) => {
     <div style={{
       width: 472,
       height: 408,
-      background: '#FFFFFF',
+      background: 'var(--color-surface)',
       borderRadius: 12,
-      border: '1px solid #E9E9E9',
+      border: '1px solid var(--color-border)',
       boxShadow: '0 8px 24px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06)',
       display: 'flex',
       flexDirection: 'column',
@@ -233,9 +235,9 @@ const FilterPopover = ({ onClose }) => {
         justifyContent: 'space-between',
         padding: '16px',
         flexShrink: 0,
-        borderBottom: '1px solid #E9E9E9',
+        borderBottom: '1px solid var(--color-border)',
       }}>
-        <span style={{ font: '500 16px/24px Inter', color: '#252525' }}>Filter</span>
+        <span style={{ font: '500 16px/24px Inter', color: 'var(--color-ink-1)' }}>Filter</span>
         <CloseButton onClick={onClose} />
       </div>
 
@@ -255,11 +257,11 @@ const FilterPopover = ({ onClose }) => {
                     width: '100%',
                     padding: '13px 16px',
                     border: 'none',
-                    borderBottom: active ? '2px solid #1C81EF' : '2px solid transparent',
+                    borderBottom: active ? '2px solid var(--color-primary)' : '2px solid transparent',
                     background: 'none',
                     textAlign: 'left',
                     font: `${active ? 600 : 400} 14px/20px Inter`,
-                    color: active ? '#1C81EF' : '#252525',
+                    color: active ? 'var(--color-primary)' : 'var(--color-ink-1)',
                     cursor: 'pointer',
                     transition: 'color 150ms ease-out',
                   }}
@@ -267,7 +269,7 @@ const FilterPopover = ({ onClose }) => {
                   {t.label}
                 </button>
                 {!active && (
-                  <div style={{ height: 1, background: '#E9E9E9' }}></div>
+                  <div style={{ height: 1, background: 'var(--color-border)' }}></div>
                 )}
               </React.Fragment>
             );
@@ -275,11 +277,11 @@ const FilterPopover = ({ onClose }) => {
         </div>
 
         {/* Vertical separator */}
-        <div style={{ width: 1, background: '#E9E9E9', flexShrink: 0 }}></div>
+        <div style={{ width: 1, background: 'var(--color-border)', flexShrink: 0 }}></div>
 
         {/* Right: filter content */}
         <div style={{ flex: 1, padding: '16px', overflowY: 'auto' }}>
-          <div style={{ font: '500 14px/20px Inter', color: '#252525', marginBottom: 12 }}>
+          <div style={{ font: '500 14px/20px Inter', color: 'var(--color-ink-1)', marginBottom: 12 }}>
             {tab.label}
           </div>
 
@@ -311,7 +313,7 @@ const FilterPopover = ({ onClose }) => {
         justifyContent: 'space-between',
         padding: '12px 16px',
         flexShrink: 0,
-        borderTop: '1px solid #E9E9E9',
+        borderTop: '1px solid var(--color-border)',
       }}>
         <GhostButton>Advance filter</GhostButton>
         <div style={{ display: 'flex', gap: 12 }}>

@@ -3,14 +3,16 @@
 <head>
   <meta charset="utf-8">
   <title>Stepper — NST Design System</title>
+  <link rel="stylesheet" href="../colors.css">
+  <link rel="stylesheet" href="../colors_and_type.css">
   <style>
     @font-face { font-family: 'Inter'; src: url('../fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype-variations'); font-weight: 100 900; font-style: normal; font-display: swap; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #fff; padding: 32px 28px 36px 90px; font-family: 'Inter', system-ui, sans-serif; }
+    body { background: var(--color-surface); padding: 32px 28px 36px 90px; font-family: 'Inter', system-ui, sans-serif; }
 
     .section-label {
       font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
-      text-transform: uppercase; color: #9CA3AF; margin-bottom: 28px;
+      text-transform: uppercase; color: var(--vw-color-gray-400); margin-bottom: 28px;
     }
 
     /* ── Stepper shell ── */
@@ -26,8 +28,8 @@
       margin-top: 11px;
       align-self: flex-start;
     }
-    .connector.blue  { background: #1C81EF; }
-    .connector.gray  { background: #D1D5DB; }
+    .connector.blue  { background: var(--vw-color-accent-500); }
+    .connector.gray  { background: var(--vw-color-gray-300); }
 
     /* ── Step column — width locked to circle width so line touches circle ── */
     .step {
@@ -42,30 +44,30 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 12px; font-weight: 600; flex-shrink: 0;
     }
-    .step.done     .circle { background: #1C81EF; color: #fff; }
-    .step.active   .circle { background: #fff; border: 1px solid #1C81EF; color: #1C81EF; }
-    .step.upcoming .circle { background: #fff; border: 1px solid #D1D5DB; color: #6B7280; }
+    .step.done     .circle { background: var(--vw-color-accent-500); color: var(--color-surface); }
+    .step.active   .circle { background: var(--color-surface); border: 1px solid var(--vw-color-accent-500); color: var(--vw-color-accent-500); }
+    .step.upcoming .circle { background: var(--color-surface); border: 1px solid var(--vw-color-gray-300); color: var(--vw-color-gray-500); }
 
     /* ── Label ── */
     .label {
       font-size: 13px; font-weight: 500; line-height: 18px;
-      color: #1C81EF; text-align: center; white-space: nowrap;
+      color: var(--vw-color-accent-500); text-align: center; white-space: nowrap;
     }
-    .step.upcoming .label { color: #6B7280; }
+    .step.upcoming .label { color: var(--vw-color-gray-500); }
 
     /* ── Description ── */
     .desc {
       font-size: 12px; font-weight: 400; line-height: 17px;
-      color: #1C81EF; text-align: center; white-space: nowrap;
+      color: var(--vw-color-accent-500); text-align: center; white-space: nowrap;
     }
-    .step.upcoming .desc { color: #6B7280; }
+    .step.upcoming .desc { color: var(--vw-color-gray-500); }
 
     .block { margin-bottom: 36px; }
     .block:last-child { margin-bottom: 0; }
 
     /* Interactive block only — real components let users click a step to jump */
     #interactive-stepper .step { cursor: pointer; }
-    #interactive-stepper .step:hover .circle { box-shadow: 0 0 0 3px #DBEAFE; }
+    #interactive-stepper .step:hover .circle { box-shadow: 0 0 0 3px var(--vw-color-accent-100); }
   </style>
 </head>
 <body>
@@ -154,7 +156,7 @@
       <div class="step done">
         <div class="circle">
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-            <path d="M1 5L4.5 8.5L11 1.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1 5L4.5 8.5L11 1.5" stroke="var(--color-surface)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div class="label">Select source</div>
@@ -166,7 +168,7 @@
       <div class="step done">
         <div class="circle">
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-            <path d="M1 5L4.5 8.5L11 1.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1 5L4.5 8.5L11 1.5" stroke="var(--color-surface)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div class="label">Configure connect…</div>
@@ -178,7 +180,7 @@
       <div class="step done">
         <div class="circle">
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-            <path d="M1 5L4.5 8.5L11 1.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1 5L4.5 8.5L11 1.5" stroke="var(--color-surface)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div class="label">Transform</div>
@@ -190,7 +192,7 @@
       <div class="step done">
         <div class="circle">
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-            <path d="M1 5L4.5 8.5L11 1.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1 5L4.5 8.5L11 1.5" stroke="var(--color-surface)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div class="label">Data profiling</div>
@@ -206,7 +208,7 @@
       var stepEls = Array.prototype.slice.call(wrap.querySelectorAll('.step'));
       var connectorEls = Array.prototype.slice.call(wrap.querySelectorAll('.connector'));
       var checkSvg = '<svg width="12" height="10" viewBox="0 0 12 10" fill="none">'
-        + '<path d="M1 5L4.5 8.5L11 1.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        + '<path d="M1 5L4.5 8.5L11 1.5" stroke="var(--color-surface)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
       function render(activeIndex) {
         stepEls.forEach(function (el, i) {
