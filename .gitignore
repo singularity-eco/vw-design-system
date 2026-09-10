@@ -4,5 +4,9 @@ reference-only/
 # Sample applications used for study/mapping only — not part of the design system
 sample-application/
 
+# Our own findings derived from reading the two folders above — internal working
+# material, names and judges third-party code, goes stale fast. See analysis/README.md
+analysis/
+
 # macOS
 .DS_Store
