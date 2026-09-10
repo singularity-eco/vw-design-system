@@ -22,7 +22,7 @@
 
     /* Demo-only: statically pins the hover background for the "Hover state"
        column. Not a shipped class — real usage relies on :hover in components.css. */
-    .demo-hover { background: #F4F4F4; }
+    .demo-hover { background: var(--vw-color-neutral-100); }
 
     /* .nst-action-menu is position:absolute in components.css (it's a floating
        menu). Pin it to static so it lays out inline for this specimen. */
@@ -156,10 +156,10 @@
   <!-- Anatomy -->
   <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--vw-color-gray-400);margin-bottom:10px;">Classes</div>
   <div style="font-size:12px;color:var(--vw-color-gray-500);font-family:ui-monospace,monospace;line-height:22px;">
-    .nst-action-menu &nbsp;·&nbsp; radius: 12px &nbsp;·&nbsp; border: 1px solid #E9E9E9 &nbsp;·&nbsp; shadow: 0 2px 9px rgba(0,0,0,.10)<br>
-    .nst-action-menu-item &nbsp;·&nbsp; padding: 8px &nbsp;·&nbsp; radius: 8px &nbsp;·&nbsp; idle: #FFF &nbsp;·&nbsp; hover: #F4F4F4<br>
+    .nst-action-menu &nbsp;·&nbsp; radius: 12px &nbsp;·&nbsp; border: 1px solid var(--vw-color-neutral-200) &nbsp;·&nbsp; shadow: 0 2px 9px rgba(0,0,0,.10)<br>
+    .nst-action-menu-item &nbsp;·&nbsp; padding: 8px &nbsp;·&nbsp; radius: 8px &nbsp;·&nbsp; idle: var(--vw-color-white) &nbsp;·&nbsp; hover: var(--vw-color-neutral-100)<br>
     .nst-action-menu-icon &nbsp;·&nbsp; 20×20px &nbsp;·&nbsp; currentColor<br>
-    .nst-action-menu-item &nbsp;·&nbsp; 14px / 400 / #1F2937 &nbsp;·&nbsp; .nst-action-menu-item--danger: #EF4444
+    .nst-action-menu-item &nbsp;·&nbsp; 14px / 400 / var(--vw-color-gray-800) &nbsp;·&nbsp; .nst-action-menu-item--danger: var(--vw-color-red-500)
   </div>
 
 </body>
