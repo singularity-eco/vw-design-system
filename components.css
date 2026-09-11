@@ -323,6 +323,23 @@
    ============================================================ */
 
 /* Outer card */
+/* Cell metrics, shared by BOTH table variants so they cannot drift apart again.
+   .nst-table-card (the grid variant) is the canonical look — signed off against
+   the vendor-table reference — and .nst-table now matches it rather than running
+   its own 63px-row, gray/slate-family version.
+
+   10px and 13px have no token: --vw-space-* jumps 8px -> 12px and --vw-font-*
+   jumps 12px -> 14px. Snapping to the nearest would change the approved density,
+   so they live here once instead of being retyped in four rule blocks. Closing
+   that scale gap properly is a registry decision, logged not silently taken. */
+.nst-table-card,
+.nst-table {
+  --nst-table-cell-py: 10px;
+  --nst-table-cell-px: 8px;
+  --nst-table-cell-fs: 13px;
+  --nst-table-cell-lh: 20px;
+}
+
 .nst-table-card {
   background: var(--vw-color-white);
   border-radius: 12px;
@@ -361,11 +378,11 @@
 }
 
 .nst-table-th {
-  padding: 10px 8px;
+  padding: var(--nst-table-cell-py) var(--nst-table-cell-px);
   font-family: var(--fontFamily);
   font-size: var(--vw-font-label-sm);
   font-weight: 500;
-  line-height: 20px;
+  line-height: var(--nst-table-cell-lh);
   color: var(--vw-color-neutral-500);
   white-space: nowrap;
   overflow: hidden;
@@ -397,11 +414,11 @@
 
 /* Cell */
 .nst-table-td {
-  padding: 10px 8px;
+  padding: var(--nst-table-cell-py) var(--nst-table-cell-px);
   font-family: var(--fontFamily);
-  font-size: 13px;
+  font-size: var(--nst-table-cell-fs);
   font-weight: 400;
-  line-height: 20px;
+  line-height: var(--nst-table-cell-lh);
   color: var(--vw-color-neutral-600);
   white-space: nowrap;
   overflow: hidden;
@@ -507,29 +524,40 @@
   border-collapse: separate;
   border-spacing: 0;
   background: var(--vw-color-white);
-  border: 1px solid var(--vw-color-slate-200);
+  border: 1px solid var(--vw-color-neutral-200);
   border-radius: var(--vw-radius-md);
   overflow: hidden;
   font-family: var(--fontFamily);
 }
 
+/* Inside a card the card owns the surface — otherwise you get a border inside a
+   border and two mismatched radii. This is what makes the canonical structure
+   (one card holding toolbar + table) possible for the semantic variant, which
+   cannot nest a <div> toolbar inside its own <table>. */
+.nst-table-card > .nst-table-wrap > .nst-table,
+.nst-table-card > .nst-table {
+  border: 0;
+  border-radius: 0;
+}
+
 .nst-table th {
   text-align: left;
-  padding: var(--vw-space-md) var(--vw-space-lg);
-  background: var(--vw-color-white);
-  border-bottom: 1px solid var(--vw-color-slate-200);
+  padding: var(--nst-table-cell-py) var(--nst-table-cell-px);
+  background: var(--vw-color-neutral-50);
+  border-bottom: 1px solid var(--vw-color-neutral-200);
   font-size: var(--vw-font-label-sm);
   font-weight: 500;
-  line-height: 1.4;
-  color: var(--vw-color-gray-500);
+  line-height: var(--nst-table-cell-lh);
+  color: var(--vw-color-neutral-500);
   white-space: nowrap;
 }
 
 .nst-table td {
-  padding: var(--vw-space-md) var(--vw-space-lg);
-  border-bottom: 1px solid var(--vw-color-slate-200);
-  font-size: var(--vw-font-description);
-  color: var(--vw-color-gray-700);
+  padding: var(--nst-table-cell-py) var(--nst-table-cell-px);
+  border-bottom: 1px solid var(--vw-color-neutral-100);
+  font-size: var(--nst-table-cell-fs);
+  line-height: var(--nst-table-cell-lh);
+  color: var(--vw-color-neutral-600);
   vertical-align: middle;
   /* Matches .nst-table th above. Without this, td fell back to
      white-space: normal and long cell text wrapped to three or four
@@ -540,13 +568,13 @@
   white-space: nowrap;
 }
 
-.nst-table td.nst-table-td--primary { color: var(--vw-color-gray-900); }
+.nst-table td.nst-table-td--primary { color: var(--vw-color-neutral-800); }
 .nst-table tr:last-child td { border-bottom: 0; }
 
 /* Rows need no class. Do NOT reuse .nst-table-row here — that is the grid
    variant and carries display:grid, which would destroy <tr> layout. */
 .nst-table tbody tr { transition: background 100ms; }
-.nst-table tbody tr:hover td { background: var(--vw-color-gray-50); }
+.nst-table tbody tr:hover td { background: var(--vw-color-neutral-50); }
 .nst-table tbody tr.is-clickable { cursor: pointer; }
 .nst-table tbody tr.is-selected td {
   /* accent, not blue-50: themes redefine --vw-color-accent-*, so a
