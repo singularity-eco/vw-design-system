@@ -211,6 +211,50 @@ Building UI?
 
 ---
 
+## Composition heuristics — arranging content, not just styling it
+
+Everything above tells you *which* component to use. None of it tells you how to arrange several
+pieces of content relative to each other, or which one matters most — that's a different kind of
+decision, and left with no guidance, the default is the flattest possible expression: every field
+the same size and weight, stacked in whatever order it was extracted in. That's not a drift
+problem (the classes are all real, registry-correct), it's a missing-hierarchy problem, and it's
+worth naming explicitly rather than leaving to per-session judgment.
+
+Concrete case this was written from: a fresh-build `admin-dashboard`'s Project Detail page
+rendered title → status chip → client name → buttons → tabs → a "Details" card, with every line
+and every field inside that card given identical visual treatment — no distinction between
+`Priority: Urgent` (probably the fact that matters most) and `Created: Jun 1` (probably the least
+important one on the page). Every class used was correct; the arrangement was still flat.
+
+A few cheap heuristics that catch the most common version of this:
+
+1. **Identity + status is one hero block, never a stack of separate plain lines.** If a
+   page/card is *about* one thing (a project, a user, a deployment), its name, primary status
+   chip, and 1-2 supporting facts belong inside one `.vw-card-section` composed the same way
+   `preview/kpi-card.html`'s own hero row already does it (title row → supporting-info row, one
+   card) — not as three separate paragraph-level lines sitting above a details card.
+2. **Not every field is equal weight.** Before listing fields in a key-value/details block, decide
+   which 1-2 actually matter most for this content and give *those* visual emphasis — a larger
+   type token, a semantic chip, its own small card — rather than rendering every field through the
+   identical style by default.
+3. **Tabs vs. accordion vs. stacked cards**: tabs for mutually exclusive top-level views of the
+   same thing (a project's Overview/Team/Activity); an accordion for optional, rarely-needed depth
+   nested inside one view; stacked cards when everything's meant to be scannable at once with
+   nothing that needs hiding.
+4. **Grid density**: reuse the registry's own worked defaults instead of improvising spacing math —
+   4 KPIs per row (`.vw-grid-cols-4`), 2-3 cards per row for richer content blocks — unless the
+   content genuinely demands otherwise.
+5. **If there's an existing app being retrofitted or transformed, its layout already *is* the
+   compositional guidance** — these heuristics matter specifically for fresh builds with no
+   reference to derive arrangement from, which is where flatness actually shows up.
+
+This is not a substitute for real UX/IA work on anything genuinely novel or high-stakes — it's a
+cheap anchor against the single most common "technically correct, visually flat" failure. For a
+new application whose layout needs real design thinking (not just registry-correct expression of
+already-decided content), that's a separate, upstream step, not something these five rules cover.
+
+---
+
 ## Framework usage — HTML vs React / SPA
 
 `vw-*` and `nst-*` classes are plain CSS — they work identically as `className` in JSX/TSX. No React-specific port exists or is needed for Layer 1/2 classes themselves.
