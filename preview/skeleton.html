@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Skeleton / shimmer — NST Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../nst-design-system.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--vw-color-gray-100);
+    padding: 28px;
+    font-family: var(--fontFamily);
+    color: var(--vw-color-gray-800);
+  }
+  .block-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--vw-color-gray-400); margin-bottom: 12px;
+  }
+  .demo { margin-bottom: 36px; max-width: 720px; }
+  .note { font-size: 12px; color: var(--vw-color-gray-500); margin-top: 8px; }
+</style>
+</head>
+<body>
+
+  <!-- ── On the page canvas ── -->
+  <div class="demo">
+    <div class="block-label">Text lines — on the page canvas</div>
+    <div class="vw-skeleton vw-skeleton-line"></div>
+    <div class="vw-skeleton vw-skeleton-line"></div>
+    <div class="vw-skeleton vw-skeleton-line" style="width: 60%;"></div>
+    <div class="note">Set an inline width on the last line so a paragraph doesn't read as a solid bar.</div>
+  </div>
+
+  <div class="demo">
+    <div class="block-label">Block — a card, chart or form area awaiting content</div>
+    <div class="vw-skeleton vw-skeleton-block"></div>
+  </div>
+
+  <!-- ── Inside a white card ── -->
+  <div class="demo">
+    <div class="block-label">Inside a card — add .vw-skeleton--on-surface</div>
+    <div class="vw-card-section">
+      <div class="vw-skeleton vw-skeleton--on-surface vw-skeleton-line" style="width: 40%;"></div>
+      <div style="height: 16px;"></div>
+      <div class="vw-skeleton vw-skeleton--on-surface vw-skeleton-line"></div>
+      <div class="vw-skeleton vw-skeleton--on-surface vw-skeleton-line"></div>
+      <div class="vw-skeleton vw-skeleton--on-surface vw-skeleton-line" style="width: 70%;"></div>
+    </div>
+    <div class="note">The canvas gradient reads as a dirty smudge on white — this variant lightens it one step.</div>
+  </div>
+
+  <!-- ── Wrong-variant comparison ── -->
+  <div class="demo">
+    <div class="block-label">Why the variant exists — same markup, wrong backdrop</div>
+    <div class="vw-card-section">
+      <div class="vw-skeleton vw-skeleton-line"></div>
+      <div class="vw-skeleton vw-skeleton-line" style="width: 70%;"></div>
+    </div>
+    <div class="note">Canvas variant on a white card. Visibly heavier than the block above — this is the mistake the modifier prevents.</div>
+  </div>
+
+  <!-- ── Realistic composition ── -->
+  <div class="demo">
+    <div class="block-label">Loading state for a KPI row + card grid</div>
+    <div class="vw-grid vw-grid-cols-4 vw-gap-xl" style="margin-bottom: 20px;">
+      <div class="vw-card-section">
+        <div class="vw-skeleton vw-skeleton--on-surface vw-skeleton-line" style="width: 55%;"></div>
+        <div style="height: 12px;"></div>
+        <div class="vw-skeleton vw-skeleton--on-surface" style="height: 2rem; width: 4rem;"></div>
+      </div>
+      <div class="vw-card-section">
+        <div class="vw-skeleton vw-skeleton--on-surface vw-skeleton-line" style="width: 55%;"></div>
+        <div style="height: 12px;"></div>
+        <div class="vw-skeleton vw-skeleton--on-surface" style="height: 2rem; width: 4rem;"></div>
+      </div>
+      <div class="vw-card-section">
+        <div class="vw-skeleton vw-skeleton--on-surface vw-skeleton-line" style="width: 55%;"></div>
+        <div style="height: 12px;"></div>
+        <div class="vw-skeleton vw-skeleton--on-surface" style="height: 2rem; width: 4rem;"></div>
+      </div>
+      <div class="vw-card-section">
+        <div class="vw-skeleton vw-skeleton--on-surface vw-skeleton-line" style="width: 55%;"></div>
+        <div style="height: 12px;"></div>
+        <div class="vw-skeleton vw-skeleton--on-surface" style="height: 2rem; width: 4rem;"></div>
+      </div>
+    </div>
+    <div class="vw-grid vw-grid-cols-3 vw-gap-xl">
+      <div class="vw-skeleton vw-skeleton-block"></div>
+      <div class="vw-skeleton vw-skeleton-block"></div>
+      <div class="vw-skeleton vw-skeleton-block"></div>
+    </div>
+  </div>
+
+  <div class="demo">
+    <div class="block-label">Reduced motion</div>
+    <div class="note">
+      Under <code>prefers-reduced-motion: reduce</code> the sweep stops and the placeholder holds a
+      static gradient — still visibly a placeholder, no animation. Neither hand-rolled implementation
+      this was promoted from did that.
+    </div>
+  </div>
+
+</body>
+</html>

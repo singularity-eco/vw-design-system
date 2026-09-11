@@ -55,6 +55,7 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 | **Count chip** (a tally beside a heading — column count, item total) | `.vw-chip.vw-chip--neutral-solid` | `vw-chips.css`, `preview/table.html` (kanban column counts) |
 | Page title | `.vw-page-title`, `.vw-page-description` | `vw-cards.css` |
 | Layout | `.vw-flex`, `.vw-flex-col`, `.vw-justify-between`, `.vw-page-gap`, `.vw-gap-sm` (gap classes need a flex/grid parent on the same element — see "Common gotcha" below) | `vw-utilities.css` |
+| **Skeleton / shimmer / loading placeholder** | `.vw-skeleton` + a shape: `.vw-skeleton-line` (text) or `.vw-skeleton-block` (card/chart area). Inside a white `.vw-card-section` add `.vw-skeleton--on-surface`, or it reads as a smudge. Set an inline `width` on the last line of a paragraph. Respects `prefers-reduced-motion` and stays visible with the animation off | `vw-cards.css`, `preview/skeleton.html` |
 | Card grid / grid of cards / tile grid | Auto-fill: `.vw-grid.vw-grid-cols-auto-320.vw-gap-xl`. Fixed columns: `.vw-grid.vw-grid-cols-2\|3\|4` | `vw-utilities.css` |
 | Clickable card | `.vw-card--clickable` | `vw-cards.css` |
 | Status accent strip (color-code a card without tinting the whole surface) | `.vw-card--accent` on host + `.vw-card-accent` first-child div | `vw-cards.css` |
@@ -66,7 +67,7 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 | Theme colors | `var(--grayColor*)`, `var(--primaryColor*)` | `theme-tokens.css` |
 | Switchable theme (blue / green / black) | `[data-theme="…"]` — see "Theming" below | `theme-blue.css`, `theme-green.css`, `theme-black.css` |
 
-**Live specimens:** `preview/vw-cards.html`, `preview/kpi-card.html`, `preview/elevation.html`
+**Live specimens:** `preview/vw-cards.html`, `preview/kpi-card.html`, `preview/elevation.html`, `preview/skeleton.html`
 
 ### Theming — `data-theme`
 
@@ -275,7 +276,9 @@ candidates the next time this file gets a sign-off review:
 - Timeline / comment thread
 - `<select>` dropdown
 - Pagination
-- Skeleton loading rows
+- ~~Skeleton loading rows~~ — **shipped 2026-09-11 as `.vw-skeleton`** (promoted: hand-rolled on
+  five screens across two independently-built apps, which had converged on byte-identical gradient
+  and timing values)
 - Confirm dialog
 - Empty state pattern
 - Loading spinner (submit-button state)

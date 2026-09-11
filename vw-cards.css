@@ -313,3 +313,88 @@
 .vw-card-icon-sm { width: 2rem;   height: 2rem; }
 .vw-card-icon-md { width: 2.5rem; height: 2.5rem; }
 .vw-card-icon-lg { width: 3rem;   height: 3rem; }
+
+/* ============================================================
+   Skeleton / shimmer — loading placeholder
+
+   Promoted from two independently-built consuming apps that
+   arrived at byte-identical values: the same 90deg gradient, the
+   same 400% background-size, the same 1.4s ease infinite sweep.
+   When two teams converge on a number without talking, that is
+   the shape — not one team's taste.
+
+   Two backdrops, because a skeleton has to sit on something:
+   .vw-skeleton is tuned for the page canvas; add --on-surface
+   inside a white .vw-card-section, where the gray pair reads as
+   a dirty smudge. Both apps had discovered this and defined two
+   gradients; only one of them named the distinction.
+
+   Deliberate change from both references: they used the page's own
+   gray-100 as the BASE and swept darker, so the placeholder was
+   visible only while animating. Stop the animation — which is
+   exactly what prefers-reduced-motion does — and it vanishes into
+   the background. Here the base is the darker tone and the sweep
+   is the lighter highlight, so it reads as a placeholder at rest
+   and still shimmers in motion.
+
+   Respects prefers-reduced-motion — neither hand-rolled version
+   did, which is a fair part of why this belongs in the registry.
+
+     <div class="vw-skeleton vw-skeleton-line"></div>
+     <div class="vw-skeleton vw-skeleton-line" style="width:60%"></div>
+     <div class="vw-skeleton vw-skeleton-block"></div>
+     <div class="vw-card-section">
+       <div class="vw-skeleton vw-skeleton--on-surface vw-skeleton-line"></div>
+     </div>
+   ============================================================ */
+
+.vw-skeleton {
+  background-color: var(--vw-color-gray-200);
+  background-image: linear-gradient(
+    90deg,
+    var(--vw-color-gray-200) 25%,
+    var(--vw-color-gray-100) 37%,
+    var(--vw-color-gray-200) 63%
+  );
+  background-size: 400% 100%;
+  animation: vw-skeleton-shimmer 1.4s ease infinite;
+  border-radius: var(--vw-radius-xs);
+}
+
+/* Inside a white card the canvas pair is too heavy — lighten one step. */
+.vw-skeleton.vw-skeleton--on-surface {
+  background-color: var(--vw-color-gray-100);
+  background-image: linear-gradient(
+    90deg,
+    var(--vw-color-gray-100) 25%,
+    var(--vw-color-white) 37%,
+    var(--vw-color-gray-100) 63%
+  );
+}
+
+/* A line of text. Stack several for a paragraph; set an inline
+   width on the last one so the block doesn't read as a solid bar. */
+.vw-skeleton-line {
+  height: 0.875rem;
+}
+
+.vw-skeleton-line + .vw-skeleton-line {
+  margin-top: var(--vw-space-sm);
+}
+
+/* A card, chart, or form-sized area awaiting content. */
+.vw-skeleton-block {
+  min-height: 7.5rem;
+  border-radius: var(--vw-radius-lg);
+}
+
+@keyframes vw-skeleton-shimmer {
+  0%   { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vw-skeleton {
+    animation: none;
+  }
+}
