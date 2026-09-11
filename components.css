@@ -518,6 +518,13 @@
   font-size: var(--vw-font-description);
   color: var(--vw-color-gray-700);
   vertical-align: middle;
+  /* Matches .nst-table th above. Without this, td fell back to
+     white-space: normal and long cell text wrapped to three or four
+     lines instead of extending the table for .nst-table-wrap to
+     scroll — the exact opposite of what this variant documents.
+     Missed because table-semantic.html's cell content is all short
+     enough never to wrap; it only surfaced on real data. */
+  white-space: nowrap;
 }
 
 .nst-table td.nst-table-td--primary { color: var(--vw-color-gray-900); }
