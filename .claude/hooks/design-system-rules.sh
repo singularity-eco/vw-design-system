@@ -146,38 +146,52 @@ ds_check_file() {
     warnings+=("Found $bad_gap_count element(s) with a vw-page-gap/vw-gap-* class but no vw-flex/vw-inline-flex/vw-grid class on the same element — gap only works on a flex/grid container, so this is likely a silent no-op. See COMPONENTS.md \"Common gotcha\" (if display is set via inline style instead of a class, this is a false positive).")
   fi
 
-  # 7. Raw px font-size where a matching var(--vw-font-*) token already exists.
+  # 7. Raw font-size where a matching var(--vw-font-*) token already exists.
   #    typography-tokens.css defines exactly these sizes: 11/12/14/16/18/20/
-  #    24/28/32/36px. Matches the literal substring "font-size:Npx" regardless
-  #    of surrounding syntax, so one regex covers both an inline
-  #    style="font-size:12px" attribute (HTML/JSX) and a bare CSS-file
-  #    declaration (font-size: 12px; in a .css file or a <style> block) —
-  #    found via a real consuming app whose whole page-local gaps.css (31
-  #    font-size declarations, 0 tokenized) drifted this way silently, since
-  #    no check here ever looked at font-size before this one. Deliberately
-  #    conservative: only fires on an EXACT token-size match, never a near
-  #    miss (13px/15px/etc. have no token and are correctly left alone — see
-  #    COMPONENTS.md "Filling a gap in the utility layer").
-  local fs_hits fs_count fs_sizes n hit
-  fs_hits=$(grep -oE 'font-size:[[:space:]]*[0-9]+px' "$file_path" 2>/dev/null || true)
+  #    24/28/32/36px. Matches both an inline style="font-size:12px" attribute
+  #    (HTML/JSX) and a bare CSS declaration, in EITHER unit.
+  #
+  #    READS rem AS WELL AS px, and that matters more than px did: our own
+  #    tokens are DEFINED in rem (--vw-font-label-sm: 0.75rem), so an app
+  #    writing `font-size: 0.75rem` has written the token's exact value by
+  #    hand. A px-only check was blind to precisely the unit our own scale
+  #    uses — in one real consuming app it hid 15 of 27 cases, every one of
+  #    them an existing token retyped as a literal.
+  #
+  #    rem is normalised at 16px root. Deliberately conservative either way:
+  #    only an exact token-size match fires, never a near miss (13px, 0.65rem
+  #    and friends have no token and are correctly left alone — that is a
+  #    genuine scale gap, not a drift, see COMPONENTS.md "Filling a gap in
+  #    the utility layer").
+  local fs_hits fs_count fs_sizes hit raw fs_num fs_unit fs_px fs_match
+  fs_hits=$(grep -oE 'font-size:[[:space:]]*[0-9]*\.?[0-9]+(px|rem)' "$file_path" 2>/dev/null || true)
   fs_count=0
   fs_sizes=""
   if [ -n "$fs_hits" ]; then
     while IFS= read -r hit; do
       [ -n "$hit" ] || continue
-      n=$(echo "$hit" | grep -oE '[0-9]+')
-      case "$n" in
-        11|12|14|16|18|20|24|28|32|36)
-          fs_count=$((fs_count + 1))
-          fs_sizes="$fs_sizes ${n}px"
-          ;;
+      raw=$(printf '%s' "$hit" | grep -oE '[0-9]*\.?[0-9]+(px|rem)')
+      [ -n "$raw" ] || continue
+      case "$raw" in
+        *rem) fs_unit="rem"; fs_num=${raw%rem} ;;
+        *)    fs_unit="px";  fs_num=${raw%px}  ;;
       esac
+      # Normalise to px, then match the token ladder with a float tolerance.
+      fs_match=$(awk -v n="$fs_num" -v u="$fs_unit" 'BEGIN{
+        p = (u == "rem") ? n * 16 : n;
+        split("11 12 14 16 18 20 24 28 32 36", t, " ");
+        for (i in t) { d = p - t[i]; if (d < 0) d = -d; if (d < 0.01) { print t[i]; exit } }
+      }')
+      if [ -n "$fs_match" ]; then
+        fs_count=$((fs_count + 1))
+        fs_sizes="$fs_sizes ${raw}"
+      fi
     done <<< "$fs_hits"
   fi
   if [ "$fs_count" -gt 0 ]; then
     local fs_sizes_sorted
-    fs_sizes_sorted=$(echo "$fs_sizes" | tr ' ' '\n' | grep -v '^$' | sort -u -n | xargs)
-    warnings+=("Found $fs_count raw px font-size value(s) ($fs_sizes_sorted) matching an existing var(--vw-font-*) token size — use the token instead of a literal value (e.g. 12px -> var(--vw-font-label-sm) or var(--vw-font-legend), 14px -> var(--vw-font-description) or var(--vw-font-label-md)). See COMPONENTS.md \"Filling a gap in the utility layer.\"")
+    fs_sizes_sorted=$(echo "$fs_sizes" | tr ' ' '\n' | grep -v '^$' | sort -u | xargs)
+    warnings+=("Found $fs_count raw font-size value(s) ($fs_sizes_sorted) matching an existing var(--vw-font-*) token size — use the token instead of a literal value (e.g. 12px / 0.75rem -> var(--vw-font-label-sm) or var(--vw-font-legend), 14px / 0.875rem -> var(--vw-font-description) or var(--vw-font-label-md), 32px / 2rem -> var(--vw-font-value-xxl)). Note our tokens are defined in rem, so a rem literal is the token's exact value retyped. See COMPONENTS.md \"Filling a gap in the utility layer.\"")
   fi
 
   # 8. Premature CSS comment close via a class-family glob. Writing "vw-*/nst-*" inside a
