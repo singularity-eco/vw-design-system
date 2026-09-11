@@ -58,11 +58,55 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 | Clickable card | `.vw-card--clickable` | `vw-cards.css` |
 | Status accent strip (color-code a card without tinting the whole surface) | `.vw-card--accent` on host + `.vw-card-accent` first-child div | `vw-cards.css` |
 | Card icon slot | `.vw-card-icon-md` + `.vw-chip--neutral` | `vw-cards.css` |
+| Page wrapper | `.vw-page-container` — page padding **and** section gap, both `var(--vw-page-gap)`. Like every gap utility it needs a display class on the same element (`.vw-flex.vw-flex-col` or `.vw-grid`) or the gap silently does nothing — see "Common gotcha" below | `vw-cards.css` |
 | Colors | `var(--vw-color-*)` | `colors.css` |
-| Spacing / radius | `var(--vw-space-*)`, `var(--vw-radius-*)` | `spacing.css` |
+| Spacing / radius | `var(--vw-space-*)`, `var(--vw-radius-*)`, `var(--vw-page-gap)` | `spacing.css` |
+| Elevation / shadow | `var(--shadow-resting)` (level 1 — `none`, hairline border only), `var(--shadow-sm)` (level 2 — raised), `var(--elevation-border)`. **Never author a raw `rgba()` shadow** — these are the two levels the system has | `components.css`, `preview/elevation.html` |
 | Theme colors | `var(--grayColor*)`, `var(--primaryColor*)` | `theme-tokens.css` |
+| Switchable theme (blue / green / black) | `[data-theme="…"]` — see "Theming" below | `theme-blue.css`, `theme-green.css`, `theme-black.css` |
 
-**Live specimens:** `preview/vw-cards.html`, `preview/kpi-card.html`
+**Live specimens:** `preview/vw-cards.html`, `preview/kpi-card.html`, `preview/elevation.html`
+
+### Theming — `data-theme`
+
+The system ships three themes: **blue** (default), **green**, and **black**. Each is a separate
+stylesheet that, under a `[data-theme="…"]` selector, redefines exactly the accent families —
+`--accentColor50…900`, `--vw-color-accent-*`, and `--color-primary` / `-hover` / `-press`. Because
+the registry's own components resolve their accent through `var(--vw-color-accent-*)`, a theme
+switch flows through every `.nst-btn--filled`, focus ring, and active state automatically. No class
+changes.
+
+```html
+<!-- global -->            <html data-theme="green">
+<!-- or scoped to a subtree --> <div data-theme="black"> … </div>
+```
+
+**These files are NOT in the `nst-design-system.css` bundle** — that bundle carries
+`theme-tokens.css` only. To use a non-default theme, link it explicitly *after* the bundle:
+
+```html
+<link rel="stylesheet" href="nst-design-system.css">
+<link rel="stylesheet" href="theme-green.css">
+```
+
+**Silent-failure warning — verified, not theoretical.** A `data-theme` attribute whose stylesheet
+was never linked renders the *default blue* with no console error and no visual clue that anything
+is wrong. Confirmed by measuring `.nst-btn--filled`'s computed background: with only
+`theme-green.css` linked, `data-theme="green"` gave `rgb(80, 199, 169)` while `data-theme="black"`
+silently stayed `rgb(28, 129, 239)`; adding `theme-black.css` changed it to `rgb(9, 9, 9)`. If a
+theme "isn't applying," check the `<link>` before anything else.
+
+Rules:
+
+- **One theme per application**, chosen for domain fit, not visual preference. Don't mix themes
+  across screens of the same product.
+- Blue is the default and needs no `data-theme` attribute at all — `theme-tokens.css` (which *is* in
+  the bundle) already carries its values. Link `theme-blue.css` only when you need the attribute
+  form explicitly, e.g. to scope blue inside a page themed otherwise.
+- **Don't author a new theme file or hand-pick accent hex values.** Three themes is the palette. If
+  none fits, that's a registry conversation (see "Deviation policy"), not a local override.
+- A theme changes the accent scale only. Neutrals, semantic colors, spacing, and type are fixed
+  across all three.
 
 ---
 
