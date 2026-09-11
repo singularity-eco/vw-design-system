@@ -68,25 +68,56 @@ ds_check_file() {
     warnings+=("Inter font found. Layer 1/dashboard pages should use Poppins, not Inter — see CLAUDE.md.")
   fi
 
+  # Where the CSS actually lives in this file. For a .css file it IS the file; for
+  # html/jsx/tsx only the <style> block counts, so an ordinary JS block comment or a
+  # string that happens to look like a selector can't trip the CSS checks below.
+  # Checks 5 and 8 both read this.
+  #
+  # Getting this wrong was a real hole: check 5 used to read the <style> block ONLY,
+  # which meant a standalone .css file — where a parallel class family is most likely
+  # to be written in the first place — had an empty scan and silently passed. A
+  # consuming app shipped 52 invented class definitions in one stylesheet and this
+  # returned clean.
+  local css_source
+  case "$file_path" in
+    *.css) css_source=$(cat "$file_path" 2>/dev/null || true) ;;
+    *)     css_source=$(sed -n '/<style/,/<\/style>/p' "$file_path" 2>/dev/null || true) ;;
+  esac
+
   # 5. A locally-defined parallel utility-class system — 5+ distinct classes sharing the
-  #    same non-vw/nst/is prefix inside a <style> block (e.g. a whole .pg-* family invented
-  #    to work around a missing typography utility). Heuristic, so the threshold is loose
-  #    on purpose — a couple of one-off page-scoped classes sharing a prefix is normal and
-  #    not what this is trying to catch.
-  local style_block
-  style_block=$(sed -n '/<style/,/<\/style>/p' "$file_path" 2>/dev/null || true)
-  if [ -n "$style_block" ]; then
+  #    same non-vw/nst/is prefix (e.g. a whole .pg-* family invented to work around a
+  #    missing typography utility). Heuristic, so the threshold is loose on purpose — a
+  #    couple of one-off page-scoped classes sharing a prefix is normal and not what this
+  #    is trying to catch.
+  #    The design system's OWN stylesheets are exempt: asking "does this file invent a
+  #    parallel class family" is meaningless for the file that defines the registry. They
+  #    legitimately ship a few families that predate the vw-/nst- convention — .common-*-chip
+  #    (vw-chips.css), .ds-* (colors_and_type.css), .display-1..10 (typography-semantic.css) —
+  #    and flagging those on every edit is how a hook gets ignored. Matched on basename so it
+  #    holds wherever a consuming app vendors these (design-system/, src/assets/nst/, …).
+  local ds_own_stylesheet=0
+  case "${file_path##*/}" in
+    colors.css|colors_and_type.css|components.css|spacing.css|nst-design-system.css) ds_own_stylesheet=1 ;;
+    vw-*.css|theme-*.css|typography-*.css)                                            ds_own_stylesheet=1 ;;
+  esac
+
+  if [ -n "$css_source" ] && [ "$ds_own_stylesheet" -eq 0 ]; then
     local top top_count top_prefix
-    top=$(echo "$style_block" \
+    # sort -u on the FULL class name first, so a single class with many states
+    # (.req-card, .req-card:hover, .req-card.is-open) counts once, not three times —
+    # the threshold is about how many distinct classes a prefix has, not how many
+    # rules mention them.
+    top=$(printf '%s\n' "$css_source" \
       | grep -oE '^[[:space:]]*\.[a-zA-Z][a-zA-Z0-9_-]*' \
       | sed -E 's/^[[:space:]]*\.//' \
       | grep -vE '^(vw|nst|is)-' \
+      | sort -u \
       | sed -E 's/-.*$//' \
       | sort | uniq -c | sort -rn | head -1 || true)
     top_count=$(echo "$top" | awk '{print $1}')
     top_prefix=$(echo "$top" | awk '{print $2}')
     if [ -n "$top_count" ] && [ "$top_count" -ge 5 ] 2>/dev/null; then
-      warnings+=("Found $top_count classes sharing the prefix \"$top_prefix-\" defined locally in a <style> block — looks like an invented parallel utility-class system. Use vw-*/nst-* classes, or fall back to var(--vw-font-*)/var(--vw-space-*) tokens via inline style (see COMPONENTS.md \"Filling a gap in the utility layer\") instead of a new naming convention.")
+      warnings+=("Found $top_count classes sharing the prefix \"$top_prefix-\" defined locally in this file — looks like an invented parallel utility-class system. Use vw-*/nst-* classes, or fall back to var(--vw-font-*)/var(--vw-space-*) tokens via inline style (see COMPONENTS.md \"Filling a gap in the utility layer\") instead of a new naming convention.")
     fi
   fi
 
@@ -162,13 +193,8 @@ ds_check_file() {
   #    must not fire here; an earlier, broader version of this check («\*/[A-Za-z.]») flagged
   #    exactly that as a false positive. Scanned whole on .css files, and only inside <style>
   #    blocks on .tsx/.jsx/.html (so an ordinary JS block comment ending right before code
-  #    never false-positives).
-  local comment_scan
-  case "$file_path" in
-    *.css) comment_scan=$(cat "$file_path" 2>/dev/null || true) ;;
-    *)     comment_scan="$style_block" ;;
-  esac
-  if [ -n "$comment_scan" ] && printf '%s\n' "$comment_scan" | grep -qE -- '-\*/[A-Za-z.]'; then
+  #    never false-positives) — see `css_source` above.
+  if [ -n "$css_source" ] && printf '%s\n' "$css_source" | grep -qE -- '-\*/[A-Za-z.]'; then
     warnings+=("A '*/' inside a CSS comment closes it early (e.g. the glob in \"vw-*/nst-*\") and silently drops the very next CSS rule — the component renders unstyled with no console error. In comments, write class families WITHOUT the trailing asterisk: \"vw- or nst-\". See uiux-dev.md rule 3.")
   fi
 
