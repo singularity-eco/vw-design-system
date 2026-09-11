@@ -1,5 +1,11 @@
 # Component registry
 
+> **Source of truth for visual patterns:** the Vision Waves UI guidelines at
+> <https://uig-uidlines.vercel.app/ui-guidelines/guidelines/vw-cards> carry worked, canonical
+> card examples with full HTML. When this registry and those guidelines disagree, **the
+> guidelines win** and this file gets corrected — which has already happened once, to the
+> Metric label row in Layer 1.
+
 **Read this before generating any UI.** If a component exists here, you MUST use it. Do not invent styles, colors, fonts, or class names.
 
 **Verify visually:** `preview/gallery-index.html` links three verification galleries — `gallery-cards.html`, `gallery-utility.html`, `gallery-atomic.html` — each live-rendering every class in this registry next to its HTML snippet and a full reference table, so you can confirm the installed version matches expectations before shipping.
@@ -48,7 +54,7 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 | Card title | `.vw-card-title`, `.vw-card-title-lg`, `.vw-card-title-sm` | `vw-cards.css` |
 | Card body text | `.vw-card-description` | `vw-cards.css` |
 | KPI / metric value | `.vw-card-metric-lg` … `.vw-card-metric-xxxl` | `vw-cards.css`, `preview/kpi-card.html` |
-| Metric label | `.vw-card-metric-label`, `.vw-card-metric-label-sub`, `.vw-card-metric-label-sm` — quiet (weight 400, gray-500) so the number dominates. **Use this, not `.vw-card-title`, when the card's subject IS the number** (a KPI tile). Use `.vw-card-title` when the card is about a *thing* and the number merely supports it — the two specimens below each show one of these, which is why they look different | `vw-cards.css`, `preview/kpi-card.html` |
+| Metric label | `.vw-card-metric-label` labels a **secondary** metric *inside* a card (guidelines §6: "Created (L30D)" under the primary number). `.vw-card-metric-label-sub` is the small qualifier beside a delta (§4: "MoM"). **The card's own label is always `.vw-card-title`, including on a KPI card** — all seven worked examples in the Vision Waves guidelines do this | `vw-cards.css`, `preview/kpi-card.html` |
 | Trend / delta | `.vw-card-variance.is-positive\|is-negative\|is-neutral` — tone (color) only, plainly optional `.vw-card-variance-icon` (Phosphor `ph-caret-up`/`ph-caret-down`) for direction; the two are independent — tone is always the caller's business-meaning call, never inferred from which way the icon points (a rising count can still be `is-negative`) | `vw-cards.css`, `preview/kpi-card.html` |
 | Semantic card bg | `.vw-card--success\|error\|warning\|info` (+ fuchsia, purple, etc.) | `vw-cards.css` |
 | Status chip / badge / pill / tag | Pastel: `.vw-chip.vw-chip--success\|error\|warning\|info\|neutral`. Filled: `.vw-chip--success-solid`, `--error-solid`, `--warning-solid`, `--info-solid`, `--neutral-solid` — written out because the old `(+ -solid)` shorthand was provably unreadable: two consuming apps hand-rolled a "count-chip" while `.vw-chip--neutral-solid` already shipped | `vw-chips.css` |
@@ -72,8 +78,8 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 
 | Specimen | Covers |
 |---|---|
-| `preview/vw-cards.html` | Card **anatomy** — containers, nesting (`parent`/`child`), semantic variants, accent strip. Labels with `.vw-card-title` because those cards are about a *thing* |
-| `preview/kpi-card.html` | The KPI **archetype** — quiet `.vw-card-metric-label` above a large number, corner icon, variance with tone + optional direction icon |
+| `preview/vw-cards.html` | Card **anatomy** — containers, nesting (`parent`/`child`), semantic variants, accent strip |
+| `preview/kpi-card.html` | The KPI **archetype** — `.vw-card-title` + large metric + variance (tone and direction independent), and where `.vw-card-metric-label` correctly belongs: on a *secondary* metric inside the card |
 | `preview/elevation.html` | The two shadow levels |
 | `preview/skeleton.html` | Loading placeholders, both backdrops |
 | `preview/avatar.html` | Initials avatar, both sizes, inline tinting |
