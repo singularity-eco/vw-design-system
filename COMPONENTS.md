@@ -145,6 +145,10 @@ Use only when the task needs atomic controls not covered by vw-cards.
 | Filter popover | preview specimens | `preview/filter-popover.html` |
 | Date picker | `.nst-datepicker` + `.nst-datepicker-{header,nav,grid,day,year-grid,year,time,steppers,footer}` — single date, single date+time, date range, date range+time, each with a collapsed/input state (`.nst-input-shell`) and expanded grid state | `components.css`, `preview/date-picker.html` |
 | Colors (Figma semantic) | `colors_and_type.css` tokens | `preview/colors-semantic.html` |
+| Colour-named chips (when you want "blue", not "info") | `.common-blue-chip`, `.common-gray-chip`, `.common-green-chip`, `.common-orange-chip`, `.common-red-chip`, `.common-yellow-chip` — a colour-named family alongside the semantic `.vw-chip--*` one. Reach for these only when the meaning genuinely is the colour; prefer the semantic chip otherwise | `vw-chips.css` |
+| Figma type classes (Layer 2 only) | `.ds-h1`/`-h2`/`-h3`, `.ds-body`, `.ds-body-strong`, `.ds-small`, `.ds-label`, `.ds-caption`, `.ds-caption-strong` — Inter-based, for the atomic/Figma layer. **Not for dashboards** (Poppins) | `colors_and_type.css`, `preview/colors-semantic.html` |
+| ⚠️ **`typography-semantic.css` — do not link on a dashboard** | A tag-level baseline that restyles `body`, `p`, `small` and `h1`-`h6` **globally** and sets the body font to **Inter**. Deliberately NOT in the `nst-design-system.css` bundle. **Measured, not theorised:** link it on a Layer 1 page and `body`, `<p>`, `<h2>` *and `.vw-card-title`* all compute to Inter — registry classes inherit it because they do not set `font-family` themselves. No error, no visual warning. It also carries `.display-1` … `.display-10`, which duplicate `.vw-card-metric-*`; prefer the metric classes | `typography-semantic.css` |
+
 
 **React prototype:** `ui_kits/admin-console/index.html` (atomic Figma components; Inter font — use only for atomic demos, not dashboard cards)
 
@@ -297,8 +301,10 @@ candidates the next time this file gets a sign-off review:
   something a consuming app happened to invent: a row of star icons, empty state in a neutral gray,
   filled/hover in gold. Until built, fall back to existing tokens rather than a hardcoded gold hex —
   `--vw-color-amber-400` already covers the same intent, `--vw-color-gray-300` for the empty state
-- Progress meter, heatmap, activity feed, sparkline/chart primitives, segmented control, filter
-  chip, sub-12px type scale (from the `Dev-Sec-Ops-V4` transform specifically)
+- Progress meter, heatmap, activity feed, sparkline/chart primitives, segmented control, filter chip
+- ~~sub-12px type scale~~ — **retired 2026-09-11, not a real gap.** Every sub-11px use found in two
+  consuming apps was avatar initials, now internal to `.vw-avatar`. Count gaps by what a value
+  *styles*, not by the value itself
 
 If you hit a gap not listed here, add it under the appropriate bucket rather than silently
 building around it unlogged — that's how the first three above became visible as real candidates

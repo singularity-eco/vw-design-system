@@ -1,6 +1,18 @@
 /* ============================================================
    NST Design System — Component Tokens & Base Styles
-   Import after colors.css and typography-semantic.css
+
+   Requires, in this order:
+     colors.css             --vw-color-*      (163 uses here)
+     spacing.css            --vw-space-*, --vw-radius-*
+     typography-tokens.css  --fontFamily, --vw-font-*
+     theme-tokens.css       --primaryColor*   (fallback chain only)
+
+   This header previously said "import after colors.css and
+   typography-semantic.css". That was wrong and actively harmful, and
+   it has already been vendored into consuming apps. typography-semantic.css
+   defines ZERO variables, so nothing here depends on it — and linking it
+   restyles body/p/h1-h6 globally and sets the body font to Inter, silently
+   breaking the Poppins rule on any dashboard. See COMPONENTS.md → Layer 2.
    ============================================================ */
 
 /* ============================================================
