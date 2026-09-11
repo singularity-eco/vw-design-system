@@ -55,6 +55,7 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 | **Count chip** (a tally beside a heading — column count, item total) | `.vw-chip.vw-chip--neutral-solid` | `vw-chips.css`, `preview/table.html` (kanban column counts) |
 | Page title | `.vw-page-title`, `.vw-page-description` | `vw-cards.css` |
 | Layout | `.vw-flex`, `.vw-flex-col`, `.vw-justify-between`, `.vw-page-gap`, `.vw-gap-sm` (gap classes need a flex/grid parent on the same element — see "Common gotcha" below) | `vw-utilities.css` |
+| **Avatar** (initials in a circle — owner, assignee, comment author) | `.vw-avatar`, or `.vw-avatar.vw-avatar--lg` for a profile/app-shell size. Initials only; the caller passes them already uppercased. For a tinted avatar set both colours inline from tokens (`style="background: var(--vw-color-blue-100); color: var(--vw-color-blue-600)"`) rather than adding a class | `vw-cards.css`, `preview/avatar.html` |
 | **Skeleton / shimmer / loading placeholder** | `.vw-skeleton` + a shape: `.vw-skeleton-line` (text) or `.vw-skeleton-block` (card/chart area). Inside a white `.vw-card-section` add `.vw-skeleton--on-surface`, or it reads as a smudge. Set an inline `width` on the last line of a paragraph. Respects `prefers-reduced-motion` and stays visible with the animation off | `vw-cards.css`, `preview/skeleton.html` |
 | Card grid / grid of cards / tile grid | Auto-fill: `.vw-grid.vw-grid-cols-auto-320.vw-gap-xl`. Fixed columns: `.vw-grid.vw-grid-cols-2\|3\|4` | `vw-utilities.css` |
 | Clickable card | `.vw-card--clickable` | `vw-cards.css` |
@@ -67,7 +68,7 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 | Theme colors | `var(--grayColor*)`, `var(--primaryColor*)` | `theme-tokens.css` |
 | Switchable theme (blue / green / black) | `[data-theme="…"]` — see "Theming" below | `theme-blue.css`, `theme-green.css`, `theme-black.css` |
 
-**Live specimens:** `preview/vw-cards.html`, `preview/kpi-card.html`, `preview/elevation.html`, `preview/skeleton.html`
+**Live specimens:** `preview/vw-cards.html`, `preview/kpi-card.html`, `preview/elevation.html`, `preview/skeleton.html`, `preview/avatar.html`
 
 ### Theming — `data-theme`
 
@@ -270,7 +271,10 @@ candidates the next time this file gets a sign-off review:
 - **Toast**
 
 **Seen on one app so far** (not yet at the cross-page-recurrence bar):
-- Avatar (single + stacked group with overflow)
+- ~~Avatar (single)~~ — **shipped 2026-09-11 as `.vw-avatar`** (13 near-identical definitions across
+  two independently-built apps). **Stacked group with overflow is NOT shipped and has no evidence** —
+  zero of those 13 stacked; this entry had been carrying a feature nobody asked for. Left here only
+  so the next person doesn't re-add it on the strength of this list alone
 - Checkbox / radio / toggle switch (styled, not just the inline demo)
 - Tabs (styled, not just the inline demo)
 - Timeline / comment thread

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Avatar — NST Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../nst-design-system.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--vw-color-gray-100);
+    padding: 28px;
+    font-family: var(--fontFamily);
+    color: var(--vw-color-gray-800);
+  }
+  .block-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--vw-color-gray-400); margin-bottom: 12px;
+  }
+  .demo { margin-bottom: 32px; max-width: 720px; }
+  .note { font-size: 12px; color: var(--vw-color-gray-500); margin-top: 8px; }
+</style>
+</head>
+<body>
+
+  <div class="demo">
+    <div class="block-label">Sizes</div>
+    <div class="vw-flex vw-items-center vw-gap-md">
+      <span class="vw-avatar">AM</span>
+      <span class="vw-avatar vw-avatar--lg">AM</span>
+    </div>
+    <div class="note">Default 24px for table rows and meta lines; <code>--lg</code> 32px for an app-shell user menu or a profile header.</div>
+  </div>
+
+  <div class="demo">
+    <div class="block-label">In a meta row — the commonest use</div>
+    <div class="vw-card-section">
+      <div class="vw-card-title">Warehouse capacity review</div>
+      <div class="vw-flex vw-items-center vw-gap-sm" style="margin-top: 12px;">
+        <span class="vw-avatar">PC</span>
+        <span class="vw-card-description">Punit Chawla</span>
+        <span class="vw-chip vw-chip--neutral-solid">4</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo">
+    <div class="block-label">Tinted — set both colours inline from tokens, don't add a class</div>
+    <div class="vw-flex vw-items-center vw-gap-md">
+      <span class="vw-avatar">AM</span>
+      <span class="vw-avatar" style="background: var(--vw-color-blue-100); color: var(--vw-color-blue-600);">RR</span>
+      <span class="vw-avatar" style="background: var(--vw-color-emerald-100); color: var(--vw-color-emerald-700);">ST</span>
+      <span class="vw-avatar" style="background: var(--vw-color-amber-100); color: var(--vw-color-amber-800);">JD</span>
+    </div>
+    <div class="note">
+      This is the sanctioned gap-fill from "Filling a gap in the utility layer" — snap to real tokens
+      inline rather than inventing <code>.avatar--blue</code> and friends. One consuming app tinted by
+      semantic tone this way; nothing else needed a class for it.
+    </div>
+  </div>
+
+  <div class="demo">
+    <div class="block-label">Initials only — deliberately</div>
+    <div class="note">
+      All 13 avatar implementations across the two apps this was promoted from render text; not one
+      holds an image. So there is no <code>&lt;img&gt;</code> sizing or overflow handling here — it
+      would be scaffolding for a case nobody has. Callers pass initials already uppercased, so there
+      is no <code>text-transform</code> either.
+    </div>
+  </div>
+
+</body>
+</html>
