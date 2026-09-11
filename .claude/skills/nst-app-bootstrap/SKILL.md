@@ -19,7 +19,8 @@ Wires a target app repo up to use the NST / Vision Waves design system, automati
 5. Copies `.cursor/rules/nst-design-system.mdc` + `.cursor/skills/nst-design-system/` into the app repo too, so Cursor gets the same auto-loaded rules Claude Code gets — not just Claude Code users
 6. Installs the enforcement hook (`.claude/hooks/check-design-system.sh` + a `PostToolUse` entry in `.claude/settings.json`) so drift is caught automatically in this app too, not just in the design-system repo itself
 7. Installs a CI check (`.github/workflows/design-system-check.yml`) that runs the same rules as a real gate on every PR — catches drift the hook can't, since the hook only fires inside a Claude Code session
-8. Installs a session-start staleness check (`.claude/hooks/check-design-system-staleness.sh` + a `SessionStart` entry in `.claude/settings.json`) so the agent proactively flags — once per session, not per task — when this app's pinned `design-system/` submodule has fallen behind `origin/main`, instead of the app silently drifting further behind with no signal
+8. Installs a session-start staleness check (`.claude/hooks/check-design-system-staleness.sh` + a `SessionStart` entry in `.claude/settings.json`) so the agent proactively flags — once per session, not per task — when this app's pinned copy has fallen behind `origin/main`, instead of drifting further behind with no signal. Works whether the design system is vendored as a submodule, a nested clone, or plain file copies
+8b. Writes a `VERSION` pin next to the vendored copy — the only record of what's installed when there's no `.git`, and the one thing the staleness hook can read in that case
 9. Scaffolds a minimal starter `index.html` — one `.vw-card-section` example, nothing more
 
 Every step checks for existing state first and skips or merges instead of overwriting. This makes the skill safe to re-run on a repo that's already partially set up (e.g. it already has a `CLAUDE.md` for other purposes).
@@ -188,12 +189,29 @@ note for.
 
 ### 8. Install the session-start staleness check
 
-Git submodules don't auto-sync — pushing a commit to `vw-design-system` gives every app that
+A vendored copy doesn't auto-sync — pushing a commit to `vw-design-system` gives every app that
 already pinned an older commit no signal at all that an update exists, until someone happens to
 check by hand. This step closes that gap with a `SessionStart` hook: once per session start or
-resume (never per-prompt, so it stays cheap), it does a quick `git fetch` on the `design-system/`
-submodule and, if the app's pinned commit is behind `origin/main`, injects that fact into context
-so the agent can ask the user whether to update now or later — never updates silently either way.
+resume (never per-prompt, so it stays cheap), it resolves the app's pinned commit, compares it to
+`origin/main`, and if the app is behind, injects that fact into context so the agent can ask the
+user whether to update now or later — never updates silently either way.
+
+**It handles all three vendoring shapes**, which matters because most real apps are not submodules:
+
+| Shape | How the pin is read | Upstream resolved by |
+|---|---|---|
+| Submodule (`.git` is a gitlink file) | `git rev-parse HEAD` | `git fetch` |
+| Nested clone (`.git` is a real directory, any path) | `git rev-parse HEAD` | `git fetch` |
+| **Plain file copy (no `.git` at all)** | the `commit:` line in `VERSION` | `git ls-remote` — no clone needed |
+
+The plain-copy case is not hypothetical: an app that lives inside the design system's own worktree
+cannot `git submodule add` at all (it would resolve to the design system repo itself), so file
+copies are the only option there. That shape is exactly why step 8b writes a `VERSION` file.
+
+The hook searches the usual locations (`design-system/`, `frontend/design-system/`,
+`src/assets/nst/`, `frontend/apps/*/src/assets/nst/`, and a few more); set
+`NST_DESIGN_SYSTEM_DIR` if this app vendors it somewhere unusual. It is silent on every failure —
+not found, offline, no pin — and never blocks session start.
 
 Same settings.json caveat as step 6 — a properly safety-configured session may pause for
 confirmation before writing to `.claude/settings.json`; that's expected, confirm and proceed.
@@ -222,6 +240,46 @@ Then wire it into `.claude/settings.json` under `hooks.SessionStart` (merge — 
 ```
 
 Validate after writing: `jq -e '.hooks.SessionStart[0].hooks[0].command' .claude/settings.json` should print the command back, not error.
+
+### 8b. Write a `VERSION` pin alongside the vendored copy
+
+Write this into the vendored design-system directory. For a plain file copy it is the **only**
+record of what's installed and the sole thing the staleness hook can read; for a submodule or clone
+it costs nothing and makes the pin legible to a human who isn't going to run `git -C`.
+
+```bash
+DS_DIR=design-system   # or wherever this app vendors it
+PINNED=$(git -C "$DS_DIR" rev-parse HEAD 2>/dev/null || echo "<paste the source commit SHA>")
+
+cat > "$DS_DIR/VERSION" <<EOF
+# NST / Vision Waves design system — vendored snapshot
+
+source:   https://github.com/singularity-eco/vw-design-system
+commit:   $PINNED
+vendored: $(date -u +%Y-%m-%d)
+
+Nothing here auto-updates. The SessionStart hook
+(.claude/hooks/check-design-system-staleness.sh) reads the commit line above and
+warns once per session when this copy falls behind origin/main — but it only
+warns. Updating is always a deliberate act.
+
+To refresh:
+  - submodule:   git submodule update --remote $DS_DIR
+  - nested clone: git -C $DS_DIR pull
+  - plain copy:   re-copy the files, then update the commit line above
+
+Check for drift by hand:
+  git ls-remote https://github.com/singularity-eco/vw-design-system.git main
+
+Stylesheets: import each layer individually, NOT the nst-design-system.css
+bundle — Tailwind v4 resolves only one level of @import, so the bundle's nested
+imports are dropped and every vw- class silently goes unstyled while nst-
+classes keep working. See docs/ for the full write-up.
+EOF
+```
+
+Keep the `commit:` line accurate. A stale pin is worse than no pin — it makes the hook confidently
+report the wrong thing.
 
 This hook is silent by design whenever there's nothing to report — no submodule, offline, or
 already current — so a quiet session start means it ran and found nothing, not that it didn't run.

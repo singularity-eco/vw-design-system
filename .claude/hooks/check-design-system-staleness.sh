@@ -1,58 +1,151 @@
 #!/usr/bin/env bash
-# SessionStart hook — checks whether design-system/ (a submodule of
-# singularity-eco/vw-design-system) is behind origin's default branch, and if
-# so, injects that into context so the agent can ask the user whether to
-# update now or later. Fires once per session start/resume, NOT per prompt.
+# SessionStart hook — warns when a consuming app's copy of this design system is
+# behind origin, so the agent can ask the user whether to update. Fires once per
+# session start/resume, NOT per prompt.
 #
-# Deliberately silent on any failure (no submodule, offline, slow network,
-# detached/non-submodule design-system/ dir) — this must never block or
-# noisily interrupt session start. `git fetch` here only updates
-# refs/remotes/origin/*, it never touches the working tree, so it's safe to
-# run unconditionally.
+# WHY THIS IS MORE THAN A SUBMODULE CHECK
+# An earlier version looked for exactly one thing: a git submodule at exactly
+# `design-system/`. Neither real consuming app we have is that shape, so it exited
+# on its second line and never once fired — which is why two independently built
+# apps sat 9 commits behind without knowing. One of them documented our own gap
+# back to us, in its VERSION file: "nothing auto-updates and nothing warns when
+# this falls behind."
+#
+# Three shapes exist in the wild, and all three are handled here:
+#   1. submodule   — .git is a FILE (gitlink into the superproject)
+#   2. nested clone— .git is a DIRECTORY, real remote, just not at the root path
+#   3. plain copy  — no .git at all; the pinned commit lives in a VERSION file
+#
+# Shape 3 has no local git to fetch with, so it resolves upstream via
+# `git ls-remote`, which needs no clone. It can only report "pinned X, latest Y
+# differ" — no commit count, no log — and says so rather than implying more.
+#
+# Deliberately silent on every failure (not found, offline, no VERSION pin, no
+# jq). This must never block or noisily interrupt session start. Nothing here
+# writes: `git fetch` only updates refs/remotes/*, and ls-remote is read-only.
 set -uo pipefail
 
-SUBMODULE_DIR="design-system"
+REPO_URL_DEFAULT="https://github.com/singularity-eco/vw-design-system.git"
 
-# A submodule's .git is a FILE (gitlink to the superproject's .git/modules/),
-# not a directory — use -e, not -d, or this always misses real submodules.
-[ -e "$SUBMODULE_DIR/.git" ] || exit 0
+command -v jq >/dev/null 2>&1 || exit 0
 
-cd "$SUBMODULE_DIR" || exit 0
-
-DEFAULT_BRANCH=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##')
-[ -n "$DEFAULT_BRANCH" ] || DEFAULT_BRANCH="main"
-
-# 5s cap so a flaky/offline network can never stall session start. `timeout`
-# is GNU coreutils and isn't on stock macOS (only as `gtimeout` via brew) —
-# fall back to running unguarded rather than failing outright via "command
-# not found", since that would silently disable the whole hook on macOS.
+# 5s cap so a flaky network can never stall session start. `timeout` is GNU
+# coreutils and isn't on stock macOS (only `gtimeout` via brew) — fall back to
+# running unguarded rather than dying on "command not found", which would
+# silently disable the whole hook on macOS.
 TIMEOUT_BIN=""
 if command -v timeout >/dev/null 2>&1; then
   TIMEOUT_BIN="timeout 5"
 elif command -v gtimeout >/dev/null 2>&1; then
   TIMEOUT_BIN="gtimeout 5"
 fi
-$TIMEOUT_BIN git fetch origin "$DEFAULT_BRANCH" --quiet 2>/dev/null || exit 0
 
-LOCAL_SHA=$(git rev-parse HEAD 2>/dev/null) || exit 0
-REMOTE_SHA=$(git rev-parse "origin/$DEFAULT_BRANCH" 2>/dev/null) || exit 0
+# ── Locate the vendored design system ────────────────────────────────────────
+# COMPONENTS.md and VERSION are the two markers present across every vendoring
+# shape seen so far, including partial copies that ship no CSS at all.
+is_ds_dir() { [ -f "$1/COMPONENTS.md" ] || [ -f "$1/VERSION" ]; }
 
-[ "$LOCAL_SHA" = "$REMOTE_SHA" ] && exit 0
+DS_DIR=""
+if [ -n "${NST_DESIGN_SYSTEM_DIR:-}" ] && is_ds_dir "${NST_DESIGN_SYSTEM_DIR}"; then
+  DS_DIR="$NST_DESIGN_SYSTEM_DIR"
+else
+  for cand in \
+    design-system \
+    frontend/design-system \
+    src/assets/nst \
+    frontend/src/assets/nst \
+    vendor/design-system \
+    packages/design-system \
+    frontend/apps/*/src/assets/nst \
+    apps/*/src/assets/nst
+  do
+    if is_ds_dir "$cand"; then DS_DIR="$cand"; break; fi
+  done
+fi
+[ -n "$DS_DIR" ] || exit 0
 
-BEHIND_COUNT=$(git rev-list --count "HEAD..origin/$DEFAULT_BRANCH" 2>/dev/null) || BEHIND_COUNT="some"
-BEHIND_LOG=$(git log --oneline "HEAD..origin/$DEFAULT_BRANCH" 2>/dev/null | head -5)
+# Don't fire inside the design system's own repo — a maintainer working here is
+# not a consumer with a stale copy.
+[ -f "$DS_DIR/COMPONENTS.md" ] && [ -f "./COMPONENTS.md" ] && [ "$DS_DIR" = "." ] && exit 0
+[ -d "./.git" ] && [ -f "./COMPONENTS.md" ] && [ -f "./nst-design-system.css" ] && exit 0
+
+# ── Resolve the pinned commit ────────────────────────────────────────────────
+VERSION_FILE="$DS_DIR/VERSION"
+REPO_URL="$REPO_URL_DEFAULT"
+if [ -f "$VERSION_FILE" ]; then
+  url_line=$(grep -iE '^[[:space:]]*source:' "$VERSION_FILE" 2>/dev/null | grep -oE 'https?://[^[:space:]]+' | head -1)
+  [ -n "$url_line" ] && REPO_URL="$url_line"
+fi
+
+SHAPE=""
+LOCAL_SHA=""
+if [ -e "$DS_DIR/.git" ]; then
+  LOCAL_SHA=$(git -C "$DS_DIR" rev-parse HEAD 2>/dev/null || true)
+  if [ -n "$LOCAL_SHA" ]; then
+    if [ -f "$DS_DIR/.git" ]; then SHAPE="submodule"; else SHAPE="clone"; fi
+  fi
+fi
+if [ -z "$LOCAL_SHA" ] && [ -f "$VERSION_FILE" ]; then
+  LOCAL_SHA=$(grep -iE '^[[:space:]]*commit:' "$VERSION_FILE" 2>/dev/null | head -1 | grep -oE '[0-9a-f]{7,40}' | head -1 || true)
+  [ -n "$LOCAL_SHA" ] && SHAPE="copy"
+fi
+[ -n "$LOCAL_SHA" ] || exit 0
+
+# ── Resolve upstream ─────────────────────────────────────────────────────────
+BEHIND_COUNT=""
+BEHIND_LOG=""
+REMOTE_SHA=""
+DEFAULT_BRANCH="main"
+
+if [ "$SHAPE" = "submodule" ] || [ "$SHAPE" = "clone" ]; then
+  b=$(git -C "$DS_DIR" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##' || true)
+  [ -n "$b" ] && DEFAULT_BRANCH="$b"
+  $TIMEOUT_BIN git -C "$DS_DIR" fetch origin "$DEFAULT_BRANCH" --quiet 2>/dev/null || exit 0
+  REMOTE_SHA=$(git -C "$DS_DIR" rev-parse "origin/$DEFAULT_BRANCH" 2>/dev/null || true)
+  [ -n "$REMOTE_SHA" ] || exit 0
+  [ "$LOCAL_SHA" = "$REMOTE_SHA" ] && exit 0
+  BEHIND_COUNT=$(git -C "$DS_DIR" rev-list --count "HEAD..origin/$DEFAULT_BRANCH" 2>/dev/null || true)
+  BEHIND_LOG=$(git -C "$DS_DIR" log --oneline "HEAD..origin/$DEFAULT_BRANCH" 2>/dev/null | head -5 || true)
+else
+  # Plain copy: no local git object store, so resolve the tip without cloning.
+  REMOTE_SHA=$($TIMEOUT_BIN git ls-remote "$REPO_URL" "refs/heads/$DEFAULT_BRANCH" 2>/dev/null | awk '{print $1}' | head -1 || true)
+  [ -n "$REMOTE_SHA" ] || exit 0
+  # The pin may be abbreviated, so compare on the shorter of the two lengths.
+  n=${#LOCAL_SHA}
+  [ "$n" -gt 0 ] && [ "${REMOTE_SHA:0:$n}" = "$LOCAL_SHA" ] && exit 0
+fi
+
+# ── Report ───────────────────────────────────────────────────────────────────
+if [ "$SHAPE" = "copy" ]; then
+  DETAIL="This is a plain file copy (no .git), so the pinned commit was read from $VERSION_FILE and upstream resolved via ls-remote. That means no commit count or changelog is available here — only that the two differ."
+  ACTION="re-copy the files from $REPO_URL and update the commit line in $VERSION_FILE"
+else
+  DETAIL="Recent upstream commits:
+$BEHIND_LOG"
+  if [ "$SHAPE" = "submodule" ]; then
+    ACTION="git submodule update --remote $DS_DIR"
+  else
+    ACTION="git -C $DS_DIR pull"
+  fi
+fi
+
+COUNT_TEXT="behind"
+[ -n "$BEHIND_COUNT" ] && COUNT_TEXT="$BEHIND_COUNT commit(s) behind"
 
 jq -n \
-  --arg count "$BEHIND_COUNT" \
+  --arg dir "$DS_DIR" \
+  --arg shape "$SHAPE" \
+  --arg count "$COUNT_TEXT" \
   --arg local "${LOCAL_SHA:0:7}" \
   --arg remote "${REMOTE_SHA:0:7}" \
-  --arg log "$BEHIND_LOG" \
   --arg branch "$DEFAULT_BRANCH" \
+  --arg detail "$DETAIL" \
+  --arg action "$ACTION" \
   '{
     hookSpecificOutput: {
       hookEventName: "SessionStart",
       additionalContext: (
-        "The design-system/ submodule is \($count) commit(s) behind origin/\($branch) (pinned: \($local), latest: \($remote)).\nRecent upstream commits:\n\($log)\n\nAt the start of this session, ask the user whether to update now (git submodule update --remote design-system, then check design-system/COMPONENTS.md and design-system/docs/card-reference.md for anything new before using them) or stay on the pinned version for now. Don'\''t update silently either way — this is a one-time touchbase for this session, not a per-task check."
+        "The vendored NST design system at \($dir)/ (\($shape)) is \($count) origin/\($branch) — pinned \($local), latest \($remote).\n\n\($detail)\n\nAt the start of this session, ask the user whether to update now (\($action), then re-read \($dir)/COMPONENTS.md for anything new before relying on it) or stay pinned for now. Don'\''t update silently either way — this is a one-time touchbase for this session, not a per-task check."
       )
     }
   }'
