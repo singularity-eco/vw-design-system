@@ -163,28 +163,28 @@
 }
 
 .vw-card-activity-label {
-  font-size: 0.875rem;
+  font-size: var(--vw-font-label-md);
   font-weight: 500;
   line-height: 1.5;
   color: var(--vw-color-gray-800);
 }
 
 .vw-card-activity-value {
-  font-size: 0.75rem;
+  font-size: var(--vw-font-label-sm);
   font-weight: 400;
   line-height: 1.4;
   color: var(--vw-color-gray-500);
 }
 
 .vw-label {
-  font-size: 0.75rem;
+  font-size: var(--vw-font-label-sm);
   font-weight: 400;
   line-height: 1.4;
   color: var(--vw-color-gray-500);
 }
 
 .vw-value {
-  font-size: 0.875rem;
+  font-size: var(--vw-font-description);
   font-weight: 400;
   line-height: 1.5;
   color: var(--vw-color-gray-900);
@@ -207,14 +207,14 @@
 /* ── Page typography ─────────────────────────────────────── */
 
 .vw-page-title {
-  font-size: 1.25rem;
+  font-size: var(--vw-font-heading-xl);
   font-weight: 500;
   line-height: 1.5;
   color: var(--vw-color-slate-800);
 }
 
 .vw-page-description {
-  font-size: 0.875rem;
+  font-size: var(--vw-font-description);
   font-weight: 400;
   line-height: 1.4;
   color: var(--vw-color-slate-700);
@@ -249,8 +249,8 @@
 .vw-card-metric-md   { font-size: var(--vw-font-value-md); }
 .vw-card-metric-sm   { font-size: var(--vw-font-value-sm); }
 .vw-card-metric-xs   { font-size: var(--vw-font-value-xs); }
-.vw-card-metric-xxs  { font-size: 0.75rem; }
-.vw-card-metric-xxxs { font-size: 0.625rem; }
+.vw-card-metric-xxs  { font-size: var(--vw-font-value-xxs); }
+.vw-card-metric-xxxs { font-size: var(--vw-font-value-xxxs); }
 
 .vw-card-metric-label,
 .vw-card-metric-label-sub,
@@ -291,6 +291,8 @@
 
 .vw-card-variance-icon {
   flex-shrink: 0;
+  /* Glyph size for the caret icon, NOT type — see the note on
+     .nst-table-kebab in components.css. */
   font-size: 12px;
 }
 

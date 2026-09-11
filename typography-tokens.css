@@ -43,4 +43,11 @@
   --vw-font-value-md:   1.125rem;    /* 18px */
   --vw-font-value-sm:   1rem;        /* 16px */
   --vw-font-value-xs:   0.875rem;    /* 14px */
+  /* The bottom of the metric scale. Added so .vw-card-metric-xxs/-xxxs can
+     reference tokens like every other metric class, rather than carrying raw
+     values. 10px is deliberately absent from the enforcement hook's ladder —
+     it is a metric size, and flagging every 10px would wrongly push unrelated
+     things (avatar initials, for one) onto a value-* token. */
+  --vw-font-value-xxs:  0.75rem;     /* 12px */
+  --vw-font-value-xxxs: 0.625rem;    /* 10px */
 }

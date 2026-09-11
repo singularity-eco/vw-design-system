@@ -58,7 +58,7 @@
   transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
 
   /* default size = md */
-  font-size: 14px;
+  font-size: var(--vw-font-label-md);
   line-height: 20px;
   padding: 8px 16px;
 
@@ -87,10 +87,10 @@
 }
 
 /* ── Sizes ───────────────────────────────────────────────── */
-.nst-btn--xs { font-size: 12px; line-height: 16px; padding: 4px; }
+.nst-btn--xs { font-size: var(--vw-font-label-sm); line-height: 16px; padding: 4px; }
 .nst-btn--sm { font-size: 13px; line-height: 18px; padding: 6px 8px; }
-.nst-btn--md { font-size: 14px; line-height: 20px; padding: 8px 16px; }
-.nst-btn--lg { font-size: 16px; line-height: 24px; padding: 8px 16px; }
+.nst-btn--md { font-size: var(--vw-font-label-md); line-height: 20px; padding: 8px 16px; }
+.nst-btn--lg { font-size: var(--vw-font-label-lg); line-height: 24px; padding: 8px 16px; }
 
 /* Icon-only — square, matching each size's text-button height */
 .nst-btn--icon.nst-btn--xs { width: 24px; height: 24px; padding: 0; }
@@ -184,7 +184,7 @@
   background: var(--vw-color-white);
 
   font-family: var(--fontFamily);
-  font-size: 14px;
+  font-size: var(--vw-font-description);
   font-weight: 400;
   line-height: 20px;
   color: var(--vw-color-gray-700);
@@ -203,7 +203,7 @@
   white-space: nowrap;
 
   font-family: var(--fontFamily);
-  font-size: 12px;
+  font-size: var(--vw-font-label-sm);
   font-style: normal;
   font-weight: 500;
   line-height: 18px;
@@ -245,7 +245,7 @@
 /* Hint / error message below input */
 .nst-input-hint {
   font-family: var(--fontFamily);
-  font-size: 12px;
+  font-size: var(--vw-font-label-sm);
   line-height: 18px;
   font-weight: 400;
   color: var(--vw-color-gray-400);
@@ -284,7 +284,7 @@
   outline: none;
   background: transparent;
   font-family: var(--fontFamily);
-  font-size: 14px;
+  font-size: var(--vw-font-description);
   line-height: 20px;
   color: var(--vw-color-gray-700);
   min-width: 0;
@@ -338,7 +338,7 @@
 .nst-table-th {
   padding: 10px 8px;
   font-family: var(--fontFamily);
-  font-size: 12px;
+  font-size: var(--vw-font-label-sm);
   font-weight: 500;
   line-height: 20px;
   color: var(--vw-color-neutral-500);
@@ -399,6 +399,9 @@
   color: var(--vw-color-neutral-400);
   cursor: pointer;
   transition: color 100ms;
+  /* Glyph size for the ⋮ character, NOT type. Deliberately a literal:
+     mapping an icon onto a --vw-font-* token would file it in the wrong
+     family. Check 7 flags it; this comment is the answer. */
   font-size: 18px;
   line-height: 1;
   padding: 0 4px;
@@ -684,7 +687,7 @@
   background: transparent;
   padding: 0;
   font-family: var(--fontFamily);
-  font-size: 14px;
+  font-size: var(--vw-font-description);
   color: var(--vw-color-gray-700);
   display: none;
 }
@@ -745,7 +748,7 @@
   transition: background 100ms;
   color: var(--vw-color-gray-800);
   font-family: var(--fontFamily);
-  font-size: 14px;
+  font-size: var(--vw-font-label-md);
   font-weight: 400;
   line-height: 20px;
   user-select: none;
@@ -808,7 +811,7 @@
   resize: none;
   padding: 8px 8px 0;
   font-family: var(--fontFamily);
-  font-size: 14px;
+  font-size: var(--vw-font-description);
   font-weight: 400;
   line-height: 20px;
   color: var(--vw-color-gray-900);
@@ -832,7 +835,7 @@
 /* Character counter */
 .nst-textarea-counter {
   font-family: var(--fontFamily);
-  font-size: 12px;
+  font-size: var(--vw-font-label-sm);
   line-height: 18px;
   font-weight: 400;
   color: var(--vw-color-gray-400);
@@ -887,7 +890,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: var(--vw-font-label-md);
   font-weight: 600;
   color: var(--vw-color-gray-900);
 }
@@ -924,7 +927,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 14px;
+  font-size: var(--vw-font-label-md);
   font-weight: 600;
   color: var(--vw-color-gray-900);
   background: none;
@@ -944,7 +947,7 @@
 
 .nst-datepicker-weekday {
   text-align: center;
-  font-size: 12px;
+  font-size: var(--vw-font-label-sm);
   font-weight: 500;
   color: var(--vw-color-gray-400);
   padding: 4px 0 8px;
@@ -1017,7 +1020,7 @@
 
 /* Collapsed input state — single date: one field, built on .nst-input-shell */
 .nst-datepicker-field-label {
-  font-size: 12px;
+  font-size: var(--vw-font-label-sm);
   font-weight: 500;
   color: var(--vw-color-gray-500);
   margin-bottom: 4px;
@@ -1059,7 +1062,7 @@
   padding: 6px 8px;
   border: 1px solid var(--vw-color-gray-200);
   border-radius: var(--vw-radius-sm);
-  font-size: 14px;
+  font-size: var(--vw-font-label-md);
   font-weight: 500;
   color: var(--vw-color-gray-900);
 }
@@ -1227,4 +1230,65 @@
   .nst-panel.nst-panel--dialog {
     animation: none;
   }
+}
+
+/* ============================================================
+   Anchoring a floating menu to its trigger
+
+   .nst-action-menu has always been `position: absolute` — but an
+   absolutely positioned element needs a positioned ancestor, and we
+   never shipped one. So every consumer had to rediscover the other
+   half of the pattern themselves.
+
+   They did, identically. Four popover families across one app, plus
+   more in another, all landing on exactly:
+
+     position: absolute; top: calc(100% + 6px); right: 0;
+
+   while ALSO using .nst-action-menu 50 times elsewhere — they used
+   ours where a bare menu sufficed and hand-rolled whenever it had to
+   sit under a trigger. That is a missing half, not a missing
+   component.
+
+   Wrap the trigger in .nst-anchor, put the placement modifier on the
+   menu:
+
+     <div class="nst-anchor">
+       <button class="nst-icon-btn">⋮</button>
+       <div class="nst-action-menu nst-action-menu--below-end"> … </div>
+     </div>
+
+   CLIPPING: an absolutely positioned menu is clipped by any ancestor
+   with `overflow: hidden` — which .nst-table-card and .nst-table-td
+   both set for column truncation. Inside a real grid table the menu
+   still has to be portalled outside the row; anchoring does not solve
+   that. See the Table row-actions entry in COMPONENTS.md.
+   ============================================================ */
+
+.nst-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Below the trigger, right edges aligned — the placement all four
+   consuming implementations chose. */
+.nst-action-menu.nst-action-menu--below-end {
+  top: calc(100% + var(--vw-space-xxs));
+  right: 0;
+}
+
+.nst-action-menu.nst-action-menu--below-start {
+  top: calc(100% + var(--vw-space-xxs));
+  left: 0;
+}
+
+/* For a trigger near the bottom of the viewport. */
+.nst-action-menu.nst-action-menu--above-end {
+  bottom: calc(100% + var(--vw-space-xxs));
+  right: 0;
+}
+
+.nst-action-menu.nst-action-menu--above-start {
+  bottom: calc(100% + var(--vw-space-xxs));
+  left: 0;
 }
