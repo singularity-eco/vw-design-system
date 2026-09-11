@@ -1088,3 +1088,143 @@
   gap: 8px;
   padding-top: 4px;
 }
+
+/* ============================================================
+   Overlay + panel — drawer, modal, confirm dialog
+
+   One system, three declared "gaps". Reading the consuming apps
+   made it obvious: their confirm overlay and their drawer overlay
+   are byte-identical except for one property —
+
+     confirm : justify-content: center;
+     drawer  : justify-content: flex-end;
+
+   So this ships as an overlay (the scrim AND the positioning
+   context) plus a panel placed inside it. A centered dialog and a
+   right-anchored drawer differ by one modifier, not by a second
+   component family.
+
+   Promoted from six drawer and two confirm implementations across
+   two independently-built apps, which agreed on: 480px drawers
+   (5 of 6), a gray-900 scrim at 32-45%, a right-anchored full-height
+   flex column, and header / scrollable body / right-aligned footer.
+
+   Two deliberate changes from the references:
+   - the scrim derives from var(--vw-color-gray-900) via color-mix
+     rather than a hand-typed rgba(17, 24, 39, …), which is that
+     token's value retyped in all eight implementations
+   - the slide-in is disabled under prefers-reduced-motion
+
+   Focus trapping, Escape-to-close, aria-modal and returning focus
+   to the trigger are the caller's job — this is styling only.
+
+     <div class="nst-overlay">                        <!-- centered -->
+       <div class="nst-panel nst-panel--dialog"> … </div>
+     </div>
+
+     <div class="nst-overlay nst-overlay--end">       <!-- drawer -->
+       <div class="nst-panel nst-panel--drawer">
+         <div class="nst-panel-header"> … </div>
+         <div class="nst-panel-body"> … </div>
+         <div class="nst-panel-footer"> … </div>
+       </div>
+     </div>
+   ============================================================ */
+
+.nst-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--vw-color-gray-900) 40%, transparent);
+}
+
+/* `display: flex` above beats the browser's `[hidden] { display: none }`, so
+   an overlay written as <div class="nst-overlay" hidden> would render anyway —
+   a silent, confusing failure the caller cannot see in the markup. Same class
+   of trap as .vw-gap-* on a non-flex parent. Handled here so nobody has to
+   rediscover it. */
+.nst-overlay[hidden] {
+  display: none;
+}
+
+/* Right-anchored — the drawer placement. */
+.nst-overlay.nst-overlay--end {
+  justify-content: flex-end;
+}
+
+.nst-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  background: var(--vw-color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.nst-panel.nst-panel--drawer {
+  width: 30rem;
+  max-width: 92vw;
+  height: 100%;
+  animation: nst-panel-slide-in 180ms ease-out;
+}
+
+.nst-panel.nst-panel--dialog {
+  width: 22.5rem;
+  max-width: calc(100vw - var(--vw-space-2xl));
+  border-radius: var(--vw-radius-lg);
+  animation: nst-panel-fade-in 150ms ease-out;
+}
+
+.nst-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--vw-space-md);
+  padding: var(--vw-space-lg);
+  border-bottom: 1px solid var(--vw-color-gray-200);
+  flex-shrink: 0;
+}
+
+.nst-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--vw-space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--vw-space-md);
+}
+
+.nst-panel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--vw-space-sm);
+  padding: var(--vw-space-lg);
+  border-top: 1px solid var(--vw-color-gray-200);
+  flex-shrink: 0;
+}
+
+/* A dialog is short enough that header/footer borders read as clutter. */
+.nst-panel--dialog .nst-panel-header,
+.nst-panel--dialog .nst-panel-footer {
+  border: none;
+}
+
+@keyframes nst-panel-slide-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes nst-panel-fade-in {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nst-panel.nst-panel--drawer,
+  .nst-panel.nst-panel--dialog {
+    animation: none;
+  }
+}

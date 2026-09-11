@@ -131,6 +131,7 @@ Use only when the task needs atomic controls not covered by vw-cards.
 | Table status badge | `.vw-chip.vw-chip--success\|warning\|...` (reuse Layer 1 chips) | `vw-chips.css` |
 | Tile view for table data | `.vw-grid.vw-grid-cols-2\|3\|4` + `.vw-card-section` tiles | `vw-utilities.css`, `preview/table.html` |
 | Kanban board (status-column view for table data — third view alongside table/tile, switched via the same toolbar's Actions menu, not a separate section) | Only 4 new classes: `.nst-kanban` (scroll container) > `.nst-kanban-column` (+ `.nst-kanban-column-header`, `.nst-kanban-column-body`) — a scrolling board of sticky-header columns has no existing equivalent. Everything inside a column reuses existing classes, not a parallel set: `.vw-card-title-sm` for the column title AND the card title, `.vw-card-section` + `.vw-card--clickable` for the card itself (real hover/focus state, not reinvented), `.vw-card-metric-label-sm` for field labels, `.vw-card-description` for field values, `.vw-chip--*` for priority/severity, `.nst-action-menu` for the card kebab, `.vw-flex`/`.vw-grid.vw-grid-cols-2`/`.vw-gap-*` for every layout row. No color-coded column accent — deliberately quiet, matching this system's flat/low-chroma language; use a `.vw-chip--*` on the title if a status genuinely needs a color cue | `components.css`, `preview/table.html` |
+| **Drawer / modal / confirm dialog** — one system | `.nst-overlay` (scrim **and** positioning context) wrapping `.nst-panel` + `.nst-panel--drawer` or `.nst-panel--dialog`. Add `.nst-overlay--end` for a right-anchored drawer; without it the panel is centred. Anatomy: `.nst-panel-header` / `.nst-panel-body` (scrolls) / `.nst-panel-footer`. Handles `[hidden]` itself, so `<div class="nst-overlay" hidden>` really is hidden. **Focus trap, Escape-to-close, `aria-modal` and focus return are the caller's job** — this is styling only | `components.css`, `preview/overlay-panel.html` |
 | Action menu (generic dropdown — also used for the table toolbar's Actions trigger) | `.nst-action-menu`, `.nst-action-menu-item`, `.nst-action-menu-divider` | `components.css`, `preview/action-menu.html` |
 | Surface | `.nst-surface`, `.nst-surface--raised` | `components.css` |
 | Buttons | `.nst-btn` + variant (`--filled\|--gray\|--ghost\|--action\|--danger\|--danger-subtle`, default = outline) + size (`--xs\|--sm\|--md\|--lg`, default = md) | `components.css`, `preview/buttons-styles.html`, `buttons-sizes.html` |
@@ -267,7 +268,7 @@ layer" above — do not invent a parallel class system for them.
 already met for these three.** Don't promote unilaterally even so; this just means they're real
 candidates the next time this file gets a sign-off review:
 - **App shell** (sidebar nav + topbar)
-- **Modal / Drawer**
+- ~~**Modal / Drawer**~~ — **shipped 2026-09-11 as `.nst-overlay` + `.nst-panel`**
 - **Toast**
 
 **Seen on one app so far** (not yet at the cross-page-recurrence bar):
@@ -283,7 +284,7 @@ candidates the next time this file gets a sign-off review:
 - ~~Skeleton loading rows~~ — **shipped 2026-09-11 as `.vw-skeleton`** (promoted: hand-rolled on
   five screens across two independently-built apps, which had converged on byte-identical gradient
   and timing values)
-- Confirm dialog
+- ~~Confirm dialog~~ — **shipped 2026-09-11**: same `.nst-overlay`, centred, with `.nst-panel--dialog`
 - Empty state pattern
 - Loading spinner (submit-button state)
 - Sortable column header affordance (icon + click target for a `<th>`)

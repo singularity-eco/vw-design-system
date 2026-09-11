@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Overlay + panel (drawer / modal / confirm) — NST Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../nst-design-system.css">
+<link rel="stylesheet" href="../components.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--vw-color-gray-100);
+    padding: 28px;
+    font-family: var(--fontFamily);
+    color: var(--vw-color-gray-800);
+    min-height: 100vh;
+  }
+  .block-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--vw-color-gray-400); margin-bottom: 12px;
+  }
+  .note { font-size: 12px; color: var(--vw-color-gray-500); margin-top: 10px; max-width: 640px; }
+  .triggers { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+  /* Specimen only: the overlays below are shown inline, not fixed, so all three
+     shapes are visible at once without opening them one at a time. */
+  .inline-stage {
+    position: relative;
+    height: 340px;
+    border-radius: var(--vw-radius-lg);
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  /* ...and sit below the live fixed overlays, which share z-index 100 and
+     would otherwise paint over them purely by DOM order. */
+  .inline-stage .nst-overlay { position: absolute; z-index: 1; }
+</style>
+</head>
+<body>
+
+  <div class="block-label">Live — click to open a real fixed overlay</div>
+  <div class="triggers">
+    <button class="nst-btn nst-btn--filled" onclick="document.getElementById('liveDrawer').hidden = false">Open drawer</button>
+    <button class="nst-btn" onclick="document.getElementById('liveDialog').hidden = false">Open confirm dialog</button>
+  </div>
+
+  <div class="nst-overlay nst-overlay--end" id="liveDrawer" hidden onclick="if(event.target===this) this.hidden = true">
+    <div class="nst-panel nst-panel--drawer">
+      <div class="nst-panel-header">
+        <div>
+          <div class="vw-card-title">Edit sprint</div>
+          <div class="vw-card-description">Sprint 24 · Planning</div>
+        </div>
+        <button class="nst-btn nst-btn--ghost nst-btn--icon nst-btn--sm" onclick="document.getElementById('liveDrawer').hidden = true" aria-label="Close">✕</button>
+      </div>
+      <div class="nst-panel-body">
+        <div>
+          <label class="nst-input-label" for="d1">Name</label>
+          <input class="nst-input" id="d1" value="Sprint 24">
+        </div>
+        <div>
+          <label class="nst-input-label" for="d2">Goal</label>
+          <div class="nst-textarea-wrap" style="height: 92px; min-height: 92px; margin-top: 4px;">
+            <textarea class="nst-textarea" id="d2">Close out the requirements register.</textarea>
+          </div>
+        </div>
+        <div>
+          <label class="nst-input-label" for="d3">Owner</label>
+          <div class="vw-flex vw-items-center vw-gap-sm" style="margin-top:6px;">
+            <span class="vw-avatar">PC</span>
+            <span class="vw-card-description">Punit Chawla</span>
+          </div>
+        </div>
+      </div>
+      <div class="nst-panel-footer">
+        <button class="nst-btn" onclick="document.getElementById('liveDrawer').hidden = true">Cancel</button>
+        <button class="nst-btn nst-btn--filled" onclick="document.getElementById('liveDrawer').hidden = true">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="nst-overlay" id="liveDialog" hidden onclick="if(event.target===this) this.hidden = true">
+    <div class="nst-panel nst-panel--dialog">
+      <div class="nst-panel-header">
+        <div class="vw-card-title">Delete this sprint?</div>
+      </div>
+      <div class="nst-panel-body">
+        <div class="vw-card-description">This removes Sprint 24 and unlinks its 18 requirements. It cannot be undone.</div>
+      </div>
+      <div class="nst-panel-footer">
+        <button class="nst-btn" onclick="document.getElementById('liveDialog').hidden = true">Cancel</button>
+        <button class="nst-btn nst-btn--danger" onclick="document.getElementById('liveDialog').hidden = true">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Inline stages so every shape is visible at once ── -->
+
+  <div class="block-label">Drawer — <code>.nst-overlay.nst-overlay--end</code> + <code>.nst-panel--drawer</code></div>
+  <div class="inline-stage">
+    <div class="nst-overlay nst-overlay--end">
+      <div class="nst-panel nst-panel--drawer" style="width: 380px;">
+        <div class="nst-panel-header">
+          <div class="vw-card-title">Filters</div>
+          <span class="vw-chip vw-chip--neutral-solid">3</span>
+        </div>
+        <div class="nst-panel-body">
+          <div class="vw-card-description">Status</div>
+          <div class="vw-card-description">Owner</div>
+          <div class="vw-card-description">Priority</div>
+        </div>
+        <div class="nst-panel-footer">
+          <button class="nst-btn nst-btn--sm">Reset</button>
+          <button class="nst-btn nst-btn--filled nst-btn--sm">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block-label">Confirm dialog — same overlay, <code>justify-content: center</code></div>
+  <div class="inline-stage">
+    <div class="nst-overlay">
+      <div class="nst-panel nst-panel--dialog">
+        <div class="nst-panel-header">
+          <div class="vw-card-title">Discard changes?</div>
+        </div>
+        <div class="nst-panel-body">
+          <div class="vw-card-description">Your edits to this requirement haven't been saved.</div>
+        </div>
+        <div class="nst-panel-footer">
+          <button class="nst-btn">Keep editing</button>
+          <button class="nst-btn nst-btn--danger-subtle">Discard</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>The whole point:</strong> these two differ by one property. The drawer adds
+    <code>--end</code>, which flips the overlay's <code>justify-content</code> from
+    <code>center</code> to <code>flex-end</code>. Two consuming apps built these as separate
+    component families and declared them as two separate registry gaps.
+  </div>
+
+  <div class="note">
+    <strong>Not styling's job:</strong> focus trapping, Escape-to-close, <code>aria-modal</code>,
+    and returning focus to the trigger are the caller's responsibility. The live examples above do
+    backdrop-click only — they are a styling demo, not an accessible dialog implementation.
+  </div>
+
+  <div class="note">
+    <strong>Reduced motion:</strong> the drawer's slide-in and the dialog's fade are both disabled
+    under <code>prefers-reduced-motion: reduce</code>.
+  </div>
+
+</body>
+</html>
