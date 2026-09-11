@@ -48,7 +48,7 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 | Card title | `.vw-card-title`, `.vw-card-title-lg`, `.vw-card-title-sm` | `vw-cards.css` |
 | Card body text | `.vw-card-description` | `vw-cards.css` |
 | KPI / metric value | `.vw-card-metric-lg` … `.vw-card-metric-xxxl` | `vw-cards.css`, `preview/kpi-card.html` |
-| Metric label | `.vw-card-metric-label`, `.vw-card-metric-label-sub` | `vw-cards.css` |
+| Metric label | `.vw-card-metric-label`, `.vw-card-metric-label-sub`, `.vw-card-metric-label-sm` — quiet (weight 400, gray-500) so the number dominates. **Use this, not `.vw-card-title`, when the card's subject IS the number** (a KPI tile). Use `.vw-card-title` when the card is about a *thing* and the number merely supports it — the two specimens below each show one of these, which is why they look different | `vw-cards.css`, `preview/kpi-card.html` |
 | Trend / delta | `.vw-card-variance.is-positive\|is-negative\|is-neutral` — tone (color) only, plainly optional `.vw-card-variance-icon` (Phosphor `ph-caret-up`/`ph-caret-down`) for direction; the two are independent — tone is always the caller's business-meaning call, never inferred from which way the icon points (a rising count can still be `is-negative`) | `vw-cards.css`, `preview/kpi-card.html` |
 | Semantic card bg | `.vw-card--success\|error\|warning\|info` (+ fuchsia, purple, etc.) | `vw-cards.css` |
 | Status chip / badge / pill / tag | Pastel: `.vw-chip.vw-chip--success\|error\|warning\|info\|neutral`. Filled: `.vw-chip--success-solid`, `--error-solid`, `--warning-solid`, `--info-solid`, `--neutral-solid` — written out because the old `(+ -solid)` shorthand was provably unreadable: two consuming apps hand-rolled a "count-chip" while `.vw-chip--neutral-solid` already shipped | `vw-chips.css` |
@@ -68,7 +68,15 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 | Theme colors | `var(--grayColor*)`, `var(--primaryColor*)` | `theme-tokens.css` |
 | Switchable theme (blue / green / black) | `[data-theme="…"]` — see "Theming" below | `theme-blue.css`, `theme-green.css`, `theme-black.css` |
 
-**Live specimens:** `preview/vw-cards.html`, `preview/kpi-card.html`, `preview/elevation.html`, `preview/skeleton.html`, `preview/avatar.html`
+**Live specimens** — open the one that matches your task, they are not interchangeable:
+
+| Specimen | Covers |
+|---|---|
+| `preview/vw-cards.html` | Card **anatomy** — containers, nesting (`parent`/`child`), semantic variants, accent strip. Labels with `.vw-card-title` because those cards are about a *thing* |
+| `preview/kpi-card.html` | The KPI **archetype** — quiet `.vw-card-metric-label` above a large number, corner icon, variance with tone + optional direction icon |
+| `preview/elevation.html` | The two shadow levels |
+| `preview/skeleton.html` | Loading placeholders, both backdrops |
+| `preview/avatar.html` | Initials avatar, both sizes, inline tinting |
 
 ### Theming — `data-theme`
 
