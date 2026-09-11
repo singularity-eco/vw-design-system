@@ -19,6 +19,14 @@
 .vw-chip.is-clickable { cursor: pointer; }
 
 /* Default variants */
+/* The four variants below carry literal hex on purpose. They are the legacy
+   Vision Waves semantic chip palette and have no adequate --vw-color-* match:
+   the nearest token for each foreground is 25-34 ΔRGB away (a visible shift),
+   and .vw-chip--error's background snaps to a GREY token, which is semantically
+   wrong for an error chip. .vw-chip--success differs because emerald-50/700
+   happens to land exactly on its values.
+   Measured 2026-09-11. Do not "tokenize" these without re-measuring — the
+   enforcement hook's hardcoded-hex check will flag them, and it is wrong here. */
 .vw-chip.vw-chip--neutral {
   background-color: #f4f4f4;
   color: #515151;
