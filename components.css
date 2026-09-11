@@ -336,8 +336,21 @@
   align-items: center;
   gap: 6px;
   padding: 10px 12px;
-  border-bottom: 1px solid var(--vw-color-neutral-200);
   flex-wrap: nowrap;
+}
+
+/* The divider belongs to the nested case only. This class is documented as
+   working "above any list, not only a .nst-table-card", but the border-bottom
+   used to be unconditional — so standing it on a page background produced a
+   transparent row with an orphan rule under it and no surface of its own.
+
+   That is not hypothetical: the semantic .nst-table variant puts the surface
+   on the <table> element itself, and a <div> cannot live inside a <table>, so
+   an app using that variant has nowhere to put the toolbar except outside the
+   card. One consuming app hit exactly this and hand-rolled a six-line flex row
+   instead. Now the base class is that flex row. */
+.nst-table-card > .nst-table-toolbar {
+  border-bottom: 1px solid var(--vw-color-neutral-200);
 }
 
 /* Header row — set grid-template-columns to match your column widths */
