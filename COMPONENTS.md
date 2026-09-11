@@ -51,10 +51,11 @@ Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 | Metric label | `.vw-card-metric-label`, `.vw-card-metric-label-sub` | `vw-cards.css` |
 | Trend / delta | `.vw-card-variance.is-positive\|is-negative\|is-neutral` — tone (color) only, plainly optional `.vw-card-variance-icon` (Phosphor `ph-caret-up`/`ph-caret-down`) for direction; the two are independent — tone is always the caller's business-meaning call, never inferred from which way the icon points (a rising count can still be `is-negative`) | `vw-cards.css`, `preview/kpi-card.html` |
 | Semantic card bg | `.vw-card--success\|error\|warning\|info` (+ fuchsia, purple, etc.) | `vw-cards.css` |
-| Status chip | `.vw-chip.vw-chip--success\|error\|warning\|info\|neutral` (+ `-solid`) | `vw-chips.css` |
+| Status chip / badge / pill / tag | Pastel: `.vw-chip.vw-chip--success\|error\|warning\|info\|neutral`. Filled: `.vw-chip--success-solid`, `--error-solid`, `--warning-solid`, `--info-solid`, `--neutral-solid` — written out because the old `(+ -solid)` shorthand was provably unreadable: two consuming apps hand-rolled a "count-chip" while `.vw-chip--neutral-solid` already shipped | `vw-chips.css` |
+| **Count chip** (a tally beside a heading — column count, item total) | `.vw-chip.vw-chip--neutral-solid` | `vw-chips.css`, `preview/table.html` (kanban column counts) |
 | Page title | `.vw-page-title`, `.vw-page-description` | `vw-cards.css` |
 | Layout | `.vw-flex`, `.vw-flex-col`, `.vw-justify-between`, `.vw-page-gap`, `.vw-gap-sm` (gap classes need a flex/grid parent on the same element — see "Common gotcha" below) | `vw-utilities.css` |
-| Grid of cards | `.vw-grid.vw-grid-cols-auto-320.vw-gap-xl` | `vw-utilities.css` |
+| Card grid / grid of cards / tile grid | Auto-fill: `.vw-grid.vw-grid-cols-auto-320.vw-gap-xl`. Fixed columns: `.vw-grid.vw-grid-cols-2\|3\|4` | `vw-utilities.css` |
 | Clickable card | `.vw-card--clickable` | `vw-cards.css` |
 | Status accent strip (color-code a card without tinting the whole surface) | `.vw-card--accent` on host + `.vw-card-accent` first-child div | `vw-cards.css` |
 | Card icon slot | `.vw-card-icon-md` + `.vw-chip--neutral` | `vw-cards.css` |
@@ -121,6 +122,7 @@ Use only when the task needs atomic controls not covered by vw-cards.
 | Textarea | `.nst-textarea`, `.nst-textarea-wrap` | `components.css`, `preview/textarea.html` |
 | Table (grid-of-divs — resizable/virtualisable columns) | `.nst-table-card`, `.nst-table-toolbar`, `.nst-table-head`, `.nst-table-th`, `.nst-table-row`, `.nst-table-td` | `components.css`, `preview/table.html` |
 | Table (real `<table>` — prefer for plain data grids, keeps screen-reader row/column semantics) | `.nst-table` on the `<table>`, always wrapped in `.nst-table-wrap` (handles horizontal overflow — `.nst-table`'s own `th`/`td` are `white-space: nowrap`, so a wide table needs this to scroll in place instead of pushing the page wider; don't put `overflow-x`/`display:block` on `.nst-table` itself, that touches the box type this variant exists to keep as a real `<table>`); plain `<tr>`, `.is-clickable`, `.is-selected` | `components.css`, `preview/table-semantic.html` |
+| **Toolbar** — the strip above a table or list holding search, filters and actions | `.nst-table-toolbar` (the container). Fill it with `.nst-table-search`, `.nst-icon-btn`, `.nst-action-menu`. Works above any list, not only a `.nst-table-card` — it was previously findable only inside the Table row below, and two consuming apps hand-rolled all eight of their toolbars as a result | `components.css`, `preview/table.html` |
 | Table toolbar search (collapsible) | `.nst-table-search` (+ `.is-open`), `.nst-table-search-icon`, `.nst-table-search-clear` | `components.css`, `preview/table.html` |
 | Icon-only button (filter, actions trigger) | `.nst-icon-btn` (+ `.is-active`) | `components.css`, `preview/table.html` |
 | Table row actions (kebab) — **note:** the drop-menu is clipped by the table card's / cell's `overflow: hidden` (used for column truncation), so in a real grid table it must be portalled/rendered outside the row rather than nested in the `.nst-table-td` | `.nst-table-kebab`, `.nst-table-menu`, `.nst-table-menu-item` | `components.css`, `preview/table.html` |
@@ -192,7 +194,27 @@ do **not** invent a new class or a parallel micro-utility system (`.pg-text-10-5
 whole `.pg-*`-prefixed family defined in a local `<style>` block, etc.). That fragments the class
 system exactly like the things this registry forbids, just via a back door.
 
-Instead:
+### First: confirm it is actually a gap — grep the CSS, don't trust this file alone
+
+**Before declaring anything missing, search the stylesheets**, not just the tables above:
+
+```bash
+grep -rn "shadow\|avatar\|skeleton" *.css        # is a token or class already there?
+grep -rn "^\.vw-\|^\.nst-" vw-*.css components.css | grep -i "<what you need>"
+```
+
+This exists because the tables above have repeatedly failed a reader who only read the tables.
+Three real cases, all from apps that followed every other rule correctly:
+
+- **shadows** — declared *"REGISTRY GAP (no NST equivalent)"* and hand-rolled as `--shadowSm/Md/Lg`.
+  `--shadow-resting` and `--shadow-sm` had shipped all along; they simply weren't listed here.
+- **count chip** — hand-rolled on two screens. `.vw-chip--neutral-solid` shipped, and was used for
+  exactly that purpose in `preview/table.html` — but appeared here only as the shorthand `(+ -solid)`.
+- **card grid** — declared a gap on two screens while `.vw-grid-cols-*` was fully documented, because
+  the row was headed "Grid of cards" and the search was for "card grid".
+
+A one-line grep would have caught all three. If the grep finds it, use it and tell us the table was
+hard to search. If the grep finds nothing, it is a real gap — proceed:
 
 1. Snap to the nearest existing `var(--vw-font-*)` / `var(--vw-line-*)` / `var(--vw-space-*)` token
    and apply it via inline style (e.g. `style="font-size: var(--vw-font-label-sm)"`) — even if it's
