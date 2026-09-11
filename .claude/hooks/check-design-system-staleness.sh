@@ -45,9 +45,25 @@ fi
 # shape seen so far, including partial copies that ship no CSS at all.
 is_ds_dir() { [ -f "$1/COMPONENTS.md" ] || [ -f "$1/VERSION" ]; }
 
-DS_DIR=""
+# Read whatever commit a directory is pinned to, whichever shape it is.
+pinned_sha() {
+  if [ -e "$1/.git" ]; then
+    git -C "$1" rev-parse HEAD 2>/dev/null && return
+  fi
+  if [ -f "$1/VERSION" ]; then
+    grep -iE '^[[:space:]]*commit:' "$1/VERSION" 2>/dev/null \
+      | head -1 | grep -oE '[0-9a-f]{7,40}' | head -1
+  fi
+}
+
+# Collect EVERY vendored copy, not just the first. Apps commonly keep two — a
+# clone/submodule to pull into, plus a plain copy under src/assets that is the
+# one the bundler actually imports. Stopping at the first match reports on the
+# clone, so a `git pull` that was never re-copied downstream reads as "up to
+# date" while the build still compiles the old CSS.
+DS_DIRS=""
 if [ -n "${NST_DESIGN_SYSTEM_DIR:-}" ] && is_ds_dir "${NST_DESIGN_SYSTEM_DIR}"; then
-  DS_DIR="$NST_DESIGN_SYSTEM_DIR"
+  DS_DIRS="$NST_DESIGN_SYSTEM_DIR"
 else
   for cand in \
     design-system \
@@ -59,10 +75,48 @@ else
     frontend/apps/*/src/assets/nst \
     apps/*/src/assets/nst
   do
-    if is_ds_dir "$cand"; then DS_DIR="$cand"; break; fi
+    if is_ds_dir "$cand"; then DS_DIRS="$DS_DIRS $cand"; fi
   done
 fi
+DS_DIRS=$(echo "$DS_DIRS" | tr ' ' '\n' | grep -v '^$' || true)
+DS_DIR=$(echo "$DS_DIRS" | head -1)
 [ -n "$DS_DIR" ] || exit 0
+
+# ── Copies that disagree with each other ─────────────────────────────────────
+# This outranks staleness against upstream: if two vendored copies are pinned to
+# different commits, updating from upstream cannot fix it and the build is
+# already using something other than what the clone says it is.
+if [ "$(echo "$DS_DIRS" | wc -l | tr -d ' ')" -gt 1 ]; then
+  drift_report=""
+  base_sha=""
+  drifted=0
+  while IFS= read -r d; do
+    [ -n "$d" ] || continue
+    s=$(pinned_sha "$d")
+    [ -n "$s" ] || continue
+    drift_report="${drift_report}  ${d}/ — ${s:0:7}
+"
+    if [ -z "$base_sha" ]; then base_sha="$s"
+    else
+      n=${#s}; m=${#base_sha}
+      [ "$n" -lt "$m" ] && m=$n
+      [ "${s:0:$m}" = "${base_sha:0:$m}" ] || drifted=1
+    fi
+  done <<EOF
+$DS_DIRS
+EOF
+  if [ "$drifted" = "1" ]; then
+    jq -n --arg report "$drift_report" '{
+      hookSpecificOutput: {
+        hookEventName: "SessionStart",
+        additionalContext: (
+          "This project vendors the NST design system in more than one place, and the copies are pinned to DIFFERENT commits:\n\n\($report)\nWhichever one the bundler imports is what actually ships — check the app'"'"'s CSS entrypoint (@import paths) to see which that is. Pulling from upstream will not reconcile these; the newer copy has to be propagated to the other.\n\nAt the start of this session, raise this with the user and ask which copy is authoritative. Don'"'"'t reconcile them silently."
+        )
+      }
+    }'
+    exit 0
+  fi
+fi
 
 # Don't fire inside the design system's own repo — a maintainer working here is
 # not a consumer with a stale copy.
