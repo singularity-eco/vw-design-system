@@ -42,7 +42,33 @@ icon library, an inline-SVG-from-scratch icon, or an emoji — use `<i class="ph
 
 ---
 
-## Layer 1 — Legacy / dashboard (default for enterprise apps)
+## The two prefixes — what actually separates them
+
+`vw-*` and `nst-*` are not two flavours of the same thing. They differ by **whether a legacy CSS
+counterpart exists**, and that decides how much freedom we have:
+
+| | `vw-*` | `nst-*` |
+|---|---|---|
+| Legacy counterpart | **Yes** — real classes in `core-mixin.scss` | **No** |
+| How the legacy system does it | the same CSS classes | `bntv-*` **Angular components** from `@enttribe/core`, configured by property bindings (`[type]`, `[theme]`) with no CSS classes at all |
+| The published guidelines | **binding** — a divergence is a defect to fix | nothing to match; they document Angular inputs, not classes |
+| Our obligation | reproduce the guideline values exactly | look close to the `bntv-*` component's rendered appearance |
+
+So `nst-*` exists because this design system is CSS-only — it serves React and plain HTML, not
+Angular — and for buttons, inputs, tables, menus and the date picker there was **no CSS vocabulary
+to inherit**. We had to author one. `vw-*` had one already and must stay faithful to it.
+
+Practical consequence: if a `vw-*` class disagrees with
+<https://uig-uidlines.vercel.app/ui-guidelines/guidelines/vw-cards>, that is a bug in this repo.
+If an `nst-*` detail differs from a `bntv-*` component, that is only worth changing if it *looks*
+wrong.
+
+*(The single-prefix question — folding `nst-*` into `vw-*` — is open, not settled. It is deferred
+rather than rejected: 626 live usages across two consuming apps make it a migration, not a rename.)*
+
+---
+
+## Layer 1 — `vw-*` — Legacy / dashboard (default for enterprise apps)
 
 Use for: KPI cards, dashboards, admin consoles, CRM screens, data-dense layouts.
 
@@ -127,9 +153,10 @@ Rules:
 
 ---
 
-## Layer 2 — Atomic / form controls (when building inputs, tables, buttons)
+## Layer 2 — `nst-*` — Atomic / form controls (inputs, tables, buttons)
 
-Use only when the task needs atomic controls not covered by vw-cards.
+Use when the task needs atomic controls not covered by vw-cards. These are the CSS expression of
+the legacy `bntv-*` Angular components — see "The two prefixes" above for what that licenses.
 
 | Need | Use | Reference |
 |------|-----|-----------|

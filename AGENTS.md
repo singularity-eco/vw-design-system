@@ -23,8 +23,13 @@ Setup in other projects: `docs/claude-code-setup.md`
 
 | Layer | When | Files |
 |-------|------|-------|
-| **1 — Legacy / dashboard** | Default for enterprise apps | `nst-design-system.css`, `vw-*.css`, `preview/vw-cards.html` |
-| **2 — Atomic / Figma** | Buttons, inputs, tables only | `components.css`, `preview/buttons-*.html`, `ui_kits/admin-console/` |
+| **1 — `vw-*`** | Default for enterprise apps | `nst-design-system.css`, `vw-*.css`, `preview/vw-cards.html` |
+| **2 — `nst-*`** | Buttons, inputs, tables only | `components.css`, `preview/buttons-*.html`, `ui_kits/admin-console/` |
+
+The prefixes differ by whether a legacy CSS counterpart exists: `vw-*` classes have one in
+`core-mixin.scss` and must match the published guidelines exactly; `nst-*` classes have none — the
+legacy equivalents are `bntv-*` Angular components with no CSS surface — so they only need to look
+close. Full explanation: `COMPONENTS.md` → "The two prefixes".
 
 Dashboard and KPI screens → **Layer 1 only**.
 
